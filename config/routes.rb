@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :contacts
   devise_for :users
   resources :posts
   root 'pages#index' # Pagina principl
@@ -6,7 +7,7 @@ Rails.application.routes.draw do
   get '/index'     => 'pages#index'
   get '/acerca'    => 'pages#about'
   get '/servicios' => 'pages#services'
-  get '/contacto'  => 'pages#contact'
+  get '/contacto'  => 'contacts#new'
 
   get '/blog'      => 'posts#list'
 
