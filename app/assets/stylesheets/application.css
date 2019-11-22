@@ -13,3 +13,6 @@
  *= require_tree .
  *= require_self
  */
+
+ @import url("./arcana/fontawesome-all.min.css");
+ @import url("./arcana/main.css");
