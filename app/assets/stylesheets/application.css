@@ -14,5 +14,5 @@
  *= require_self
  */
 
- @import url("./arcana/fontawesome-all.min.css");
+ @import '@fortawesome/fontawesome-free';
  @import url("./arcana/main.css");
