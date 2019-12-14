@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :list]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
+
   # GET /posts
   # GET /posts.json
   def index
@@ -10,7 +11,7 @@ class PostsController < ApplicationController
 
   # Get /blog
   def list
-    @posts = Post.all
+    @posts = Post.order("id DESC").all
   end
 
  # GET /posts/1
@@ -79,6 +80,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :posts)
+      params.require(:post).permit(:title, :body)
     end
 end

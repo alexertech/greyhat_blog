@@ -7,7 +7,7 @@
     <li <%= current_page?('/index') ? @cur_html : '' %>><a href="/index">Inicio</a></li>
     <li <%= current_page?('/acerca') ? @cur_html : '' %>><a href="/acerca">Acerca</a></li>
     <li <%= current_page?('/servicios') ? @cur_html : '' %>><a href="/servicios">Servicios</a></li>
-    <li <%= current_page?('/blog') ? @cur_html : '' %>><a href="/blog">Blog</a></li>
+    <li <%= current_page?('/blog') || current_page?('/posts') ? @cur_html : '' %>><a href="/blog">Blog</a></li>
     <li <%= current_page?('/contacto') ? @cur_html : '' %>><a href="/contacto">Contacto</a></li>
   </ul>
 </nav>
