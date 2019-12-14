@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  resources :contacts
+
   devise_for :users
+
+  resources :contacts
   resources :posts
+
   root 'pages#index' # Pagina principl
 
   get '/index'     => 'pages#index'
