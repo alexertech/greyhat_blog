@@ -28,25 +28,47 @@
         <h3>¿Capacitación Gratuita?</h3>
         <p>Brindamos charlas y capacitación al personal más vulnerable de su organización, con técnicas de protección efectivas para las amenazas del día a día. Contáctanos para mayor información.</p>
         <footer>
-          <a href="#" class="button">Quiero una charla gratuita</a>
+          <%= link_to "Quiero una charla gratuita", '/contacto', class: "button" %>
         </footer>
       </section>
 
       <section>
         <h3>Nuestros servicios</h3>
-        <ul class="links">
-          <li><a href="#">Auditoría de Sistemas WhiteBox/BlackBox</a></li>
-          <li><a href="#">Pentesting y Ethical Hacking</a></li>
-          <li><a href="#">Capacitación y Asesoría</a></li>
-          <li><a href="#">Pruebas de Phishing</a></li>
+        <ul>
+          <li>Auditoría de Sistemas WhiteBox/BlackBox</li>
+          <li>Pentesting y Ethical Hacking</li>
+          <li>Capacitación y Asesoría</li>
+          <li>Pruebas de Phishing</li>
         </ul>
         <footer>
-          <a href="#" class="button">Catálogo completo</a>
+          <%= link_to "Servicios", '/servicios', class: "button" %>
+
         </footer>
       </section>
 
     </div>
+
   </div>
+
 </div>
+
 </div>
+</section>
+
+<section class="wrapper style2">
+  <div class="container">
+    <header class="major">
+      <h2>Hacking Ético de verdad</h2>
+      <p>Somos profesionales con experiencia certificada en penetración de sistemas</p>
+    </header>
+  </div>
+</section>
+
+<section id="cta" class="wrapper style3">
+  <div class="container">
+    <header>
+      <h2>¿Quieres saber más?</h2>
+      <%= link_to "Contáctanos", '/contacto', class: "button" %>
+    </header>
+  </div>
 </section>
