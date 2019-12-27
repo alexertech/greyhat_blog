@@ -1,0 +1,18 @@
+=> Booting Puma
+=> Rails 6.0.1 application starting in development 
+=> Run `rails server --help` for more startup options
+Puma starting in single mode...
+* Version 4.3.0 (ruby 2.6.3-p62), codename: Mysterious Traveller
+* Min threads: 5, max threads: 5
+* Environment: development
+* Listening on tcp://167.71.176.223:8080
+Use Ctrl-C to stop
+=> Booting Puma
+=> Rails 6.0.1 application starting in production 
+=> Run `rails server --help` for more startup options
+Puma starting in single mode...
+* Version 4.3.0 (ruby 2.6.3-p62), codename: Mysterious Traveller
+* Min threads: 5, max threads: 5
+* Environment: production
+* Listening on tcp://167.71.176.223:8080
+Use Ctrl-C to stop

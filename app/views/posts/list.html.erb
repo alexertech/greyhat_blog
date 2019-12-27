@@ -5,7 +5,7 @@
 
       <tr>
         <td>
-          <strong><%= post.title %></strong>
+          <strong><%= link_to post.title, post %></strong>
           <div style="font-size:small"><em><%= post.created_at.strftime("%d %b. %Y") %></em></div>
         </td>
       </tr>
