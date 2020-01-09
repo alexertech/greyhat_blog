@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+
+  impressionist :actions=>[:list,:show],:unique=>[:controller_name, :action_name, :session_hash]
   before_action :authenticate_user!, except: [:show, :list]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
