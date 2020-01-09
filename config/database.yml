@@ -66,6 +66,7 @@ test:
 #
 production:
   <<: *default
-  database: blog_production
-  username: blog
-  password: <%= ENV['BLOG_DATABASE_PASSWORD'] %>
+  database: greyhat_db
+  username: greyhat_usr
+  password: password1
+  host: localhost
