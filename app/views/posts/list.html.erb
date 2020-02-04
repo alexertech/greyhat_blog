@@ -1,25 +1,30 @@
-<table>
-  <tbody>
 
-    <% @posts.each do |post| %>
+<% @posts.each do |post| %>
 
-      <tr>
-        <td>
-          <strong><%= link_to post.title, post %></strong>
-          <div style="font-size:small"><em><%= post.created_at.strftime("%d %b. %Y") %></em></div>
-        </td>
-      </tr>
+  <div class="row">
+    <div class="col-2 col-2-narrower">
+      <% if post.image.attached? %>
+        <%=image_tag url_for(post.image),height: '80', width: '150',align: :right, class: "image"%>
+      <% end %>
+    </div>
+    <div class="col-10 col-10-narrower">
+      <strong>
+        <%= link_to post.title, post %>
+      </strong>
 
-      <tr>
-        <td><%= post.body.at(0..200) %> ... [<%= link_to ' Leer ', post %>]</td>
-      </tr>
+      <div style="font-size:small">
+        <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+      </div>
 
-      <tr>
-        <td>&nbsp;</td>
-      </tr>
+      <div>
+        <%= post.body.at(0..200) %> ... [<%= link_to ' Leer ', post %>]
+      </div>
 
-    <% end %>
 
-  </tbody>
-</table>
+    </div>
+  </div>
+  <div>&nbsp;</div>
+
+<% end %>
+
 
