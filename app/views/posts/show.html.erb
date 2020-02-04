@@ -1,15 +1,20 @@
-<p id="notice"><%= notice %></p>
 
 
-<article>
-  <header>
-    <h2><%= @post.title %></h2>
-    <p><%= @post.created_at.strftime("%d %b. %Y") %> | <%= link_to "Volver", "/articulos"%></p>
-  </header>
+      <p id="notice"><%= notice %></p>
 
-  <%= markdown(@post.body) %>
+      <article>
+        <header>
+          <h2><%= @post.title %></h2>
+          <p><%= @post.created_at.strftime("%d %b. %Y") %> | <%= link_to "Volver", "/articulos"%></p>
+        </header>
 
-  <%= link_to "Volver", "/articulos"%>
+        <% if @post.image.attached? %>
+          <span class="image featured"><%=image_tag url_for(@post.image)%></span>
+        <% end %>
 
-</article>
 
+        <%= markdown(@post.body) %>
+
+        <%= link_to "Volver", "/articulos"%>
+
+      </article>

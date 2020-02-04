@@ -61,4 +61,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.hosts << "greyhat.cl"
+
+
+  config.active_storage.service = :local
 end
