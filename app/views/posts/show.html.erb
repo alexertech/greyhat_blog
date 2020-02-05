@@ -18,3 +18,10 @@
         <%= link_to "Volver", "/articulos"%>
 
       </article>
+
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:site" content="@greyhat_se">
+      <meta name="twitter:creator" content="@greyhat_se">
+      <meta name="twitter:title" content="<%= @post.title %>">
+      <meta name="twitter:description" content="<%= post.body.at(0..200) %>">
+      <meta name="twitter:image" content="<%=image_tag url_for(@post.image)%>">
