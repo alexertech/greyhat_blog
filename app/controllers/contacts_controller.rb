@@ -1,4 +1,5 @@
 class ContactsController < ApplicationController
+  impressionist :unique => [:session_hash]
   before_action :authenticate_user!, except: [:new,:create]
   before_action :set_contact, only: [:show, :destroy]
 
