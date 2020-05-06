@@ -1,27 +1,33 @@
-<!-- Views: <%=@post.impressionist_count%> -->
 
-      <p id="notice"><%= notice %></p>
+<section class="wrapper style1">
+  <div class="container">
+    <!-- Views: <%=@post.impressionist_count%> -->
 
-      <article>
-        <header>
-          <h2><%= @post.title %></h2>
-          <p><%= @post.created_at.strftime("%d %b. %Y") %> | <%= link_to "Volver", "/articulos"%></p>
-        </header>
+    <p id="notice"><%= notice %></p>
 
-        <% if @post.image.attached? %>
-          <span class="image featured"><%=image_tag url_for(@post.image)%></span>
-        <% end %>
+    <article>
+      <header>
+        <h2><%= @post.title %></h2>
+        <p><%= @post.created_at.strftime("%d %b. %Y") %> | <%= link_to "Volver", "/articulos"%></p>
+      </header>
+
+      <% if @post.image.attached? %>
+      <span class="image featured"><%=image_tag url_for(@post.image)%></span>
+      <% end %>
 
 
-        <%= markdown(@post.body) %>
+      <%= markdown(@post.body) %>
 
-        <%= link_to "Volver", "/articulos"%>
+      <%= link_to "Volver", "/articulos"%>
 
-      </article>
+    </article>
 
-      <meta name="twitter:card" content="summary_large_image">
-      <meta name="twitter:site" content="@greyhat_se">
-      <meta name="twitter:creator" content="@greyhat_se">
-      <meta name="twitter:title" content="<%= @post.title %>">
-      <meta name="twitter:description" content="<%= @post.body.at(0..200) %>">
-      <meta name="twitter:image" content="https://greyhat.cl<%=url_for(@post.image)%>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@greyhat_se">
+    <meta name="twitter:creator" content="@greyhat_se">
+    <meta name="twitter:title" content="<%= @post.title %>">
+    <meta name="twitter:description" content="<%= @post.body.at(0..200) %>">
+    <meta name="twitter:image" content="https://greyhat.cl<%=url_for(@post.image)%>">
+
+  </div>
+</section>
