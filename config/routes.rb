@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  get 'dashboard/index'
+  get 'dashboard/stats'
+  get 'dashboard/posts'
   devise_for :users
 
   resources :contacts
