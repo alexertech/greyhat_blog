@@ -1,85 +1,68 @@
 
-<section class="wrapper style2">
-  <div class="container">
+<div class="medium-container">
 	<header class="major">
-	  <h2>Hacking Ético de verdad</h2>
-	  <p>Somos profesionales con experiencia certificada en penetración de sistemas:</p>
-	  <%= image_tag  "oscp-acclaim.png", style:'width:120px' %>
-	  <%= image_tag  "osce-acclaim.png", style:'width:120px' %>
-	  <%= image_tag  "oswp-acclaim.png", style:'width:120px' %>
-	  <%= image_tag  "oswe-acclaim.png", style:'width:120px' %>
+		<h2>Hacking Ético de verdad</h2>
+		<p>Somos profesionales con experiencia certificada en penetración de sistemas:</p>
+		<%= image_tag  "oscp-acclaim.png", style:'width:120px' %>
+		<%= image_tag  "osce-acclaim.png", style:'width:120px' %>
+		<%= image_tag  "oswp-acclaim.png", style:'width:120px' %>
+		<%= image_tag  "oswe-acclaim.png", style:'width:120px' %>
 	</header>
-  </div>
-</section>
+</div>
 
-<section class="wrapper style1">
-	<div class="container">
-		<div class="row gtr-200">
-		  <div class="col-8 col-12-narrower">
-			<div id="content">
+<div class="flex-row">
+	<div class="flex-small two-thirds ">
 
-			  <!-- Content -->
+		<!-- Content -->
 
-			  <article>
-				<header>
-				  <h2>El Verdadero Ethical Hacking</h2>
-				</header>
+		<article>
+			<header>
+				<h2>El Verdadero Ethical Hacking</h2>
+			</header>
 
-				<p>En <strong>GreyHat Security</strong> nuestro principal enfoque es la “prevención por educación”, donde una vez completado el proceso de penetración de sistemas (pentesting), nuestros clientes cuentan con un informe detallado de los resultados, posibles vulnerabilidades y vectores de ataque, además de consultoría y capacitación necesaria para implementar las recomendaciones permitiendo corregir, mejorar y fortalecer la seguridad de su infraestructura tecnológica y el activo más importante: <strong>la información</strong>. </p>
+			<p>En <strong>GreyHat Security</strong> nuestro principal enfoque es la “prevención por educación”, donde una vez completado el proceso de penetración de sistemas (pentesting), nuestros clientes cuentan con un informe detallado de los resultados, posibles vulnerabilidades y vectores de ataque, además de consultoría y capacitación necesaria para implementar las recomendaciones permitiendo corregir, mejorar y fortalecer la seguridad de su infraestructura tecnológica y el activo más importante: <strong>la información</strong>. </p>
 
-				<span class="image featured"><%= image_tag  "pic02.jpg" %></span>
-		 
-				<p>Permita que nosotros echemos un vistazo con pruebas controladas que lo ayuden a prevenir antes de que “alguien más” lo haga.</p>
+			<%= image_tag  "pic02.jpg",style:"width:100%" %>
 
-			  </article>
+			<p>Permita que nosotros echemos un vistazo con pruebas controladas que lo ayuden a prevenir antes de que “alguien más” lo haga.</p>
 
-			</div>
-		  </div>
-		  <div class="col-4 col-12-narrower">
-			<div id="sidebar">
-
-			  <!-- Sidebar -->
-
-			  <section>
-				<h3>¿Capacitación Gratuita?</h3>
-				<p>Brindamos charlas y capacitación acerca de técnicas de protección efectivas para las amenazas del día a día, aseguramiento, <a href="https://www.greyhat.cl/posts/como-mejorar-tu-seguridad-y-privacidad-en-linea-rapidamente">buenas prácticas</a> para nuestra vida digital, entre otros.</p>
-				<footer>
-				  <%= link_to "Quiero una charla gratuita", '/contacto', class: "button" %>
-				</footer>
-			  </section>
-
-			  <section>
-				<h3>Nuestros servicios</h3>
-				<ul>
-				  <li>Auditoría de Sistemas WhiteBox/BlackBox</li>
-				  <li>Pentesting y Ethical Hacking</li>
-				  <li>Capacitación y Asesoría</li>
-				  <li>Pruebas de Phishing</li>
-				</ul>
-				<footer>
-				  <%= link_to "Servicios", '/servicios', class: "button" %>
-
-				</footer>
-			  </section>
-
-			</div>
-
-		  </div>
-
-		</div>
+		</article>
 	</div>
-</section>
+	<div class="flex-small one-third">
 
-<section id="cta" class="wrapper style3">
-  <div class="container">
+		<section>
+			<h3>¿Capacitación Gratuita?</h3>
+			<p>Brindamos charlas y capacitación acerca de técnicas de protección efectivas para las amenazas del día a día, aseguramiento, <a href="https://www.greyhat.cl/posts/como-mejorar-tu-seguridad-y-privacidad-en-linea-rapidamente">buenas prácticas</a> para nuestra vida digital, entre otros.</p>
+			<footer>
+				<%= link_to "Quiero una charla gratuita", '/contacto', class: "button" %>
+			</footer>
+		</section>
+
+		<section>
+			<h3>Nuestros servicios</h3>
+			<ul>
+				<li>Auditoría de Sistemas</li>
+					<li>WhiteBox/BlackBox</li>
+				<li>Pentesting y Ethical Hacking</li>
+				<li>Capacitación y Asesoría</li>
+				<li>Pruebas de Phishing</li>
+			</ul>
+			<footer>
+				<%= link_to "Servicios", '/servicios', class: "button" %>
+
+			</footer>
+		</section>
+
+	</div>
+</div>
+
+<div class="medium-container">
 	<header>
-	  <h2>¿Quieres saber más?</h2>
-	  <%= link_to "Contáctanos", '/contacto', class: "button" %>
+		<h2>¿Quieres saber más?</h2>
+		<%= link_to "Contáctanos", '/contacto', class: "button" %>
 	</header>
-  </div>
-</section>
+</div>
 
 
 
 
-				

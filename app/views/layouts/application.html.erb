@@ -1,47 +1,31 @@
-<!DOCTYPE HTML>
-<!--
-	Arcana by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-<head>
-	<title>Greyhat Security - The Real Ethical Hacking</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<!doctype html>
+<html lang="en">
 
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Greyhat Security - The Real Ethical Hacking</title>
 	<%= csrf_meta_tags %>
 	<%= csp_meta_tag %>
 
 	<%= stylesheet_link_tag 'application', media: 'all' %>
 	<%= javascript_pack_tag 'application' %>
-
 </head>
-<body class="is-preload">
-	<div id="page-wrapper">
 
-		<!-- Header -->
-		<div id="header">
+<body>
+	<div class="medium-container">
 
-			<!-- Logo -->
-			<p><a href="index.html" id="logo" style="display:none">Greyhat Security</em></a>
-			<%= image_tag  "logo_full_orig.png", style:"width:300px;margin:0" %>
-			</p>
+		<%= render 'partials/navigation' %>
 
-			<!-- Nav -->
-			<%= render 'partials/navigation' %>
+		<div class="vertical-center">
+			<div><%= image_tag  "logo_full_orig.png", style:"width:300px;margin:0" %></div>
+		</div>	
 
-		</div>
-		
-		
-		
 		<%= yield %>
-		
-		
-				
-		<!-- Footer -->
-		<div id="footer">
 
+		<div class="vertical-center">
 
 			<!-- Icons -->
 			<ul class="icons">
@@ -54,15 +38,13 @@
 			<!-- Copyright -->
 			<div class="copyright">
 				<ul class="menu">
-					<li>&copy; Greyhat Security - All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Greyhat Security - All rights reserved</li><li>Powered by: <a href="https://taniarascia.github.io/primitive/">Primitive</a></li>
 				</ul>
 			</div>
 
-		</div>
-
+		</div>	
 	</div>
 
-	<%= javascript_pack_tag 'arcana' %>
-
 </body>
+
 </html>

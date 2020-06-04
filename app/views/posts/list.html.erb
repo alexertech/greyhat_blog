@@ -1,33 +1,29 @@
-<section class="wrapper style1">
-  <div class="container">
-    <% @posts.each do |post| %>
+<div class="medium-container">
+  <% @posts.each do |post| %>
 
-    <div class="row">
-      <div class="col-2 col-2-narrower">
-        <% if post.image.attached? %>
-        <%=image_tag url_for(post.image),height: '80', width: '150',align: :right, class: "image"%>
-        <% end %>
-      </div>
-      <div class="col-10 col-10-narrower">
-        <strong>
-          <%= link_to post.title, post %>
-        </strong>
-
-        <div style="font-size:small">
-          <em><%= post.created_at.strftime("%d %b. %Y") %></em>
-        </div>
-
-        <div>
-          <%= post.body.at(0..200) %> ... [<%= link_to ' Leer ', post %>]
-        </div>
-
-
-      </div>
+  <div class="row">
+    <div class="col-2 col-2-narrower">
+      <% if post.image.attached? %>
+      <%=image_tag url_for(post.image),height: '80', width: '150',align: :right, class: "image"%>
+      <% end %>
     </div>
-    <div>&nbsp;</div>
+    <div class="col-10 col-10-narrower">
+      <strong>
+        <%= link_to post.title, post %>
+      </strong>
 
-    <% end %>
+      <div style="font-size:small">
+        <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+      </div>
+
+      <div>
+        <%= post.body.at(0..200) %> ... [<%= link_to ' Leer ', post %>]
+      </div>
 
 
+    </div>
   </div>
-</section>
+  <div>&nbsp;</div>
+
+  <% end %>
+</div>
