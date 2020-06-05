@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'dashboard/index'
+  get 'dashboard' => 'dashboard#index'
   get 'dashboard/stats'
   get 'dashboard/posts'
   devise_for :users
@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   get '/servicios' => 'pages#services'
   get '/contacto'  => 'contacts#new'
 
-  get '/articulos'      => 'posts#list'
+  get '/articulos' => 'posts#list'
+
+
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

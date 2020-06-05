@@ -1,13 +1,26 @@
 <%
-@cur_html = 'class="current"'.html_safe
+@cur_html = 'active'.html_safe
 %>
 
-<nav id="nav">
-  <ul>
-    <li <%= current_page?('/index') ? @cur_html : '' %>><a href="/index">Inicio</a></li>
-    <li <%= current_page?('/acerca') ? @cur_html : '' %>><a href="/acerca">Acerca</a></li>
-    <li <%= current_page?('/servicios') ? @cur_html : '' %>><a href="/servicios">Servicios</a></li>
-    <li <%= current_page?('/articulos') || current_page?('/posts') ? @cur_html : '' %>><a href="/articulos">Articulos</a></li>
-    <li <%= current_page?('/contacto') ? @cur_html : '' %>><a href="/contacto">Contacto</a></li>
-  </ul>
-</nav>
+<ul id="nav" class="flex-row">
+	<li class="flex-small <%= current_page?('/index') ? @cur_html : '' %>"">
+		<a href="/index">Inicio</a>
+	</li>
+	<li class="flex-small <%= current_page?('/acerca') ? @cur_html : '' %>"">
+		<a href="/acerca">Acerca</a>
+	</li>
+	<li class="flex-small <%= current_page?('/servicios') ? @cur_html : '' %>"">
+		<a href="/servicios">Servicios</a>
+	</li>
+	<li class="flex-small <%=current_page?('/articulos') || controller.controller_name == 'posts' ? @cur_html : '' %>"">
+		<a href="/articulos">Articulos</a>
+	</li>
+	<li class="flex-small <%= current_page?('/contacto') ? @cur_html : '' %>"">
+		<a href="/contacto">Contacto</a>
+	</li>
+	<% if user_signed_in? %>
+	<li class="flex-small <%= current_page?('/dashboard') ? @cur_html : '' %>"">
+		<a href="/dashboard">Dashboard</a>
+	</li>
+	<% end %>
+</ul>
