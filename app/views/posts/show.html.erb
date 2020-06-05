@@ -1,8 +1,6 @@
+<p id="notice"><%= notice %></p>
 
 <div class="medium-container">
-  <!-- Views: <%=@post.impressionist_count%> -->
-
-  <p id="notice"><%= notice %></p>
 
   <article>
     <header>
@@ -11,11 +9,13 @@
     </header>
 
     <% if @post.image.attached? %>
-    <span class="image featured"><%=image_tag url_for(@post.image)%></span>
+    <div id="image_post"><%=image_tag url_for(@post.image), class:"image_post" %></div>
     <% end %>
 
 
-    <%= markdown(@post.body) %>
+    <div class="medium-container">
+      <%= markdown(@post.body) %>
+    </div>
 
     <%= link_to "Volver", "/articulos"%>
 
@@ -26,6 +26,8 @@
   <meta name="twitter:creator" content="@greyhat_se">
   <meta name="twitter:title" content="<%= @post.title %>">
   <meta name="twitter:description" content="<%= @post.body.at(0..200) %>">
+  <% if @post.image.attached? %>
   <meta name="twitter:image" content="https://greyhat.cl<%=url_for(@post.image)%>">
+  <% end %>
 
 </div>

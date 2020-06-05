@@ -15,36 +15,49 @@
 </head>
 
 <body>
-	<div class="medium-container">
+	<div id="main_body" class="medium-container">
+
+
+		<div id="header" class="vertical-center logo">
+			<div><%= image_tag  "logo_full_orig.png"%></div>
+		</div>	
 
 		<%= render 'partials/navigation' %>
 
-		<div class="vertical-center">
-			<div><%= image_tag  "logo_full_orig.png", style:"width:300px;margin:0" %></div>
-		</div>	
+		<div id="main" class="medium-container">
+			<%= yield %>
+		</div>
 
-		<%= yield %>
 
-		<div class="vertical-center">
 
-			<!-- Icons -->
-			<ul class="icons">
-				<li><a href="https://www.twitter.com/greyhat_se" class="icon brands fa-twitter"  target="_blank"><span class="label">Twitter</span></a></li>
-				<li><a href="https://www.linkedin.com/company/greyhat-se/" class="icon brands fa-linkedin-in"  target="_blank"><span class="label">LinkedIn</span></a></li>
-				<li><a href="https://www.youtube.com/channel/UC6UyHXoDUuv3RDjCkm_Cwaw" class="icon brands fa-youtube" target="_blank"><span class="label">YouTube</span></a></li>
+		<div id="footer" class="medium-container">
 
-			</ul>
+			<div class="flex-row vertical-center copyfoot">
+				Greyhat Security&nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
+				
+			</div>
+			<div class="flex-row vertical-center">
+				<a href="https://www.twitter.com/greyhat_se" target="_blank" class="icon_large">
+					<%=fa_icon "twitter"%>
+				</a>
+				
+				<a href="https://www.linkedin.com/company/greyhat-se/" target="_blank" class="icon_large">
+					<%=fa_icon "linkedin"%>
+				</a>
 
-			<!-- Copyright -->
-			<div class="copyright">
-				<ul class="menu">
-					<li>&copy; Greyhat Security - All rights reserved</li><li>Powered by: <a href="https://taniarascia.github.io/primitive/">Primitive</a></li>
-				</ul>
+				<a href="https://www.youtube.com/channel/UC6UyHXoDUuv3RDjCkm_Cwaw" target="_blank" class="icon_large">
+					<%=fa_icon "youtube"%>
+				</a>
 			</div>
 
-		</div>	
-	</div>
+			<div class="flex-row vertical-center" style="font-size:small;color:grey">
+				<em>Powered by&nbsp;<a href="https://taniarascia.github.io/primitive/">Primitive UI</a></em>
+			</div>
 
+		</div>
+
+
+	</div>
 </body>
 
 </html>
