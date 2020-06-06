@@ -3,8 +3,8 @@
 
 <% @posts.each do |post| %>
 
-<div class="flex-row">
-  <div class="flex-small one-third image_list">
+<div class="flex-row post_list">
+  <div class="flex-small one-fourth image_list">
     <% if post.image.attached? %>
     <%=image_tag url_for(post.image)%>
     <% end %>
@@ -18,11 +18,13 @@
       <em><%= post.created_at.strftime("%d %b. %Y") %></em>
     </div>
 
+<!--
     <div>
       <%= post.body.at(0..200) %> ... [<%= link_to ' Leer ', post %>]
     </div>
-
+-->
   </div>
+  <div style="clear:both"></div>
 </div>
 
 <% end %>
