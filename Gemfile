@@ -59,3 +59,6 @@ gem 'impressionist'
 
 # Font Awesome
 gem "font-awesome-rails"
+
+# Recaptcha
+gem "recaptcha"
