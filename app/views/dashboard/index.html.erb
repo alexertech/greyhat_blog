@@ -2,3 +2,28 @@
 
 <p id="notice"><%= notice %></p>
 
+<div><%= link_to "Posts", posts_url %></div>
+
+<div>
+  <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
+</div>
+
+<h1>Quick stats</h1>
+<table>
+  <tr>
+    <td style="width:200px">Index</td>
+    <td><%= @statIndex %></td>
+  </tr>
+  <tr>
+    <td>Acerca</td>
+    <td><%= @statAbout %></td>
+  </tr>
+  <tr>
+    <td >Servicios</td>
+    <td><%= @statServ %></td>
+  </tr>
+  <tr>
+    <td >Posts</td>
+    <td><%= @statPosts %></td>
+  </tr>
+</table>
