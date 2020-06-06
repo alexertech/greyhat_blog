@@ -10,8 +10,11 @@
 	<%= csrf_meta_tags %>
 	<%= csp_meta_tag %>
 
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
 	<%= stylesheet_link_tag 'application', media: 'all' %>
 	<%= javascript_pack_tag 'application' %>
+
 </head>
 
 <body>
@@ -19,7 +22,7 @@
 
 
 		<div id="header" class="vertical-center logo">
-			<div><%= image_tag  "logo_full_orig.png"%></div>
+			<div><%= image_tag  "logo_white.png"%></div>
 		</div>	
 
 		<%= render 'partials/navigation' %>
@@ -51,7 +54,7 @@
 			</div>
 
 			<div class="flex-row vertical-center" style="font-size:small;color:grey">
-				<em>Powered by&nbsp;<a href="https://taniarascia.github.io/primitive/">Primitive UI</a></em>
+				<em>Powered by&nbsp;<a href="https://taniarascia.github.io/primitive/">Primitive UI</a><br>Photo by Clint Patterson on Unsplash</em>
 			</div>
 
 		</div>
