@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.all
+	@contacts = Contact.all
   end
 
   # GET /contacts/1
@@ -16,41 +16,42 @@ class ContactsController < ApplicationController
 
   # GET /contacts/new
   def new
-    @contact = Contact.new
+	@contact = Contact.new
   end
 
   # POST /contacts
   # POST /contacts.json
   def create
-    @contact = Contact.new(contact_params)
-
-    respond_to do |format|
-      if verify_recaptcha(model: @contact) && @contact.save
-        @contact = Contact.new
-        format.html { render :new, locals: {notice: 'Contact was successfully created.'} }
-      else
-        format.html { render :new }
-      end
-    end
+	respond_to do |format|
+	  if verify_recaptcha(model: @contact)
+		@contact = Contact.new(contact_params)
+		if @contact.save
+		  @contact = Contact.new
+		  format.html { render :new, locals: {notice: 'Contact was successfully created.'} }
+		else
+		  format.html { render :new }
+		end
+	  end
+	end
   end
 
   # DELETE /contacts/1.json
   def destroy
-    @contact.destroy
-    respond_to do |format|
-      format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+	@contact.destroy
+	respond_to do |format|
+	  format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
+	  format.json { head :no_content }
+	end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contact
-      @contact = Contact.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_contact
+	@contact = Contact.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def contact_params
-      params.require(:contact).permit(:name, :email, :message)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def contact_params
+	params.require(:contact).permit(:name, :email, :message)
+  end
 end
