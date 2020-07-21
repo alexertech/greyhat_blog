@@ -33,6 +33,8 @@ class ContactsController < ApplicationController
 		else
 		  format.html { render :new }
 		end
+      else
+	    format.html { render :new }
 	  end
 	end
   end
