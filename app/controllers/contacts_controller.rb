@@ -21,10 +21,12 @@ class ContactsController < ApplicationController
 
   # POST /contacts
   # POST /contacts.json
+
   def create
+
+	@contact = Contact.new(contact_params)
 	respond_to do |format|
 	  if verify_recaptcha(model: @contact)
-		@contact = Contact.new(contact_params)
 		if @contact.save
 		  @contact = Contact.new
 		  format.html { render :new, locals: {notice: 'Contact was successfully created.'} }
