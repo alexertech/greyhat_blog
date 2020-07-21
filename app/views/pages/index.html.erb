@@ -2,46 +2,75 @@
 <div class="flex-row">
   <div class="flex-small two-thirds ">
 
-	<!-- Content -->
+    <!-- Content -->
 
-	<article>
-	  <header>
-		<h2>El Verdadero Ethical Hacking</h2>
-	  </header>
+    <article>
+      <header>
+        <h2>El Verdadero Ethical Hacking</h2>
+      </header>
 
-	  <p>En <strong>GreyHat Security</strong> nuestro principal enfoque es la “prevención por educación”.
-	  Nuestros clientes cuentan con informes detallado las vulnerabilidades y vectores de ataque encontrados en su plataforma
-	  y, en caso de ser requerido, la consultoría y capacitación necesaria para implementar las recomendaciones permitiendo
-	  corregir, mejorar y fortalecer la seguridad de su infraestructura tecnológica. </p>
+      <p>En <strong>GreyHat Security</strong> nuestro principal enfoque es la “prevención por educación”. Nuestros 
+      clientes cuentan con informes detallado las vulnerabilidades y vectores de ataque encontrados en su plataforma.</p>
 
-	  <%=image_tag "img_main.jpg",style:"width:100%" %>
+      <%=image_tag "img_main.jpg",style:"width:100%" %>
 
-	</article>
+      <p>En caso de ser requerido, tambien brindamos la consultoría y capacitación necesaria para implementar las recomendaciones permitiendo
+      corregir, mejorar y fortalecer la seguridad de su infraestructura tecnológica. </p>
+
+      <header>
+        <h2>Ultimos articulos</h2>
+      </header>
+
+
+      <% Post.order("id DESC").all.take(3).each do |post| %>
+
+        <div class="flex-row post_list">
+          <div class="flex-small one-fourth image_list">
+            <% if post.image.attached? %>
+              <%=image_tag url_for(post.image)%>
+            <% end %>
+          </div>
+          <div class="flex-small">
+            <strong>
+              <%= link_to post.title, post %>
+            </strong>
+
+            <div style="font-size:small">
+              <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+            </div>
+
+          </div>
+          <div style="clear:both"></div>
+        </div>
+
+     <% end %>
+
+    </article>
   </div>
   <div class="flex-small one-third">
 
-	<section>
-	  <h3>¿Capacitación Gratuita?</h3>
-	  <p>Brindamos charlas y capacitación acerca de técnicas de protección efectivas para las amenazas del día a día, aseguramiento, <a href="https://www.greyhat.cl/posts/como-mejorar-tu-seguridad-y-privacidad-en-linea-rapidamente">buenas prácticas</a> para nuestra vida digital, entre otros.</p>
-	  <footer>
-		<%= link_to "Quiero una charla gratuita", '/contacto', class: "button" %>
-	  </footer>
-	</section>
+    <section>
+      <h3>¿Capacitación Gratuita?</h3>
+      <p>Brindamos charlas y capacitación acerca de técnicas de protección efectivas para las amenazas del día a día, aseguramiento, <a href="https://www.greyhat.cl/posts/como-mejorar-tu-seguridad-y-privacidad-en-linea-rapidamente">buenas prácticas</a> para nuestra vida digital, entre otros.</p>
+      <footer>
+        <%= link_to "Quiero una charla gratuita", '/contacto', class: "button" %>
+      </footer>
+    </section>
 
-	<section>
-	  <h3>Nuestros servicios</h3>
-	  <ul>
-		<li>Auditoría de Sistemas</li>
-		<li>WhiteBox/BlackBox</li>
-		<li>Pentesting y Ethical Hacking</li>
-		<li>Capacitación y Asesoría</li>
-		<li>Pruebas de Phishing</li>
-	  </ul>
-	  <footer>
-		<%= link_to "Servicios", '/servicios', class: "button" %>
+    <section>
+      <h3>Nuestros servicios</h3>
+      <ul>
+        <li>Auditoría de Sistemas</li>
+        <li>WhiteBox/BlackBox</li>
+        <li>Pentesting y Ethical Hacking</li>
+        <li>Capacitación y Asesoría</li>
+        <li>Pruebas de Phishing</li>
+      </ul>
+      <footer>
+        <%= link_to "Servicios", '/servicios', class: "button" %>
 
-	  </footer>
-	</section>
+      </footer>
+    </section>
 
   </div>
 </div>
