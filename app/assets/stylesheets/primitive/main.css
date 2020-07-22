@@ -1045,10 +1045,17 @@ caption {
   background-color: #212121;
   padding:10px 20px 20px 20px;
 }
-h1, h2, h3 {
+h1 {
+  font-size:20px;
   color:#d3d3d3;
   font-family: 'Montserrat';
 }
+h2, h3 {
+  font-size:24px;
+  color:#d3d3d3;
+  font-family: 'Montserrat';
+}
+
 div.logo img{
   width:300px;
   padding-top: 30px;

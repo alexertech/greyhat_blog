@@ -15,9 +15,37 @@
 
     <div class="medium-container">
       <%= markdown(@post.body) %>
+      <a href="https://twitter.com/intent/tweet?screen_name=greyhat_se&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-size="large" data-lang="es" data-dnt="true" data-show-count="false">Tweet to @greyhat_se</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
+    <br>
+    <hr>
 
-    <%= link_to "Volver", "/articulos"%>
+    <h2>También te puede interesar</h2>
+
+     <% Post.order("RANDOM()").where.not(id: @post.id).all.take(3).each do |post| %>
+
+      <div class="flex-row post_list">
+        <div class="flex-small one-fourth image_list">
+          <% if post.image.attached? %>
+            <%=image_tag url_for(post.image)%>
+          <% end %>
+        </div>
+        <div class="flex-small">
+          <strong>
+            <%= link_to post.title, post %>
+          </strong>
+
+          <div style="font-size:small">
+            <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+          </div>
+
+        </div>
+        <div style="clear:both"></div>
+      </div>
+
+   <% end %>
+
+
 
   </article>
 
