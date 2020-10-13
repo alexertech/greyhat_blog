@@ -3,21 +3,33 @@
 <div class="medium-container">
 
   <article>
-    <header>
-      <h2><%= @post.title %></h2>
-      <p><%= @post.created_at.strftime("%d %b. %Y") %> | <%= link_to "Volver", "/articulos"%></p>
-    </header>
-
     <% if @post.image.attached? %>
     <div id="image_post"><%=image_tag url_for(@post.image), class:"image_post" %></div>
     <% end %>
 
+    <header>
+      <h2><%= @post.title %></h2>
+      <p><%= @post.created_at.strftime("%d %b. %Y") %> | Lectura de <%= (@post.body.scan(/\w+/).size/200)+1 %> minutos | <%= link_to "Volver", "/articulos"%></p>
+    </header>
+
+
 
     <div class="medium-container">
       <%= markdown(@post.body) %>
-      <a href="https://twitter.com/intent/tweet?screen_name=greyhat_se&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-size="large" data-lang="es" data-dnt="true" data-show-count="false">Tweet to @greyhat_se</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
-    <br>
+    
+    <hr>
+    
+    <div class="medium-container">
+      <h3>Acerca del Autor</h3>
+      <%= image_tag "avatar.jpg", style:"width:96px;border-radius:50%;margin-right:20px", align:'left' %>
+      <a href="http://linkedin.com/in/alexbariv/" target="_blank"><strong>Alex Barrios</strong></a><br>
+      <p style="font-size:14px">
+      Cuenta con más de 15 años de experiencia en distintos campos de las tecnologías de información, 
+      ejerciendo principalmente como desarrollador fullstack, administrador de sistemas y asesor de seguridad informática certificado
+      (OSCP, OSCE, OSWP, Hardware Security, Software Security, Usable Security). </p>
+    </div>
+
     <hr>
 
     <h2>También te puede interesar</h2>

@@ -15,7 +15,7 @@
     </strong>
 
     <div style="font-size:small">
-      <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+      <%= post.created_at.strftime("%d %b. %Y") %> | Lectura de <%= (post.body.scan(/\w+/).size/200)+1 %> minutos
     </div>
 
 <!--
