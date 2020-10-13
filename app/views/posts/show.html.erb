@@ -4,7 +4,7 @@
 
   <article>
     <% if @post.image.attached? %>
-    <div id="image_post"><%=image_tag url_for(@post.image), class:"image_post" %></div>
+    <div id="image_post"><%=image_tag url_for(@post.image), class:"image_post", style:"border-radius:5px;" %></div>
     <% end %>
 
     <header>
