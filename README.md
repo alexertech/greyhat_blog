@@ -1,24 +1,22 @@
-# README
+# Greyhat Blog Engine
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI](https://taniarascia.github.io/primitive/) as CSS template. The live version is available at: [greyhat.cl](www.greyhat.cl)
 
-Things you may want to cover:
 
-* Ruby version
+## To-Do:
 
-* System dependencies
+- Large updates in the Dashboard
+  - Better usage of the impresionist gem for the statistics
+  - Better UI for the post management
 
-* Configuration
+## Tools
 
-* Database creation
+- `VScode`
+- Built on `Debian Linux`
+- `ruby 2.6.7p197`
+- `node v14.17.0`
+- `rails 6.1.3.1`
 
-* Database initialization
+## Demo
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+![Greyhat Demo](greyhat.gif)
