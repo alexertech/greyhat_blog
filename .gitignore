@@ -26,6 +26,9 @@
 /config/database.yml
 /config/secrets.yml
 /config/credentials.yml.enc
+/config/initializers/recaptcha.rb
+sync.sh
+server.sh
 
 /public/packs
 /public/packs-test
