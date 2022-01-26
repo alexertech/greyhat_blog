@@ -1,7 +1,5 @@
 class PagesController < ApplicationController
 
-  impressionist :unique => [:session_hash]
-
   def index
   end
   def about

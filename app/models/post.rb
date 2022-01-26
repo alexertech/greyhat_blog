@@ -2,7 +2,6 @@ class Post < ApplicationRecord
 
   after_create :update_slug
   before_update :assign_slug
-  is_impressionable
   has_one_attached :image
 
   def to_param
