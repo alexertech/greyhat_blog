@@ -6,8 +6,14 @@ A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI]
 ## To-Do:
 
 - Large updates in the Dashboard
-  - Better usage of the impresionist gem for the statistics
-  - Better UI for the post management
+- Better UI for the post management
+
+## Changelog
+
+- v0.2
+  - Removed impressionist, will need to research another way to track the visits
+- v0.1
+  - Initial release
 
 ## Tools
 
