@@ -28,7 +28,7 @@ class ContactsController < ApplicationController
 	  if verify_recaptcha(model: @contact)
 		if @contact.save
 		  @contact = Contact.new
-		  format.html { render :new, locals: {notice: 'Contact was successfully created.'} }
+		  format.html { render :new, locals: {notice: 'Mensaje guardado! Recibirá nuestra respuesta en breve.'} }
 		else
 		  format.html { render :new }
 		end
