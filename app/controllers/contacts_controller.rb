@@ -47,6 +47,14 @@ class ContactsController < ApplicationController
 	end
   end
 
+  def clean
+    Contact.destroy_all
+    respond_to do |format|
+      format.html { redirect_to contacts_url, notice: 'Contact messages deleted.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_contact
