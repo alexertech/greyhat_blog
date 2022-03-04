@@ -1165,3 +1165,9 @@ a.button:hover{
 #image_post img {
   width:100%;
 }
+
+#notice {
+  color:green;
+  font-weight: bold;
+  text-align:center;
+}
