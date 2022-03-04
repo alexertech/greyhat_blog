@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   get '/acerca'    => 'pages#about'
   get '/servicios' => 'pages#services'
   get '/contacto'  => 'contacts#new'
-  get '/contacto_clean'  => 'contacts#clean', as: 'contacts_clean_url'
+  get '/contacto_clean'  => 'contacts#clean', as: 'contacts_clean'
 
   get '/articulos' => 'posts#list'
 
