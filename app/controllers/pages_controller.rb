@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-
   def index
   end
   def about
@@ -8,5 +7,4 @@ class PagesController < ApplicationController
   end
   def contact
   end
-
 end

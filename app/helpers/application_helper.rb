@@ -5,13 +5,12 @@ module ApplicationHelper
     end
   end
   def markdown(text)
-    coderayified = CodeRayify.new(:filter_html => true,
-                                  :hard_wrap => true)
+    coderayified = CodeRayify.new(filter_html: true, hard_wrap: true)
     options = {
-      :fenced_code_blocks => true,
-      :no_intra_emphasis => true,
-      :autolink => true,
-      :lax_html_blocks => true,
+      fenced_code_blocks: true,
+      no_intra_emphasis: true,
+      autolink: true,
+      lax_html_blocks: true
     }
     markdown_to_html = Redcarpet::Markdown.new(coderayified, options)
     markdown_to_html.render(text).html_safe

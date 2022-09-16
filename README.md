@@ -2,7 +2,6 @@
 
 A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI](https://taniarascia.github.io/primitive/) as CSS template. The live version is available at: [greyhat.cl](http://www.greyhat.cl)
 
-
 ## To-Do:
 
 - Large updates in the Dashboard
