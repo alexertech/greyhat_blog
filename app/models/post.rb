@@ -16,6 +16,6 @@ class Post < ApplicationRecord
   end
 
   def update_slug
-    update_attributes slug: assign_slug
+    update slug: assign_slug
   end
 end
