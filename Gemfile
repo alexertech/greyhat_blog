@@ -52,3 +52,6 @@ end
 
 # Code styling
 gem "prettier", "~> 3.2"
+
+# Read .env files
+gem "dotenv-rails"
