@@ -1,0 +1,19 @@
+default: &default
+  adapter:  postgresql
+  encoding: unicode
+  port:     5432
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  host:     <%= ENV['DATABASE_HOST'] %>
+
+development:
+  <<: *default
+  database: <%= ENV['DATABASE_PREFIX'] %>-development
+
+test:
+  <<: *default
+    database: <%= ENV['DATABASE_PREFIX'] %>-test
+
+production:
+  <<: *default
+  database: <%= ENV['DATABASE_PREFIX'] %>
