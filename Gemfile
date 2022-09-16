@@ -62,3 +62,5 @@ gem "font-awesome-rails"
 
 # Recaptcha
 gem "recaptcha"
+
+gem "sprockets-rails"
