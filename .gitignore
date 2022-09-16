@@ -25,7 +25,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-/config/database.yml
 /config/secrets.yml
 /config/credentials.yml.enc
 /config/initializers/recaptcha.rb
@@ -41,3 +40,4 @@ yarn-debug.log*
 
 /Notes.todo
 
+/.env
