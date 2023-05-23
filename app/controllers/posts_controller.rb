@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: %i[show list]
   before_action :set_post, only: %i[show edit update destroy]
+  before_action :track_visit, only: %i[show]
 
   # GET /posts
   # GET /posts.json
@@ -16,7 +17,6 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
-    track_visit(@post) unless visit_tracked?
   end
 
   # GET /posts/new
@@ -90,10 +90,10 @@ class PostsController < ApplicationController
     params.require(:post).permit(:title, :body, :image)
   end
 
-  def track_visit(blog_post)
-    blog_post.increment!(:unique_visits)
+  def track_visit
+    @post.increment!(:unique_visits)
     session[:visited_blog_posts] ||= []
-    session[:visited_blog_posts] << blog_post.id
+    session[:visited_blog_posts] << @post.id
   end
 
   def visit_tracked?
