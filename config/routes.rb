@@ -5,8 +5,11 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :contacts
-  resources :posts
-
+  resources :posts do
+    member do
+      get 'track_visit'
+    end
+  end
   root "pages#index" # Pagina principl
 
   get "/index" => "pages#index"

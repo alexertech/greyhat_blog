@@ -16,6 +16,7 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
+    track_visit(@post) unless visit_tracked?
   end
 
   # GET /posts/new
@@ -88,4 +89,15 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:title, :body, :image)
   end
+
+  def track_visit(blog_post)
+    blog_post.increment!(:unique_visits)
+    session[:visited_blog_posts] ||= []
+    session[:visited_blog_posts] << blog_post.id
+  end
+
+  def visit_tracked?
+    session[:visited_blog_posts]&.include?(params[:id].to_i)
+  end
+  
 end
