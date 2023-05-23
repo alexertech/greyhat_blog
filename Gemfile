@@ -1,42 +1,33 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.6"
+ruby "3.1.4"
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "7.0.4"
-# Use postgresql as the database for Active Record
+gem "rails", "7.0.4.3"
 gem "pg", "~> 1.4"
-# Use Puma as the app server
 gem "puma", "~> 5.0"
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem "turbolinks", "~> 5"
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.7"
-
 gem 'sass-rails'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-# Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
-# Auth support
 gem "devise", "4.8.1"
+gem "font-awesome-rails"
+gem "bootsnap", ">= 1.4.2", require: false
+
 # Markdown Support with CodeStyling
 gem "redcarpet", "~> 3.5.1"
 gem "coderay", "~> 1.1.3"
-# Analytics
-# gem 'impressionist' # TODO: Find Alternative
-# Font Awesome
-gem "font-awesome-rails"
+
 # Recaptcha
 gem "recaptcha", "~> 5.12.3"
+
+# Code styling
+gem "prettier", "~> 3.2"
+
+# Read .env files
+gem "dotenv-rails"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
-
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", ">= 1.4.2", require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -51,9 +42,3 @@ group :development do
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
 end
-
-# Code styling
-gem "prettier", "~> 3.2"
-
-# Read .env files
-gem "dotenv-rails"
