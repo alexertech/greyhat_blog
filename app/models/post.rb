@@ -18,4 +18,9 @@ class Post < ApplicationRecord
   def update_slug
     update slug: assign_slug
   end
+
+  def self.total_unique_visits
+    sum { |record| record.unique_visits }
+  end
+
 end
