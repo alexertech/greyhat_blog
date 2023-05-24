@@ -7,8 +7,6 @@ class Post < ApplicationRecord
     slug
   end
 
-  #metodos privados.
-
   private
 
   def assign_slug
@@ -19,8 +17,8 @@ class Post < ApplicationRecord
     update slug: assign_slug
   end
 
-  def self.total_unique_visits
-    sum { |record| record.unique_visits }
+  def total_unique_visits
+    self.sum { |record| record.unique_visits }
   end
 
 end
