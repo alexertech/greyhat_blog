@@ -16,8 +16,14 @@
 
     <div style="font-size:small">
       <%= post.created_at.strftime("%d %b. %Y") %> <br>
-       Lectura de <%= (post.body.scan(/\w+/).size/200)+1 %> minutos
+      Lectura de <%= (post.body.scan(/\w+/).size/200)+1 %> minutos
     </div>
+
+    <% if user_signed_in? %>
+    <div style="font-size:small">
+      Unique visitors: <%= post.unique_visits %>
+    </div>
+    <% end %>
 
 <!--
     <div>
