@@ -6,18 +6,20 @@
 	<li class="flex-small <%= current_page?('/index') ? @cur_html : '' %>"">
 		<a href="/index">Inicio</a>
 	</li>
+	<li class="flex-small <%=current_page?('/articulos') || controller.controller_name == 'posts' ? @cur_html : '' %>"">
+		<a href="/articulos">Articulos</a>
+	</li>
 	<li class="flex-small <%= current_page?('/acerca') ? @cur_html : '' %>"">
 		<a href="/acerca">Acerca</a>
 	</li>
+	<!--
 	<li class="flex-small <%= current_page?('/servicios') ? @cur_html : '' %>"">
 		<a href="/servicios">Servicios</a>
-	</li>
-	<li class="flex-small <%=current_page?('/articulos') || controller.controller_name == 'posts' ? @cur_html : '' %>"">
-		<a href="/articulos">Articulos</a>
 	</li>
 	<li class="flex-small <%= current_page?('/contacto') ? @cur_html : '' %>"">
 		<a href="/contacto">Contacto</a>
 	</li>
+	-->
 	<% if user_signed_in? %>
 	<li class="flex-small <%= current_page?('/dashboard') ? @cur_html : '' %>"">
 		<a href="/dashboard">Dashboard</a>
