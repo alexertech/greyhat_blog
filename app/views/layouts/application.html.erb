@@ -17,7 +17,7 @@
 </head>
 
 <body>
-	<div id="main_body" class="medium-container">
+	<div id="main_body" class="small-container">
 
 
 		<div id="header" class="vertical-center logo">
@@ -28,18 +28,19 @@
 
 		<%= render 'partials/navigation' %>
 
-		<div id="main" class="medium-container">
+		<div id="main" class="small-container">
 			<%= yield %>
 		</div>
 
 
 
-		<div id="footer" class="medium-container">
+		<div id="footer" class="small-container">
 
-			<div class="flex-row vertical-center copyfoot">
+			<div class="vertical-center copyfoot">
 				Greyhat Security&nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
 				
 			</div>
+			<!-- 
 			<div class="flex-row vertical-center">
 				<a href="https://www.twitter.com/greyhat_se" target="_blank" class="icon_large">
 					<%=fa_icon "twitter"%>
@@ -53,6 +54,7 @@
 					<%=fa_icon "youtube"%>
 				</a>
 			</div>
+			-->
 
 			<div class="flex-row vertical-center" style="font-size:small;color:grey">
 				<em>Powered by&nbsp;<a href="https://taniarascia.github.io/primitive/">Primitive UI</a></em>
