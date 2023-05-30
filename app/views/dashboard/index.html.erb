@@ -13,11 +13,11 @@
 <table>
   <tr>
     <td style="width:200px">Index</td>
-    <td></td>
+    <td> <%= Page.find(1).total_unique_visits %> </td>
   </tr>
   <tr>
     <td>Acerca</td>
-    <td><%= @statAbout %></td>
+    <td> <%= Page.find(2).total_unique_visits %> </td>
   </tr>
   <tr>
     <td >Servicios</td>
