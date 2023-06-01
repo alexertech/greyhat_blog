@@ -9,7 +9,18 @@ A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI]
 
 ## To-Do:
 
-- Large updates in the Dashboard
-- Better UI for the post management
-- Fix contact form captcha
-- Add checkbox to enable / disable if a post should be public
+- General
+  - Migrate UI from Primitive CSS to Bulma CSS
+  - Cleanup of older non used ruby folders and files
+  - Cleanup of scaffolding code
+  - Add historic visit tracking counter: Current solution only gives unique visitors
+
+- Dashboard
+  - Change dashboard interface metrics with graphics
+
+- Posts
+  - Blob rendering time is slower, need to create variant versions using Active Storage
+  - Add checkbox to enable / disable if a post should be public
+
+- Comments
+  - Allow comments in posts
