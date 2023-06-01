@@ -12,58 +12,50 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
-	<%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
 
 </head>
 
 <body>
-	<div id="main_body" class="small-container">
 
+	<section class="section">
+		<div class="column is-three-fifths is-offset-one-fifth">
+			<div class="container">
+				<%= image_tag  "logo_white.png"%>
+			</div>
+			
+			<br>
 
-		<div id="header" class="vertical-center logo">
-			<div><%= image_tag  "logo_white.png"%></div>
-		</div>	
+			<%= render 'partials/navigation' %>
 
-		<br>
+			<div class="container">
+				<%= yield %>
+			</div>
 
-		<%= render 'partials/navigation' %>
-
-		<div id="main" class="small-container">
-			<%= yield %>
-		</div>
-
-
-
-		<div id="footer" class="small-container">
-
-			<div class="vertical-center copyfoot">
+			<div class="container">
 				Greyhat Security&nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
-				
 			</div>
-			<!-- 
-			<div class="flex-row vertical-center">
-				<a href="https://www.twitter.com/greyhat_se" target="_blank" class="icon_large">
-					<%=fa_icon "twitter"%>
-				</a>
-				
-				<a href="https://www.linkedin.com/company/greyhat-se/" target="_blank" class="icon_large">
-					<%=fa_icon "linkedin"%>
-				</a>
-
-				<a href="https://www.youtube.com/channel/UC6UyHXoDUuv3RDjCkm_Cwaw" target="_blank" class="icon_large">
-					<%=fa_icon "youtube"%>
-				</a>
-			</div>
-			-->
-
-			<div class="flex-row vertical-center" style="font-size:small;color:grey">
-				<em>Powered by&nbsp;<a href="https://taniarascia.github.io/primitive/">Primitive UI</a></em>
-			</div>
-
 		</div>
+	</section>
 
 
+
+	<!-- 
+	<div class="flex-row vertical-center">
+		<a href="https://www.twitter.com/greyhat_se" target="_blank" class="icon_large">
+			<%=fa_icon "twitter"%>
+		</a>
+		
+		<a href="https://www.linkedin.com/company/greyhat-se/" target="_blank" class="icon_large">
+			<%=fa_icon "linkedin"%>
+		</a>
+
+		<a href="https://www.youtube.com/channel/UC6UyHXoDUuv3RDjCkm_Cwaw" target="_blank" class="icon_large">
+			<%=fa_icon "youtube"%>
+		</a>
 	</div>
+	-->
+
 </body>
 
 </html>

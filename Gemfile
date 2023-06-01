@@ -17,6 +17,9 @@ gem "bootsnap", ">= 1.4.2", require: false
 gem "redcarpet", "~> 3.5.1"
 gem "coderay", "~> 1.1.3"
 
+# Css Template
+gem 'bulma-rails', '~> 0.9.4'
+
 # Recaptcha
 gem "recaptcha", "~> 5.12.3"
 
