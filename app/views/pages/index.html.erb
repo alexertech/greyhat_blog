@@ -1,15 +1,8 @@
-
-<div class="flex-row">
-  <div class="flex-small">
-
-    <!-- Content -->
-
-    <article>
-      
-      <div style="height:10px"></div>
-
-      <%=image_tag "new_main.jpg",style:"width:100%;border-radius:5px;" %>
-
+<div class="container">
+  <div class="section">
+    <%=image_tag "new_main.jpg" %>
+  </div>
+  <div class="section">
       <p>
       GreyHat en un portal de investigación y desarrollo enfocado en técnologías de la información,
       crecimiento profesional y la necesidad elemental de crear un equilibro entre nuestra productividad
@@ -21,68 +14,29 @@
       Puede encontrar en la sección <%= link_to "Artículos", "/articulos" %> nuestro material audiovisual, publicaciones e 
       investigaciones recientes. 
       </p>
+  </div>
+  <div class="section">
+    <% Post.order("id DESC").all.take(3).each do |post| %>
+    <div class="columns">
+      <div class="column is-four-fifths">
 
-      <header>
-        <h2>Últimos artículos</h2>
-      </header>
+        <% if post.image.attached? %>
+          <%=image_tag url_for(post.image)%>
+        <% end %>
 
-      <% Post.order("id DESC").all.take(3).each do |post| %>
+      </div>
+      <div class="column">
+        
+        <strong>
+          <%= link_to post.title, post %>
+        </strong>
 
-        <div class="flex-row post_list">
-          <div class="flex-small one-fourth image_list">
-            <% if post.image.attached? %>
-              <%=image_tag url_for(post.image)%>
-            <% end %>
-          </div>
-          <div class="flex-small">
-            <strong>
-              <%= link_to post.title, post %>
-            </strong>
-
-            <div style="font-size:small">
-              <em><%= post.created_at.strftime("%d %b. %Y") %></em>
-            </div>
-
-          </div>
-          <div style="clear:both"></div>
+        <div style="font-size:small">
+          <em><%= post.created_at.strftime("%d %b. %Y") %></em>
         </div>
 
-     <% end %>
-
-    </article>
-  </div>
-  <!--
-  <div class="flex-small one-third">
-
-    <section>
-      <h3></h3>
-      <p>
-      <ul>
-      <li>Ruby On Rails</li>
-      <li></li>
-      <li></li>
-      <li></li>
-      </li>
-    </section>
-
-    <section>
-      <h3>Nuestros servicios</h3>
-      <ul>
-        <li>Desarrollo Web Full-Stack</li>
-        <li>Mantenimiento Frontend y Backend</li>
-        <li>Auditoría de Sistemas</li>
-        <li>WhiteBox / BlackBox</li>
-        <li>Pentesting y Ethical Hacking</li>
-      </ul>
-    </section>
-
-    <section>
-      <h3>Plataformas</h3>
-      <ul>
-        <li>GNU/Linux en Digital Ocean</li>
-        <li>GCP / Azure / AWS / EC2</li>
-      </ul>
-    </section>
-    -->
+      </div>
+    </div>
+    <% end %>
   </div>
 </div>
