@@ -20,15 +20,15 @@
 
 	<section class="section">
 		<div class="column is-three-fifths is-offset-one-fifth">
-			<div class="container">
-				<%= image_tag  "logo_white.png"%>
+			<div class="containerx">
+				<%= image_tag "logo_white.png", class: "is-three-quarters" %>
 			</div>
 			
 			<br>
 
 			<%= render 'partials/navigation' %>
 
-			<div class="container">
+			<div class="container has-text-dark has-background-light">
 				<%= yield %>
 			</div>
 
