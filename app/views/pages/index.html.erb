@@ -2,7 +2,7 @@
   <div class="hero">
     <%=image_tag "new_main.jpg" %>
   </div>
-  <div class="section">
+  <div class="container p-3">
       <p>
       GreyHat en un portal de investigación y desarrollo enfocado en técnologías de la información,
       crecimiento profesional y la necesidad elemental de crear un equilibro entre nuestra productividad
@@ -15,13 +15,13 @@
       investigaciones recientes. 
       </p>
   </div>
-  <div class="section">
+  <div class="container p-3">
     <% Post.order("id DESC").all.take(3).each do |post| %>
     <div class="columns">
-      <div class="column is-four-fifths">
+      <div class="column is-one-third">
 
         <% if post.image.attached? %>
-          <%=image_tag url_for(post.image)%>
+          <%=image_tag url_for(post.image), class: "image is-rounded" %>
         <% end %>
 
       </div>

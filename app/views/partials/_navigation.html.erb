@@ -3,18 +3,18 @@
 %>
 
 <div class="container has-text-light has-background-dark">
-	<div class="columns has-text-centered">
-		<div class="column">
+	<div class="columns has-text-centered p-4">
+		<div class="column p-2">
 			<a href="/index">Inicio</a>
 		</div>
-		<div class="column">
+		<div class="column p-2">
 			<a href="/articulos">Articulos</a>
 		</div>
-		<div class="column">
+		<div class="column p-2">
 			<a href="/acerca">Acerca de</a>
 		</div>
 		<% if user_signed_in? %>
-		<div class="column">
+		<div class="column p-2">
 			<a href="/dashboard">Dashboard</a>
 		</div>
 		<% end %>

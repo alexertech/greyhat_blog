@@ -20,8 +20,10 @@
 
 	<section class="section">
 		<div class="column is-three-fifths is-offset-one-fifth">
-			<div class="container">
-				<%= image_tag "logo_white.png", class: "is-three-quarters" %>
+			<div class="container image">
+				<div class="column is-three-fifths is-offset-one-fifth">
+					<%= image_tag "logo_white.png" %>
+				</div>
 			</div>
 			
 			<br>
@@ -32,7 +34,7 @@
 				<%= yield %>
 			</div>
 
-			<div class="container has-text-light has-background-dark has-text-centered">
+			<div class="container has-text-light has-background-dark has-text-centered p-4">
 				Greyhat Security&nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
 			</div>
 		</div>
