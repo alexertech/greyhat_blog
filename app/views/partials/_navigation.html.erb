@@ -2,44 +2,15 @@
 @cur_html = 'active'.html_safe
 %>
 
-<div class="container has-text-light has-background-dark">
-	<div class="columns has-text-centered p-4">
-		<div class="column p-2">
-			<a href="/index">Inicio</a>
-		</div>
-		<div class="column p-2">
-			<a href="/articulos">Articulos</a>
-		</div>
-		<div class="column p-2">
-			<a href="/acerca">Acerca de</a>
-		</div>
-		<% if user_signed_in? %>
-		<div class="column p-2">
-			<a href="/dashboard">Dashboard</a>
-		</div>
-		<% end %>
-	</div>
-</div>
-
-
-<ul id="nav" class="flex-row">
-	<li class="flex-small <%= current_page?('/index') ? @cur_html : '' %>"">
-	</li>
-	<li class="flex-small <%=current_page?('/articulos') || controller.controller_name == 'posts' ? @cur_html : '' %>"">
-	</li>
-	<li class="flex-small <%= current_page?('/acerca') ? @cur_html : '' %>"">
-	</li>
-	<!--
-	<li class="flex-small <%= current_page?('/servicios') ? @cur_html : '' %>"">
-		<a href="/servicios">Servicios</a>
-	</li>
-	<li class="flex-small <%= current_page?('/contacto') ? @cur_html : '' %>"">
-		<a href="/contacto">Contacto</a>
-	</li>
-	-->
+<div class="tabs is-centered  has-text-light has-background-dark p-2 m-0">
+  <ul>
+    <li class="is-active"><a href="/index">Inicio</a></li>
+    <li><a href="/articulos">Articulos</a></li>
+    <li><a href="/acerca">Acerca de</a></li>
 	<% if user_signed_in? %>
-	<li class="flex-small <%= current_page?('/dashboard') ? @cur_html : '' %>"">
-		<a href="/dashboard">Dashboard</a>
+    <li>
+	<a href="/dashboard">Dashboard</a>
 	</li>
 	<% end %>
-</ul>
+  </ul>
+</div>
