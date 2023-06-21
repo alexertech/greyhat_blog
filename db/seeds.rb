@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+user = User.new(email: 'alex@dev', password: 'holahola')
+user.save
+
+#Page.new(id: 1, name: 'index').save!
+#Page.new(id: 2, name: 'about').save!
+
+(1..3).each do |n|
+  post = Post.new(title: "Blog post #{n}", body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.')
+  post.image.attach(io: File.new("#{Rails.root}/app/assets/images/new_main.jpg"), content_type: 'image/jpeg', filename: 'banner.jpg')
+  post.save!
+end
