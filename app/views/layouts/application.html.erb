@@ -9,7 +9,9 @@
 	<title>Greyhat Security - The Real Ethical Hacking</title>
 	<%= csrf_meta_tags %>
 	<%= csp_meta_tag %>
-
+    <% if content_for?(:head) %>
+      <%= yield(:head) %>
+    <% end %>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
 	<%= stylesheet_link_tag 'application', media: 'all' %>

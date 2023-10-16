@@ -1,3 +1,8 @@
+<% content_for :head do %>
+  <meta property="og:title" content="<%= @post.title %>" />
+  <meta property="og:image" content="<%= polymorphic_url(@post.image, :only_path => false) if @post.image.attached? %>" />
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <div class="medium-container">
@@ -17,15 +22,10 @@
       <h2><%= @post.title %></h2>
       <p><%= @post.created_at.strftime("%d %b. %Y") %> | Lectura de <%= (@post.body.scan(/\w+/).size/200)+1 %> minutos | <%= link_to "Volver", "/articulos"%></p>
     </header>
-
-
-
     <div class="medium-container">
       <%= markdown(@post.body) %>
     </div>
-    
     <hr>
-    
     <div class="medium-container">
       <h3>Acerca del Autor</h3>
       <%= image_tag "0.jpg", style:"width:120px;border-radius:5px;margin-right:20px", align:'left' %>
