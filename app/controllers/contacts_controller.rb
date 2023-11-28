@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContactsController < ApplicationController
   before_action :authenticate_user!, except: %i[new create]
   before_action :set_contact, only: %i[show destroy]
@@ -10,8 +12,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1
   # GET /contacts/1.json
-  def show
-  end
+  def show; end
 
   # GET /contacts/new
   def new
@@ -31,7 +32,7 @@ class ContactsController < ApplicationController
             render :new,
                    locals: {
                      notice:
-                       "Mensaje guardado! Recibirá nuestra respuesta en breve."
+                       'Mensaje guardado! Recibirá nuestra respuesta en breve.'
                    }
           end
         else
@@ -48,7 +49,7 @@ class ContactsController < ApplicationController
     @contact.destroy
     respond_to do |format|
       format.html do
-        redirect_to contacts_url, notice: "Contact was successfully destroyed."
+        redirect_to contacts_url, notice: 'Contact was successfully destroyed.'
       end
       format.json { head :no_content }
     end
@@ -58,7 +59,7 @@ class ContactsController < ApplicationController
     Contact.destroy_all
     respond_to do |format|
       format.html do
-        redirect_to contacts_url, notice: "Contact messages deleted."
+        redirect_to contacts_url, notice: 'Contact messages deleted.'
       end
       format.json { head :no_content }
     end

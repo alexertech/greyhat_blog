@@ -1,16 +1,16 @@
+# frozen_string_literal: true
+
 class DashboardController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @statIndex =''
-    @statAbout =''
+    @statIndex = ''
+    @statAbout = ''
     @statServ = ''
-    @statPosts =''
+    @statPosts = ''
   end
 
-  def stats
-  end
+  def stats; end
 
-  def posts
-  end
+  def posts; end
 end

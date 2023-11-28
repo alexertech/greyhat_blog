@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   class CodeRayify < Redcarpet::Render::HTML
     def block_code(code, language)
       CodeRay.scan(code, language).div
     end
   end
+
   def markdown(text)
     coderayified = CodeRayify.new(filter_html: true, hard_wrap: true)
     options = {
