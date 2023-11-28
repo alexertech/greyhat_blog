@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post < ApplicationRecord
   after_create :update_slug
   before_update :assign_slug
@@ -10,7 +12,7 @@ class Post < ApplicationRecord
   private
 
   def assign_slug
-    self.slug = "#{title.parameterize}"
+    self.slug = title.parameterize.to_s
   end
 
   def update_slug
@@ -18,7 +20,6 @@ class Post < ApplicationRecord
   end
 
   def self.total_unique_visits
-    sum { |record| record.unique_visits }
+    sum(&:unique_visits)
   end
-
 end

@@ -3,9 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-
   context 'post' do
-		it 'createa post with atachment' do
+    it 'createa post with atachment' do
       subject = Post.new
 
       subject.title = 'title'
@@ -21,7 +20,6 @@ RSpec.describe Post, type: :model do
       expect(subject.image).to be_attached
       expect(subject.image).to be_an_instance_of(ActiveStorage::Attached::One)
       expect(subject.image.blob.filename).not_to be_nil
-		end
-	end
-
+    end
+  end
 end

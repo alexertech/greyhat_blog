@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: %i[show list]
   before_action :set_post, only: %i[show edit update destroy]
@@ -11,13 +13,12 @@ class PostsController < ApplicationController
 
   # Get /blog
   def list
-    @posts = Post.order("id DESC").all
+    @posts = Post.order('id DESC').all
   end
 
   # GET /posts/1
   # GET /posts/1.json
-  def show
-  end
+  def show; end
 
   # GET /posts/new
   def new
@@ -25,8 +26,7 @@ class PostsController < ApplicationController
   end
 
   # GET /posts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /posts
   # POST /posts.json
@@ -36,7 +36,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       if @post.save
         format.html do
-          redirect_to @post, notice: "Post was successfully created."
+          redirect_to @post, notice: 'Post was successfully created.'
         end
         format.json { render :show, status: :created, location: @post }
       else
@@ -52,7 +52,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       if @post.update(post_params)
         format.html do
-          redirect_to @post, notice: "Post was successfully updated."
+          redirect_to @post, notice: 'Post was successfully updated.'
         end
         format.json { render :show, status: :ok, location: @post }
       else
@@ -68,7 +68,7 @@ class PostsController < ApplicationController
     @post.destroy
     respond_to do |format|
       format.html do
-        redirect_to posts_url, notice: "Post was successfully destroyed."
+        redirect_to posts_url, notice: 'Post was successfully destroyed.'
       end
       format.json { head :no_content }
     end
@@ -99,5 +99,4 @@ class PostsController < ApplicationController
   def visit_tracked?
     session[:visited_blog_posts]&.include?(params[:id].to_i)
   end
-  
 end
