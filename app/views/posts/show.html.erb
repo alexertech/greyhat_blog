@@ -1,5 +1,6 @@
 <% content_for :head do %>
   <meta property="og:title" content="<%= @post.title %>" />
+  <meta property="og:description" content="<%= @post.body.at(0..200) %>" />
   <meta property="og:image" content="<%= polymorphic_url(@post.image, :only_path => false) if @post.image.attached? %>" />
 <% end %>
 
@@ -10,31 +11,38 @@
   <article>
 
     <% if user_signed_in? %>
-    Unique visitors: <%= @post.unique_visits %>
+      Unique visitors: <%= @post.unique_visits %>
     <% end %>
 
-
     <% if @post.image.attached? %>
-    <div id="image_post"><%=image_tag url_for(@post.image), class:"image_post", style:"border-radius:5px;" %></div>
+      <div id="image_post"><%= image_tag url_for(@post.image), class: "image_post", style: "border-radius:5px;" %></div>
     <% end %>
 
     <header>
       <h2><%= @post.title %></h2>
-      <p><%= @post.created_at.strftime("%d %b. %Y") %> | Lectura de <%= (@post.body.scan(/\w+/).size/200)+1 %> minutos | <%= link_to "Volver", "/articulos"%></p>
+      <p><%= @post.created_at.strftime("%d %b. %Y") %> |
+        Lectura de <%= (@post.body.scan(/\w+/).size/200)+1 %> minutos | <%= link_to "Volver", "/articulos"%>
+      </p>
     </header>
+
     <div class="medium-container">
       <%= markdown(@post.body) %>
     </div>
     <hr>
+
     <div class="medium-container">
       <h3>Acerca del Autor</h3>
-      <%= image_tag "0.jpg", style:"width:120px;border-radius:5px;margin-right:20px", align:'left' %>
-      <a href="http://linkedin.com/in/alexertech/" target="_blank"><strong>Alex Barrios</strong></a><br>
-      <p style="font-size:14px">
-      Cuenta con más de 15 años de experiencia en distintos campos de las tecnologías de información, 
-      ejerciendo principalmente como desarrollador fullstack, administrador de sistemas y asesor de seguridad informática certificado
-      (OSCP, OSCE, OSWP, Hardware Security, Software Security, Usable Security). </p>
+      <%= image_tag "0.jpg", style: "width:120px;border-radius:5px;margin-right:20px", align:'left' %>
+
+      <strong><a href="http://linkedin.com/in/alexertech/" target="_blank">Alex Barrios</a></strong>
       <br>
+      <p style="font-size:14px">
+        Cuenta con más de 15 años de experiencia en distintos campos de las tecnologías de información,
+        ejerciendo principalmente como desarrollador fullstack, administrador de sistemas y asesor de seguridad
+        informática certificado (OSCP, OSCE, OSWP, Hardware Security, Software Security, Usable Security).
+      </p>
+      <br>
+
     </div>
 
     <hr>
@@ -64,20 +72,6 @@
 
    <% end %>
 
-
-
   </article>
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@greyhat_se">
-  <meta name="twitter:creator" content="@greyhat_se">
-  <meta name="twitter:title" content="<%= @post.title %>">
-  <meta name="twitter:description" content="<%= @post.body.at(0..200) %>">
-  <% if @post.image.attached? %>
-  <meta name="twitter:image" content="https://greyhat.cl<%=url_for(@post.image)%>">
-  <% end %>
-  <% if @post.image.attached? %>
-  <meta name="twitter:image" content="https://greyhat.cl<%=url_for(@post.image)%>">
-  <% end %>
 
 </div>

@@ -6,66 +6,39 @@
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Greyhat Security - The Real Ethical Hacking</title>
 	<%= csrf_meta_tags %>
 	<%= csp_meta_tag %>
-    <% if content_for?(:head) %>
-      <%= yield(:head) %>
-    <% end %>
+	<% if content_for?(:head) %>
+		<%= yield(:head) %>
+	<% else %>
+		<title>Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida</title>
+	<% end %>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
 	<%= stylesheet_link_tag 'application', media: 'all' %>
-
 </head>
 
 <body>
-	<div id="main_body" class="small-container">
 
-
-		<div id="header" class="vertical-center logo">
-			<div><%= image_tag  "logo_white.png"%></div>
-		</div>	
-
-		<br>
-
-		<%= render 'partials/navigation' %>
-
-		<div id="main" class="small-container">
-			<%= yield %>
-		</div>
-
-
-
-		<div id="footer" class="small-container">
-
-			<div class="vertical-center copyfoot">
-				Greyhat Security&nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
-				
-			</div>
-			<!-- 
-			<div class="flex-row vertical-center">
-				<a href="https://www.twitter.com/greyhat_se" target="_blank" class="icon_large">
-					<%=fa_icon "twitter"%>
-				</a>
-				
-				<a href="https://www.linkedin.com/company/greyhat-se/" target="_blank" class="icon_large">
-					<%=fa_icon "linkedin"%>
-				</a>
-
-				<a href="https://www.youtube.com/channel/UC6UyHXoDUuv3RDjCkm_Cwaw" target="_blank" class="icon_large">
-					<%=fa_icon "youtube"%>
-				</a>
-			</div>
-			-->
-
-			<div class="flex-row vertical-center" style="font-size:small;color:grey">
-				<em>Powered by&nbsp;<a href="https://taniarascia.github.io/primitive/">Primitive UI</a></em>
-			</div>
-
-		</div>
-
-
+<div id="main_body" class="small-container">q
+	<div id="header" class="vertical-center logo">
+		<div><%= image_tag  "logo_white.png"%></div>
 	</div>
+
+	<br>
+
+	<%= render 'partials/navigation' %>
+
+	<div id="main" class="small-container">
+		<%= yield %>
+	</div>
+
+	<div id="footer" class="small-container">
+		<div class="vertical-center copyfoot">
+			Greyhat &nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
+		</div>
+	</div>
+</div>
 </body>
 
 </html>
