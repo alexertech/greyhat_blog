@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Post, type: :model do
   context 'post' do
-    it 'create a post with atachment' do
+    it 'create 1a post with atachment' do
       subject = Post.new
 
       subject.title = 'title'
