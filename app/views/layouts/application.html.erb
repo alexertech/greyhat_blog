@@ -20,7 +20,7 @@
 
 <body>
 
-<div id="main_body" class="small-container">q
+<div id="main_body" class="small-container">
 	<div id="header" class="vertical-center logo">
 		<div><%= image_tag  "logo_white.png"%></div>
 	</div>
@@ -29,16 +29,18 @@
 
 	<%= render 'partials/navigation' %>
 
-	<div id="main" class="small-container">
+	<div id="main">
 		<%= yield %>
 	</div>
 
-	<div id="footer" class="small-container">
+	<div id="footer">
 		<div class="vertical-center copyfoot">
 			Greyhat &nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
 		</div>
 	</div>
+
 </div>
+
 </body>
 
 </html>
