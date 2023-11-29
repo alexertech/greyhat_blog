@@ -1,7 +1,7 @@
-/*! 
+/*!
  * Primitive UI | MIT License
  *
- * A minimalist front-end design toolkit built with Sass for developing 
+ * A minimalist front-end design toolkit built with Sass for developing
  * responsive, browser-consistent web apps.
  *
  * Author: Tania Rascia <hello@taniarascia.com>
@@ -1205,25 +1205,25 @@ textarea {
 }
 
 #nav li a:hover {
-  background-color: #111;
+  background-color: #2c6a47;
 }
 
 a {
-  color: #6494fc;
+  color: #02a217;
 }
 a:hover {
-  color: #0366ee;
+  color: #2c6a47;
 }
 
 .active {
-  background-color: #0246a2;
+  background-color: #02a217;
 }
 
 a.button {
-  background-color: #0246a2;
+  background-color: #17a202;
 }
 a.button:hover {
-  background-color: #0366ee;
+  background-color: #13ee03;
 }
 
 .post_list {
