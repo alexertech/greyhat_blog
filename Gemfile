@@ -14,6 +14,7 @@ gem 'puma', '~> 5.0'
 gem 'rails', '7.0.4.3'
 gem 'sass-rails'
 gem 'turbolinks', '~> 5'
+gem 'image_processing', '~> 1.2'
 
 # Markdown Support with CodeStyling
 gem 'coderay', '~> 1.1.3'
