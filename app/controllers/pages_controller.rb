@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# PagesController - Related to static content
 class PagesController < ApplicationController
   after_action :track_visit
 
