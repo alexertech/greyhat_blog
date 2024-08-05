@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
+# PostsController - Related to blog posts
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: %i[show list]
   before_action :set_post, only: %i[show edit update destroy]
   before_action :track_visit, only: %i[show]
 
   # GET /posts
-  # GET /posts.json
   def index
     @posts = Post.all
   end
@@ -17,7 +17,6 @@ class PostsController < ApplicationController
   end
 
   # GET /posts/1
-  # GET /posts/1.json
   def show; end
 
   # GET /posts/new
@@ -29,7 +28,6 @@ class PostsController < ApplicationController
   def edit; end
 
   # POST /posts
-  # POST /posts.json
   def create
     @post = Post.new(post_params)
 
@@ -38,26 +36,21 @@ class PostsController < ApplicationController
         format.html do
           redirect_to @post, notice: 'Post was successfully created.'
         end
-        format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /posts/1
-  # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
       if @post.update(post_params)
         format.html do
           redirect_to @post, notice: 'Post was successfully updated.'
         end
-        format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -21,6 +21,4 @@ Rails.application.routes.draw do
   get '/contacto_clean' => 'contacts#clean', :as => 'contacts_clean'
 
   get '/articulos' => 'posts#list'
-
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
