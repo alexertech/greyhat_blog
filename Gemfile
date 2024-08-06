@@ -8,13 +8,13 @@ ruby '3.3.4'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise', '4.8.1'
 gem 'font-awesome-rails'
+gem 'image_processing', '~> 1.2'
 gem 'jbuilder', '~> 2.7'
 gem 'pg', '~> 1.4'
 gem 'puma', '~> 5.0'
 gem 'rails', '7.1.3.4'
 gem 'sass-rails'
 gem 'turbolinks', '~> 5'
-gem 'image_processing', '~> 1.2'
 
 # Markdown Support with CodeStyling
 gem 'coderay', '~> 1.1.3'
@@ -32,9 +32,10 @@ gem 'dotenv-rails'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
-gem 'capistrano', '~> 3.1.0'
-gem 'capistrano-bundler', '~> 1.1.2'
-gem 'capistrano-rails', '~> 1.1.1'
+gem 'capistrano', '~> 3.19', '>= 3.19.1'
+gem 'capistrano-bundler', '~> 2.1'
+gem 'capistrano-rails', '~> 1.6', '>= 1.6.3'
+gem 'capistrano-rbenv', '~> 2.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
