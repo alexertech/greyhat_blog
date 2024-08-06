@@ -10,8 +10,8 @@ set :bundle_binstubs, nil
 set :default_env, path: '~/.rbenv/shims:~/.rbenv/bin:$PATH'
 set :default_environment, 'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
 
-set :linked_files, %w[config/database.yml config/master.key]
-set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
+set :linked_files, %w[config/database.yml config/master.key config/credentials.yml.enc]
+set :linked_dirs, %w[storage log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
 
 namespace :deploy do
   desc 'Restart application'
