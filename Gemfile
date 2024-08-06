@@ -32,10 +32,12 @@ gem 'dotenv-rails'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
+gem 'bcrypt_pbkdf', '~> 1.1', '>= 1.1.1'
 gem 'capistrano', '~> 3.19', '>= 3.19.1'
 gem 'capistrano-bundler', '~> 2.1'
 gem 'capistrano-rails', '~> 1.6', '>= 1.6.3'
 gem 'capistrano-rbenv', '~> 2.2'
+gem 'ed25519', '~> 1.3'
 gem 'net-ssh', '~> 7.2', '>= 7.2.3'
 
 group :development, :test do
