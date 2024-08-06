@@ -4,7 +4,7 @@ set :application, 'greyhat_blog'
 set :repo_url, 'git@github.com:alexertech/greyhat_blog.git'
 set :deploy_to, '/home/alex/greyhat_blog'
 
-set :linked_files, %w[config/database.yml]
+# set :linked_files, %w[config/database.yml]
 set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
 
 namespace :deploy do
