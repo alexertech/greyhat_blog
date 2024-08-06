@@ -36,6 +36,7 @@ gem 'capistrano', '~> 3.19', '>= 3.19.1'
 gem 'capistrano-bundler', '~> 2.1'
 gem 'capistrano-rails', '~> 1.6', '>= 1.6.3'
 gem 'capistrano-rbenv', '~> 2.2'
+gem 'net-ssh', '~> 7.2', '>= 7.2.3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
