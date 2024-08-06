@@ -4,7 +4,13 @@ set :application, 'greyhat_blog'
 set :repo_url, 'git@github.com:alexertech/greyhat_blog.git'
 set :deploy_to, '/home/alex/greyhat_blog'
 
-set :linked_files, %w[config/database.yml]
+set :rbenv_ruby, File.read('.ruby-version').strip
+set :rbenv_path, '$HOME/.rbenv/'
+set :bundle_binstubs, nil
+set :default_env, path: '~/.rbenv/shims:~/.rbenv/bin:$PATH'
+set :default_environment, 'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
+
+set :linked_files, %w[config/database.yml config/master.key]
 set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
 
 namespace :deploy do
