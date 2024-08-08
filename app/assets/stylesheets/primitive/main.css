@@ -1134,13 +1134,19 @@ caption {
  * CUSTOM - PERSONAL
  */
 
-body {
-  background-color: #121212;
+ body {
+  background-color: #061716;
+  background-image: url('background.jpg');
+  background: url('background.jpg') no-repeat top center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   color: rgba(255, 255, 255, 0.8);
   text-align: left;
   font-family: "Rubik";
   font-size: 16px;
 }
+
 
 hr {
   height: 0;
