@@ -12,9 +12,13 @@ class PagesController < ApplicationController
     @page = Page.find(2)
   end
 
-  def services; end
+  def services
+    @page = Page.find(3)
+  end
 
-  def contact; end
+  def contact
+    @page = Page.find(4)
+  end
 
   private
 

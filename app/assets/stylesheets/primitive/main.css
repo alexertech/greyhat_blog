@@ -1170,7 +1170,7 @@ h3 {
 
 div.logo img {
   width: 300px;
-  padding-top: 10px;
+  margin: 30px;
 }
 div.field input {
   border-color: #404040;
