@@ -16,6 +16,9 @@ gem 'rails', '7.1.3.4'
 gem 'sass-rails'
 gem 'turbolinks', '~> 5'
 
+# Javascript
+gem 'stimulus-rails'
+
 # Markdown Support with CodeStyling
 gem 'coderay', '~> 1.1.3'
 gem 'redcarpet', '~> 3.5.1'
