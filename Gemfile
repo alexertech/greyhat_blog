@@ -5,14 +5,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.4'
 
-gem 'bootsnap', '>= 1.4.2', require: false
-gem 'devise', '4.8.1'
+gem 'bootsnap', '~> 1.18', '>= 1.18.4', require: false
+gem 'devise', '4.9.4'
 gem 'font-awesome-rails'
 gem 'image_processing', '~> 1.2'
 gem 'jbuilder', '~> 2.7'
 gem 'pg', '~> 1.4'
-gem 'puma', '~> 5.0'
-gem 'rails', '7.1.3.4'
+gem 'puma', '~> 6.6'  
+gem 'rails', '7.2.2.1'
 gem 'sass-rails'
 gem 'turbolinks', '~> 5'
 

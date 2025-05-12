@@ -13,6 +13,7 @@ user.save
 
 Page.new(id: 1, name: 'index').save!
 Page.new(id: 2, name: 'about').save!
+Page.new(id: 3, name: 'services').save!
 
 (1..3).each do |n|
   post = Post.new(title: "Blog post #{n}",
