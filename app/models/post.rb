@@ -4,7 +4,9 @@ class Post < ApplicationRecord
   after_create :update_slug
   before_update :assign_slug
   has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_fill: [300, 170]
+    attachable.variant :thumb, resize_to_fill: [300, 170], format: :webp
+    attachable.variant :medium, resize_to_fill: [600, 400], format: :webp
+    attachable.variant :banner, resize_to_fill: [1200, 630], format: :webp
   end
   has_rich_text :body
   has_many :visits, as: :visitable, dependent: :destroy

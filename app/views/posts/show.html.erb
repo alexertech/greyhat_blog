@@ -1,7 +1,7 @@
 <% content_for :head do %>
   <meta property="og:title" content="<%= @post.title %>" />
   <meta property="og:description" content="<%= @post.body.to_plain_text.truncate(200) %>" />
-  <meta property="og:image" content="<%= polymorphic_url(@post.image, :only_path => false) if @post.image.attached? %>" />
+  <meta property="og:image" content="<%= polymorphic_url(@post.image.variant(:banner), :only_path => false) if @post.image.attached? %>" />
 <% end %>
 
 <% if notice %>
@@ -18,7 +18,7 @@
 
     <% if @post.image.attached? %>
       <div id="image_post" class="mb-4">
-        <%= image_tag @post.image, class: "img-fluid rounded" %>
+        <%= image_tag @post.image.variant(:medium), class: "img-fluid rounded", loading: "lazy" %>
       </div>
     <% end %>
 
@@ -63,7 +63,7 @@
         <div class="col-md-4 mb-4">
           <div class="card h-100">
             <% if post.image.attached? %>
-              <%= image_tag url_for(post.image), class: "card-img-top" %>
+              <%= image_tag post.image.variant(:thumb), class: "card-img-top", loading: "lazy" %>
             <% end %>
             <div class="card-body">
               <h5 class="card-title">

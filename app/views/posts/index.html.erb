@@ -34,7 +34,7 @@
                 <tr>
                   <td>
                     <% if post.image.attached? %>
-                      <%= image_tag post.image.variant(:thumb), class: "img-thumbnail", style: "max-width: 100px" %>
+                      <%= image_tag post.image.variant(:thumb), class: "img-thumbnail", style: "max-width: 100px", loading: "lazy" %>
                     <% else %>
                       <div class="bg-light p-3 text-center">
                         <small>Sin imagen</small>
