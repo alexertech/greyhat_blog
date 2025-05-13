@@ -1,0 +1,133 @@
+<div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Dashboard</h2>
+    <div>
+      <%= link_to "Estadísticas detalladas", dashboards_stats_path, class: "btn btn-outline-primary btn-sm me-2" %>
+      <%= link_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+    </div>
+  </div>
+
+  <% if notice %>
+    <div class="alert alert-success" id="notice"><%= notice %></div>
+  <% end %>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Contactos</h5>
+          <p class="card-text display-6"><%= Contact.count %></p>
+          <%= link_to "Administrar contactos", contacts_url, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Artículos</h5>
+          <p class="card-text display-6"><%= Post.count %></p>
+          <%= link_to "Administrar artículos", posts_url, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Visitas totales</h5>
+          <p class="card-text display-6"><%= @total_visits %></p>
+          <div class="small text-muted">
+            Hoy: <%= @visits_today %> | Semana: <%= @visits_this_week %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Visitas por hora</h5>
+          <p class="card-text display-6"><%= Visit.where('viewed_at >= ?', 1.hour.ago).count %></p>
+          <div class="small text-muted">
+            <%= Time.zone.now.strftime('%d/%m/%Y %H:%M') %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h3 class="mb-3">Estadísticas de página</h3>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Página</th>
+                  <th>Total visitas</th>
+                  <th>Última semana</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Inicio</td>
+                  <td><span class="badge bg-primary"><%= @home_visits %></span></td>
+                  <td><span class="badge bg-secondary"><%= Page.find(1).recent_visits %></span></td>
+                </tr>
+                <tr>
+                  <td>Acerca</td>
+                  <td><span class="badge bg-primary"><%= @about_visits %></span></td>
+                  <td><span class="badge bg-secondary"><%= Page.find(2).recent_visits %></span></td>
+                </tr>
+                <tr>
+                  <td>Servicios</td>
+                  <td><span class="badge bg-primary"><%= @services_visits %></span></td>
+                  <td><span class="badge bg-secondary"><%= Page.find(3).recent_visits %></span></td>
+                </tr>
+                <tr>
+                  <td>Artículos (total)</td>
+                  <td><span class="badge bg-success"><%= @posts_visits %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Post').where('viewed_at >= ?', 1.week.ago).count %></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <h3 class="mb-3">Artículos más visitados</h3>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Artículo</th>
+                  <th>Visitas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @most_visited_posts.each do |post| %>
+                  <tr>
+                    <td><%= link_to post.title, post, class: "text-decoration-none" %></td>
+                    <td><span class="badge bg-primary"><%= post.visits.count %></span></td>
+                  </tr>
+                <% end %>
+                <% if @most_visited_posts.empty? %>
+                  <tr>
+                    <td colspan="2" class="text-center">No hay datos disponibles</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <div class="text-end mt-2">
+              <%= link_to "Ver todos", dashboards_posts_path, class: "btn btn-sm btn-outline-primary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

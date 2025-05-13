@@ -1,19 +1,59 @@
-<p id="notice"><%= notice %></p>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">Detalle de contacto</h1>
+    <div>
+      <%= link_to contacts_path, class: "btn btn-outline-secondary" do %>
+        <i class="fa fa-arrow-left"></i> Volver
+      <% end %>
+    </div>
+  </div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @contact.name %>
-</p>
+  <% if notice %>
+    <div class="alert alert-success" id="notice"><%= notice %></div>
+  <% end %>
 
-<p>
-  <strong>Email:</strong>
-  <%= @contact.email %>
-</p>
-
-<p>
-  <strong>Message:</strong>
-  <%= @contact.message %>
-</p>
-
-<%= link_to 'Edit', edit_contact_path(@contact) %> |
-<%= link_to 'Back', contacts_path %>
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="m-0">Mensaje de <%= @contact.name %></h5>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Nombre:</label>
+            <p class="form-control"><%= @contact.name %></p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Email:</label>
+            <p class="form-control">
+              <%= link_to @contact.email, "mailto:#{@contact.email}", class: "text-decoration-none" %>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label fw-bold">Mensaje:</label>
+        <div class="form-control" style="min-height: 150px;">
+          <%= simple_format @contact.message %>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label fw-bold">Fecha de recepción:</label>
+        <p class="form-control"><%= @contact.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+      </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+      <%= link_to contacts_path, class: "btn btn-outline-secondary" do %>
+        <i class="fa fa-arrow-left"></i> Volver
+      <% end %>
+      
+      <%= link_to @contact, method: :delete, data: { confirm: '¿Está seguro de eliminar este contacto?' }, class: "btn btn-outline-danger" do %>
+        <i class="fa fa-trash"></i> Eliminar
+      <% end %>
+    </div>
+  </div>
+</div>

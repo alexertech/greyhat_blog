@@ -84,12 +84,14 @@ class PostsController < ApplicationController
   end
 
   def track_visit
+    # Keep the legacy counter for backward compatibility
     @post.increment!(:unique_visits)
-    session[:visited_blog_posts] ||= []
-    session[:visited_blog_posts] << @post.id
-  end
-
-  def visit_tracked?
-    session[:visited_blog_posts]&.include?(params[:id].to_i)
+    
+    # Record detailed visit data
+    @post.visits.create(
+      ip_address: request.remote_ip,
+      user_agent: request.user_agent,
+      referer: request.referer
+    )
   end
 end

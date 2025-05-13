@@ -3,9 +3,9 @@
 Rails.application.routes.draw do
   # Active Storage direct uploads
   post '/rails/active_storage/direct_uploads', to: 'active_storage/direct_uploads#create'
-  get 'dashboard' => 'dashboard#index'
-  get 'dashboard/stats'
-  get 'dashboard/posts'
+  get 'dashboard' => 'dashboards#index'
+  get 'dashboards/stats' => 'dashboards#stats'
+  get 'dashboards/posts' => 'dashboards#posts'
   devise_for :users
 
   resources :contacts

@@ -4,22 +4,36 @@
       <%= image_tag "old_main.jpg", class: "img-fluid rounded w-100" %>
     </div>
 
-    <h2 class="mb-4">Bienvenido a Greyhat</h2>
-
-    <div class="px-md-4 mb-5">
-      <p>En Greyhat, nos sumergimos en el mundo de la tecnología no solo como usuarios, sino como
-      pensadores críticos y exploradores conscientes. Realizamos <strong>desarrollo de aplicaciones</strong>, 
-      juegos, investigaciones y publicaciones sobre tecnología enfocado en la interacción humana y la
-      experiencia del usuario.</p>
+    <h1 class="mb-3 h2">Tecnología Consciente, Soluciones Digitales a tu Medida.</h1> 
+    <div class="px-md-4 mb-5"> <p>En Greyhat, nos sumergimos en el mundo de la tecnología no solo como usuarios, sino como
+      pensadores críticos y exploradores conscientes. Nos enfocamos en la interacción humana y la
+      experiencia de usuario para crear soluciones que realmente conectan.</p>
       
-      <p>Utilizando Ruby on Rails como pilar de nuestras creaciones, logramos equilibrar el uso de recursos
-      y la eficiencia en el desarrollo de aplicaciones web y móviles. Nuestro experticia en
-      tecnología y diseño se dedica a crear experiencias digitales que sean intuitivas, atractivas y
-      accesibles para todos.</p>
-
-      <p class="fw-bold">Explora, Reflexiona, Conéctate.</p>
+      <p>Si buscas potenciar tu proyecto web con desarrollo innovador, explorar las posibilidades de la Inteligencia Artificial Generativa, o fortalecer tu seguridad digital con una perspectiva fresca y soluciones flexibles, estás en el lugar correcto. Utilizamos <strong class="text-primary">Ruby on Rails</strong> como uno de nuestros pilares, equilibrando recursos y eficiencia para aplicaciones web y móviles intuitivas, atractivas y accesibles.</p>
     </div>
 
+    <section class="mb-5 py-4 bg-light rounded">
+      <div class="container">
+        <h2 class="mb-4">Nuestros Servicios Profesionales</h2> <div class="row">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="p-4 h-100">
+              <i class="fas fa-laptop-code fa-3x text-primary mb-3"></i> 
+              <h3 class="mb-3">Desarrollo Web y Consultoría IA</h3>
+              <p class="mb-3">Creamos experiencias web y móviles robustas y centradas en el usuario. Además, te guiamos en la aplicación de Inteligencia Artificial Generativa (LLM/GenIA) y mejores prácticas de código para potenciar tus proyectos.</p>
+              <a href="/servicios#desarrollo-web" class="btn btn-outline-primary">Ver Servicios de Desarrollo e IA</a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-4 h-100">
+              <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+              <h3 class="mb-3">Seguridad Informática Proactiva</h3>
+              <p class="mb-3">Protegemos tus activos digitales con estrategias de ciberseguridad pensadas para ti. Desde auditorías detalladas hasta pentesting, fortalecemos tus defensas para tu tranquilidad.</p>
+              <a href="/servicios#seguridad-informatica" class="btn btn-outline-primary">Ver Servicios de Seguridad</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <h2 class="mb-4">Últimos artículos</h2>
 
     <div class="row">
@@ -36,15 +50,13 @@
               </div>
               <div class="col-md-9">
                 <div class="card-body">
-                  <h5 class="card-title">
-                    <%= link_to post.title, post, class: "text-decoration-none" %>
+                  <h5 class="card-title"> <%= link_to post.title, post, class: "text-decoration-none" %>
                   </h5>
                   <p class="card-text small text-muted">
                     <%= post.created_at.strftime("%d %b. %Y") %>
                   </p>
                   <% if post.body.present? %>
-                    <p class="card-text">
-                      <%= post.body.to_plain_text.truncate(150) %>
+                    <p class="card-text"> <%= post.body.to_plain_text.truncate(150) %>
                     </p>
                     <%= link_to 'Leer artículo →', post, class: "btn btn-sm btn-outline-primary" %>
                   <% end %>
@@ -54,6 +66,9 @@
           </div>
         </div>
       <% end %>
+    </div>
+    <div class="text-center mt-3">
+      <a href="/articulos" class="btn btn-primary">Ver todos los artículos</a>
     </div>
   </article>
 </div>
