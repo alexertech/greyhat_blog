@@ -18,7 +18,6 @@ gem 'turbolinks', '~> 5'
 
 # Javascript
 gem 'stimulus-rails'
-gem 'trix'
 gem 'actiontext'
 gem 'importmap-rails'
 gem 'bootstrap', '~> 5.3.0'
