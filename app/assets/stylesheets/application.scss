@@ -10,7 +10,7 @@ body {
   -o-background-size: cover;
   text-align: left;
   font-family: "Rubik", sans-serif;
-  font-size: 16px;
+  font-size: 16px; // Considerar si este tamaño base es el adecuado o si los fs-5 estaban compensando un base pequeño.
   min-height: 100vh;
   width: 100%;
 }
@@ -25,7 +25,7 @@ body {
 
 h1, h2, h3, h4, h5 {
   font-family: "Montserrat", sans-serif;
-  color: #000;
+  color: #000; // Texto de encabezado negro, se mantiene.
 }
 
 // Logo
@@ -40,30 +40,34 @@ div.logo img {
   transition: background-color 0.2s ease;
   flex-basis: 0;
   flex-grow: 1;
+  color: #333; // Color de texto base para items de navegación (ajustar si es necesario)
 }
 
 .main-nav-item:hover {
-  background-color: #2c6a47;
+  background-color: #6c9bca; // Un gris claro para hover, o un azul muy claro si prefieres color
+  color: #0A58CA; // Texto azul oscuro en hover
 }
 
 .main-nav-item.active {
-  background-color: #02a217;
+  background-color: #0D6EFD; // Azul primario para activo
   color: white !important;
 }
 
 .bg-dark {
-  background-color: #333 !important;
+  background-color: #333 !important; // Se mantiene
 }
 
 a {
-  color: #02a217;
+  color: #0D6EFD; // Azul primario para enlaces
+  text-decoration: none; // Sugerencia: añadir para quitar subrayado por defecto si se desea
 }
 
 a:hover {
-  color: #2c6a47;
+  color: #0A58CA; // Azul más oscuro para hover de enlaces
+  text-decoration: underline; // Sugerencia: añadir subrayado en hover para mejor UX
 }
 
-// Posts
+// Posts (sin cambios de color directo en esta sección)
 .post_list {
   margin-bottom: 1.25rem;
 }
@@ -83,14 +87,19 @@ a:hover {
 }
 
 .copyfoot {
-  background-color: #333;
+  background-color: #333; // Se mantiene
   border-radius: 0 0 5px 5px;
-  color: white;
+  color: white; // Se mantiene
 }
 
 // Notices
 #notice {
-  color: green;
+  // color: #0D6EFD; // Podría ser el azul primario para consistencia de acento
+  color: #0f5132; // O un verde oscuro estándar de Bootstrap para 'éxito' si es semántico.
+  background-color: #d1e7dd; // Fondo verde claro para 'éxito'
+  border: 1px solid #badbcc; // Borde verde para 'éxito'
+  padding: 1rem;
+  border-radius: 0.25rem;
   font-weight: bold;
   text-align: center;
 }
@@ -102,14 +111,16 @@ trix-editor {
   overflow-y: auto;
 }
 
-// Override Bootstrap's defaults with custom colors
+// Override Bootstrap's defaults with custom colors (AZUL)
 .btn-primary {
-  background-color: #17a202;
-  border-color: #17a202;
+  background-color: #0D6EFD;
+  border-color: #0D6EFD;
+  color: white;
 }
 .btn-primary:hover {
-  background-color: #13ee03;
-  border-color: #13ee03;
+  background-color: #0A58CA; // Azul más oscuro para hover
+  border-color: #0A58CA;
+  color: white;
 }
 
 // Login form styling
@@ -119,35 +130,36 @@ trix-editor {
 }
 
 .card-header.bg-dark {
-  background-color: #333 !important;
+  background-color: #333 !important; // Se mantiene
 }
 
 .form-control:focus {
-  border-color: #17a202;
-  box-shadow: 0 0 0 0.25rem rgba(23, 162, 2, 0.25);
+  border-color: #0D6EFD; // Azul primario para borde en focus
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); // Sombra con el azul primario
 }
 
 .form-check-input:checked {
-  background-color: #17a202;
-  border-color: #17a202;
+  background-color: #0D6EFD; // Azul primario para checkbox activo
+  border-color: #0D6EFD;
 }
 
 .input-group-text {
-  background-color: #f8f9fa;
+  background-color: #f8f9fa; // Se mantiene
 }
 
+// Trix editor buttons - Manteniendo la lógica original pero asegurando que no choque
+// Los colores de 'active' de Trix ya usan un azul de Bootstrap, lo cual ahora será más coherente.
 .trix-button-group button,
 button.trix-button {
-  background-color: #f8f9fa; // A light background for the button
+  background-color: #f8f9fa; 
   border: 1px solid #ccc;
-  color: #333; // Default icon color
+  color: #333; 
   margin: 2px;
-  padding: 0.5em 0.75em; // Your original padding
-  font-size: 0; // Hide text
+  padding: 0.5em 0.75em; 
+  font-size: 0; 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  // Removed fixed width/height for now to debug icon rendering
 
   &:hover {
     background-color: #e9ecef;
@@ -155,15 +167,15 @@ button.trix-button {
   }
 
   &.trix-active {
-    background-color: #cfe2ff; // Bootstrap's .active blue
-    color: #004085; // Darker blue for active icon
+    background-color: #cfe2ff; // Azul claro de Bootstrap para activo (coherente con nueva paleta)
+    color: #004085; // Azul más oscuro para icono activo
     border-color: #b6d4fe;
   }
 
   &::before {
-    font-family: "Font Awesome 6 Free", "FontAwesome"; // Attempt FA6, fallback to FA4/5 generic
-    font-weight: 900; // For FA6 Solid. If using FA4/5, this might need to be 'normal' or a different value.
-    font-size: 1rem;  // Icon size - let's keep it explicit for now
+    font-family: "Font Awesome 6 Free", "FontAwesome"; 
+    font-weight: 900; 
+    font-size: 1rem;  
     font-style: normal;
     display: inline-block;
     line-height: 1;
@@ -173,7 +185,7 @@ button.trix-button {
   }
 }
 
-// Specific Icons (Unicode points - these are generally for solid style)
+// Specific Icons (Unicode points - se mantienen)
 button.trix-button--icon-bold::before { content: "\f032"; }
 button.trix-button--icon-italic::before { content: "\f033"; }
 button.trix-button--icon-strike::before { content: "\f0cc"; }
@@ -188,5 +200,5 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
 
 .trix-dialog input[type="text"], .trix-dialog input[type="url"],
 .trix-dialog .trix-button--dialog-submit {
-  font-size: initial; // Reset font-size:0 effect for dialog inputs and buttons
+  font-size: initial; 
 }
