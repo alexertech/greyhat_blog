@@ -1,6 +1,5 @@
 // Bootstrap and its variables
 @import "bootstrap";
-@import "font-awesome";
 @import "actiontext";
 
 // Custom styles
@@ -111,4 +110,59 @@ trix-editor {
 .btn-primary:hover {
   background-color: #13ee03;
   border-color: #13ee03;
+}
+
+.trix-button-group button,
+button.trix-button {
+  background-color: #f8f9fa; // A light background for the button
+  border: 1px solid #ccc;
+  color: #333; // Default icon color
+  margin: 2px;
+  padding: 0.5em 0.75em; // Your original padding
+  font-size: 0; // Hide text
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // Removed fixed width/height for now to debug icon rendering
+
+  &:hover {
+    background-color: #e9ecef;
+    color: #000;
+  }
+
+  &.trix-active {
+    background-color: #cfe2ff; // Bootstrap's .active blue
+    color: #004085; // Darker blue for active icon
+    border-color: #b6d4fe;
+  }
+
+  &::before {
+    font-family: "Font Awesome 6 Free", "FontAwesome"; // Attempt FA6, fallback to FA4/5 generic
+    font-weight: 900; // For FA6 Solid. If using FA4/5, this might need to be 'normal' or a different value.
+    font-size: 1rem;  // Icon size - let's keep it explicit for now
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+// Specific Icons (Unicode points - these are generally for solid style)
+button.trix-button--icon-bold::before { content: "\f032"; }
+button.trix-button--icon-italic::before { content: "\f033"; }
+button.trix-button--icon-strike::before { content: "\f0cc"; }
+button.trix-button--icon-link::before { content: "\f0c1"; }
+button.trix-button--icon-quote::before { content: "\f10d"; }
+button.trix-button--icon-code::before { content: "\f121"; }
+button.trix-button--icon-bullet-list::before { content: "\f0ca"; }
+button.trix-button--icon-number-list::before { content: "\f0cb"; }
+button.trix-button--icon-decrease-nesting-level::before { content: "\f03b"; }
+button.trix-button--icon-increase-nesting-level::before { content: "\f03c"; }
+button.trix-button--icon-attach::before { content: "\f0c6"; }
+
+.trix-dialog input[type="text"], .trix-dialog input[type="url"],
+.trix-dialog .trix-button--dialog-submit {
+  font-size: initial; // Reset font-size:0 effect for dialog inputs and buttons
 }

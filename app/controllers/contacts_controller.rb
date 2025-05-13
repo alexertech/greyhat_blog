@@ -25,18 +25,13 @@ class ContactsController < ApplicationController
   def create
     @contact = Contact.new(contact_params)
     respond_to do |format|
-      if verify_recaptcha(model: @contact)
-        if @contact.save
-          @contact = Contact.new
-          format.html do
-            render :new,
-                   locals: {
-                     notice:
-                       'Mensaje guardado! Recibirá nuestra respuesta en breve.'
-                   }
-          end
-        else
-          format.html { render :new }
+      if @contact.save
+        @contact = Contact.new
+        format.html do
+          render :new,
+                 locals: {
+                   notice: 'Mensaje guardado! Recibirá nuestra respuesta en breve.'
+                 }
         end
       else
         format.html { render :new }
@@ -74,6 +69,6 @@ class ContactsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def contact_params
-    params.require(:contact).permit(:name, :email, :message)
+    params.require(:contact).permit(:name, :email, :message, :website)
   end
 end

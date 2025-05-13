@@ -1,9 +1,9 @@
-<%= form_with(model: contact, local: true) do |form| %>
+<%= form_with(model: contact, local: true, class: "needs-validation", html: { novalidate: true }) do |form| %>
 
   <% if contact.errors.any? %>
-    <div id="error_explanation">
-      <h2>Por favor corrija los siguiente <%= pluralize(contact.errors.count, "error") %> errores:</h2>
-      <ul>
+    <div class="alert alert-danger">
+      <h5>Por favor corrija los siguiente <%= pluralize(contact.errors.count, "error") %>:</h5>
+      <ul class="mb-0">
         <% contact.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
@@ -11,28 +11,55 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name, "Nombre" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, "Nombre", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control", required: true %>
+    <div class="invalid-feedback">
+      Por favor ingrese su nombre
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :email, "E-mail" %>
-    <%= form.email_field :email %>
+  <div class="mb-3">
+    <%= form.label :email, "E-mail", class: "form-label" %>
+    <%= form.email_field :email, class: "form-control", required: true %>
+    <div class="invalid-feedback">
+      Por favor ingrese un email válido
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :menssage, "Mensaje" %>
-    <%= form.text_area :message %>
-
+  <div class="mb-3">
+    <%= form.label :message, "Mensaje", class: "form-label" %>
+    <%= form.text_area :message, class: "form-control", rows: 5, required: true %>
+    <div class="invalid-feedback">
+      Por favor ingrese su mensaje
+    </div>
   </div>
 
-  <div class="field">
-    <%= recaptcha_tags theme: "dark" %>
+  <div class="field" style="display: none;">
+    <!-- Honeypot field - should remain empty -->
+    <%= form.label :website, "Website (leave blank)" %>
+    <%= form.text_field :website, autocomplete: "off" %>
   </div>
 
-  <div class="actions">
-    <%= form.submit "Enviar" %>
+  <div class="d-grid">
+    <%= form.submit "Enviar", class: "btn btn-primary btn-lg" %>
   </div>
 
 <% end %>
+
+<script>
+  // Bootstrap form validation
+  document.addEventListener('DOMContentLoaded', function() {
+    var forms = document.querySelectorAll('.needs-validation');
+    
+    Array.prototype.slice.call(forms).forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  });
+</script>

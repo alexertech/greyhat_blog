@@ -1,12 +1,27 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h4 mb-0"><i class="fas fa-envelope me-2"></i>Conversemos</h2>
+        </div>
+        <div class="card-body p-4">
+          <% if notice %>
+            <div class="alert alert-success" id="notice"><%= notice %></div>
+          <% end %>
 
-<h2>Contacto</h2>
+          <p class="lead mb-4"> ¿Interesado en nuestros servicios de <strong>Desarrollo Web</strong>, <strong>Consultoría en IA</strong>, <strong>Seguridad Informática</strong>, consultoría general, charlas o capacitaciones? Completa el siguiente formulario y nos pondremos en contacto a la brevedad.
+          </p>
+          <p class="mb-4">
+            Si prefieres una comunicación más directa, podemos coordinar una llamada o videollamada una vez que recibamos tu consulta inicial por esta vía.
+          </p>
 
-<p id="notice"><%= notice %></p>
-
-<p>Para solicitud de charlas, capacitación y otros servicios, contáctanos en el siguiente formulario.
-Podemos indicarte un <strong>número para atención telefónica</strong> previa solicitud vía e-mail. </p>
-
-
-<%= render 'form', contact: @contact %>
-
-
+          <%= render 'form', contact: @contact %>
+        </div>
+        <div class="card-footer text-muted small">
+          <p class="mb-0">Nos comprometemos a proteger tu privacidad. La información que nos proporciones será utilizada únicamente para responder a tu consulta.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

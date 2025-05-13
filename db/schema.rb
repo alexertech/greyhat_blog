@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_12_201422) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_13_173205) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -87,6 +87,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_12_201422) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "visits", force: :cascade do |t|
+    t.integer "visitable_id"
+    t.string "visitable_type"
+    t.string "ip_address"
+    t.string "user_agent"
+    t.string "referer"
+    t.datetime "viewed_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["viewed_at"], name: "index_visits_on_viewed_at"
+    t.index ["visitable_id", "visitable_type"], name: "index_visits_on_visitable_id_and_visitable_type"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

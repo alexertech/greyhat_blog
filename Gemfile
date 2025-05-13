@@ -7,7 +7,6 @@ ruby '3.3.4'
 
 gem 'bootsnap', '~> 1.18', '>= 1.18.4', require: false
 gem 'devise', '4.9.4'
-gem 'font-awesome-rails'
 gem 'image_processing', '~> 1.2'
 gem 'jbuilder', '~> 2.7'
 gem 'pg', '~> 1.4'

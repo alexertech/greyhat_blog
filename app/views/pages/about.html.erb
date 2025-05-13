@@ -1,66 +1,43 @@
-
 <div>
   <div class="mb-4">
     <%= image_tag "about.jpg", class: "img-fluid rounded w-100" %>
   </div>
 
   <div class="row">
-    <div class="col-lg-8 mx-auto">
+    <div class="col-lg-9 mx-auto"> 
       <section class="mb-5">
-        <h2 class="mb-4">Acerca de Greyhat</h2>
-        <p>Greyhat es un espacio donde exploramos el equilibrio entre la innovación digital y la vida cotidiana.
-        Creemos que la tecnología no solo moldea nuestro mundo, sino que también refleja quiénes somos
-        y cómo vivimos.</p>
+        <h1 class="mb-3 h2">Acerca de Greyhat</h1> <p class="text-muted"><em>"Explorando la tecnología con pensamiento crítico y un enfoque humano."</em></p>
 
-        <p>Este concepto esta aplicado a nusetras creaciones, buscando ofrecer a nuestros usuarios experiencias
-        digitales que sean intuitivas, atractivas y accesibles para todos.</p>
-      </section>
+        <p class="mt-4">En Greyhat, vemos la tecnología no solo como un conjunto de herramientas, sino como una extensión de la capacidad humana y un reflejo de nuestra sociedad. Creemos firmemente en desarrollar y aplicar soluciones digitales de manera consciente, crítica y, sobre todo, centrada en las personas que las utilizarán.</p> <p>Buscamos el equilibrio entre la innovación digital y la vida cotidiana, aplicando este concepto en cada creación para ofrecer experiencias digitales intuitivas, atractivas y accesibles.</p> </section>
 
-      <section class="mb-5">
-        <h2 class="mb-4">Nuestra Misión</h2>
-        <p>Desarrollar aplicaciones, juegos, investigaciones y publicaciones sobre tecnología centradas en
-        la interacción humana y la experiencia del usuario.</p>
-
-        <p>Con nuestros artículos, ofrecer una perspectiva única en el vasto universo de la tecnología digital.
-        Desde análisis críticos sobre el uso excesivo de tecnología hasta consejos prácticos para manejar
-        el estrés en la era digital, Greyhat es tu guía para navegar en este mundo interconectado.</p>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="mb-4">Nuestro Enfoque</h2>
-        <p>Greyhat se centra en la sabiduría compartida, inspirada en la idea de que el conocimiento es
-        más valioso cuando se comparte. Aquí encontrarás artículos que abarcan desde el desarrollo
-        de software hasta reflexiones personales, todos con el objetivo de mejorar la comprensión y
-        el uso de la tecnología en nuestras vidas.</p>
-      </section>
+      <section class="mb-5 p-4 bg-light rounded">
+        <h2 class="mb-4 text-primary"><i class="fas fa-bullseye me-2"></i>Nuestra Misión y Enfoque</h2> <p>Nuestra misión se desdobla en dos vertientes complementarias:</p> <ul> <li><strong>Como profesionales:</strong> Desarrollar aplicaciones, soluciones de seguridad y consultoría tecnológica (incluyendo la guía en IA Generativa) que pongan la interacción humana y la experiencia del usuario en primer plano. Buscamos entregar valor tangible y soluciones robustas.</li>
+          <li><strong>Como exploradores:</strong> Ofrecer a través de nuestros artículos una perspectiva analítica y reflexiva sobre el vasto universo de la tecnología digital. Desde el desarrollo de software hasta el impacto de la IA, buscamos fomentar una comprensión más profunda y un uso más consciente de las herramientas digitales.</li>
+        </ul>
+        <p>Nos inspira la idea de que el conocimiento es más valioso cuando se comparte. Greyhat es un espacio para la sabiduría compartida, con el objetivo de mejorar la forma en que entendemos y utilizamos la tecnología en nuestras vidas.</p> </section>
 
       <section>
-        <h2 class="mb-4">Conoce al Autor</h2>
-        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-3">
-          <div class="mb-3 mb-md-0 me-md-4">
-            <a href="http://linkedin.com/in/alexertech/" target="_blank">
-              <%= image_tag "0.jpg", class: "rounded", style: "width: 140px;" %>
+        <h2 class="mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Conoce al Fundador</h2> <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-3 bg-white p-4 rounded shadow-sm">
+          <div class="mb-3 mb-md-0 me-md-4 text-center">
+            <a href="http://linkedin.com/in/alexertech/" target="_blank" rel="noopener noreferrer">
+              <%= image_tag "0.jpg", class: "rounded-circle img-thumbnail" %>
             </a>
           </div>
-          <div>
-            <p>Detrás de Greyhat está Alex Barrios, un profesional con más de 20 años de experiencia en
-            distintos campos de las tecnologías de información. Con un sólido conocimiento en
-            Desarrollo de Software y certificado experto en Seguridad Informática.</p>
+          <div> <p>Detrás de Greyhat está <strong>Alex Barrios</strong>, un profesional con más de 20 años de trayectoria en diversos campos de las Tecnologías de la Información. Con un sólido conocimiento en Desarrollo de Software y múltiples certificaciones que avalan su expertise en Seguridad Informática (OSCP, OSWP, OSWE).</p>
 
-            <p>Alex es proactivo, un apasionado de la tecnología con años de experiencia comprometido con
-            compartir sus conocimientos y experiencias, e intercambiar ideas y puntos de vistas
-            en busca de un crecimiento personal pleno en conjunto.</p>
+            <p>Alex es un apasionado de la tecnología, proactivo y comprometido con compartir sus conocimientos y experiencias. Busca constantemente intercambiar ideas y puntos de vista, fomentando un crecimiento personal y profesional en conjunto con la comunidad y sus clientes.</p>
           </div>
         </div>
 
-        <div class="text-center mt-4">
-          <div class="d-inline-block me-3">
+        <div class="text-center mt-4 mb-5">
+          <p class="fw-bold mb-2">Certificaciones Destacadas:</p>
+          <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="Offensive Security Certified Professional (OSCP)">
             <%= image_tag "oscp-acclaim.png", alt: "OSCP Certification", width: "100" %>
           </div>
-          <div class="d-inline-block me-3">
+          <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="Offensive Security Wireless Professional (OSWP)">
             <%= image_tag "oswp-acclaim.png", alt: "OSWP Certification", width: "100" %>
           </div>
-          <div class="d-inline-block">
+          <div class="d-inline-block" data-bs-toggle="tooltip" title="Offensive Security Web Expert (OSWE)">
             <%= image_tag "oswe-acclaim.png", alt: "OSWE Certification", width: "100" %>
           </div>
         </div>
