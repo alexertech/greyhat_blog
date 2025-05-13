@@ -16,9 +16,9 @@
     <%= form.text_field :title %>
   </div>
 
-  <div class="field">
+  <div class="field" data-controller="trix-paste">
     <%= form.label :body %>
-    <%= form.text_area :body %>
+    <%= form.rich_text_area :body, data: { trix_paste_target: "editor" } %>
   </div>
 
   <div class="">
