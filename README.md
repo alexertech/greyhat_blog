@@ -21,6 +21,7 @@ A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI]
 - Posts
   - Blob rendering time is slower, need to create variant versions using Active Storage
   - Add checkbox to enable / disable if a post should be public
+  - ✅ Markdown support with Trix editor and image paste functionality
 
 - Comments
   - Allow comments in posts

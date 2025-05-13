@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Active Storage direct uploads
+  post '/rails/active_storage/direct_uploads', to: 'active_storage/direct_uploads#create'
   get 'dashboard' => 'dashboard#index'
   get 'dashboard/stats'
   get 'dashboard/posts'

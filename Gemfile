@@ -18,6 +18,9 @@ gem 'turbolinks', '~> 5'
 
 # Javascript
 gem 'stimulus-rails'
+gem 'trix'
+gem 'actiontext'
+gem 'importmap-rails'
 
 # Markdown Support with CodeStyling
 gem 'coderay', '~> 1.1.3'
