@@ -1,42 +1,48 @@
 
-<h2>Artículos</h2>
+<div>
+  <h2 class="mb-4">Artículos</h2>
 
-<p>Aquí, encontrarás reflexiones sobre cómo la
-tecnología afecta nuestro día a día, consejos para una vida digital equilibrada, y perspectivas
-únicas sobre las últimas tendencias. Únete a nosotros en esta aventura para
-descubrir cómo la tecnología puede enriquecer nuestras vidas sin dominarlas.</p>
+  <p class="lead mb-5">
+    Aquí, encontrarás reflexiones sobre cómo la
+    tecnología afecta nuestro día a día, consejos para una vida digital equilibrada, y perspectivas
+    únicas sobre las últimas tendencias. Únete a nosotros en esta aventura para
+    descubrir cómo la tecnología puede enriquecer nuestras vidas sin dominarlas.
+  </p>
 
-<% @posts.each do |post| %>
-
-<div class="flex-row post_list">
-  <div class="flex-small one-fourth image_list">
-    <% if post.image.attached? %>
-      <%=image_tag post.image.variant(:thumb)%>
+  <div class="row">
+    <% @posts.each do |post| %>
+      <div class="col-md-12 mb-4">
+        <div class="card shadow-sm">
+          <div class="row g-0">
+            <div class="col-md-3 d-flex align-items-center">
+              <% if post.image.attached? %>
+                <div class="p-2" style="height: 170px; width: 100%;">
+                  <%= image_tag post.image.variant(:thumb), class: "rounded-start", style: "object-fit: cover; height: 100%; width: 100%;" %>
+                </div>
+              <% end %>
+            </div>
+            <div class="col-md-9">
+              <div class="card-body">
+                <h4 class="card-title">
+                  <%= link_to post.title, post, class: "text-decoration-none" %>
+                </h4>
+                <div class="card-text text-muted small mb-2">
+                  <%= post.created_at.strftime("%d %b. %Y") %> · 
+                  Lectura de <%= (post.body.to_plain_text.split.size/200)+1 %> minutos
+                  
+                  <% if user_signed_in? %>
+                    · <span class="badge bg-info">Unique visitors: <%= post.unique_visits %></span>
+                  <% end %>
+                </div>
+                <p class="card-text">
+                  <%= post.body.to_plain_text.truncate(200) %>
+                </p>
+                <%= link_to 'Leer artículo completo →', post, class: "btn btn-sm btn-outline-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <% end %>
   </div>
-  <div class="flex-small">
-    <strong>
-      <%= link_to post.title, post %>
-    </strong>
-
-    <div style="font-size:small">
-      <%= post.created_at.strftime("%d %b. %Y") %> <br>
-      Lectura de <%= (post.body.to_plain_text.scan(/\w+/).size/200)+1 %> minutos
-    </div>
-
-    <% if user_signed_in? %>
-    <div style="font-size:small">
-      Unique visitors: <%= post.unique_visits %>
-    </div>
-    <% end %>
-
-<!--
-    <div>
-      <%= post.body.to_plain_text.at(0..200) %> ... [<%= link_to ' Leer ', post %>]
-    </div>
--->
-  </div>
-  <div style="clear:both"></div>
 </div>
-
-<% end %>

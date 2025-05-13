@@ -4,74 +4,78 @@
   <meta property="og:image" content="<%= polymorphic_url(@post.image, :only_path => false) if @post.image.attached? %>" />
 <% end %>
 
-<p id="notice"><%= notice %></p>
+<% if notice %>
+<div class="alert alert-success" id="notice"><%= notice %></div>
+<% end %>
 
-<div class="medium-container">
-
+<div>
   <article>
-
     <% if user_signed_in? %>
-      Unique visitors: <%= @post.unique_visits %>
+      <div class="badge bg-info text-white mb-3">
+        Unique visitors: <%= @post.unique_visits %>
+      </div>
     <% end %>
 
     <% if @post.image.attached? %>
-      <div id="image_post"><%= image_tag @post.image, class: "image_post", style: "border-radius:5px;" %></div>
+      <div id="image_post" class="mb-4">
+        <%= image_tag @post.image, class: "img-fluid rounded" %>
+      </div>
     <% end %>
 
-    <header>
-      <h2><%= @post.title %></h2>
-      <p><%= @post.created_at.strftime("%d %b. %Y") %> |
-        Lectura de <%= (@post.body.to_plain_text.split.size/200)+1 %> minutos | <%= link_to "Volver", "/articulos"%>
+    <header class="mb-4">
+      <h2 class="mb-2"><%= @post.title %></h2>
+      <p class="text-muted">
+        <%= @post.created_at.strftime("%d %b. %Y") %> |
+        Lectura de <%= (@post.body.to_plain_text.split.size/200)+1 %> minutos | 
+        <%= link_to "Volver", "/articulos", class: "text-decoration-none" %>
       </p>
     </header>
 
-    <div class="medium-container">
+    <div class="mb-5">
       <%= @post.body %>
     </div>
+    
     <hr>
 
-    <div class="medium-container">
-      <h3>Acerca del Autor</h3>
-      <%= image_tag "0.jpg", style: "width:120px;border-radius:5px;margin-right:20px", align:'left' %>
-
-      <strong><a href="http://linkedin.com/in/alexertech/" target="_blank">Alex Barrios</a></strong>
-      <br>
-      <p style="font-size:14px">
-        Cuenta con más de 20 años de experiencia en distintos campos de las tecnologías de información.
-        Con un sólido conocimiento en Desarrollo de Software y certificado experto en Seguridad Informática.
-        Estudia budismo y meditación, y es un apasionado de la tecnología y la vida.
-      </p>
-      <br>
-
+    <div class="row py-4">
+      <div class="col-12">
+        <h3 class="mb-3">Acerca del Autor</h3>
+        <div class="d-flex align-items-start">
+          <%= image_tag "0.jpg", class: "rounded me-3", style: "width:120px;" %>
+          <div>
+            <strong><a href="http://linkedin.com/in/alexertech/" target="_blank" class="text-decoration-none">Alex Barrios</a></strong>
+            <p class="small mt-2">
+              Cuenta con más de 20 años de experiencia en distintos campos de las tecnologías de información.
+              Con un sólido conocimiento en Desarrollo de Software y certificado experto en Seguridad Informática.
+              Estudia budismo y meditación, y es un apasionado de la tecnología y la vida.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <hr>
 
-    <h2>También te puede interesar</h2>
+    <h2 class="mb-4">También te puede interesar</h2>
 
-     <% Post.order("RANDOM()").where.not(id: @post.id).all.take(3).each do |post| %>
-
-      <div class="flex-row post_list">
-        <div class="flex-small one-fourth image_list">
-          <% if post.image.attached? %>
-            <%=image_tag url_for(post.image)%>
-          <% end %>
-        </div>
-        <div class="flex-small">
-          <strong>
-            <%= link_to post.title, post %>
-          </strong>
-
-          <div style="font-size:small">
-            <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+    <div class="row">
+      <% Post.order("RANDOM()").where.not(id: @post.id).all.take(3).each do |post| %>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <% if post.image.attached? %>
+              <%= image_tag url_for(post.image), class: "card-img-top" %>
+            <% end %>
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= link_to post.title, post, class: "text-decoration-none" %>
+              </h5>
+              <p class="card-text small text-muted">
+                <%= post.created_at.strftime("%d %b. %Y") %>
+              </p>
+            </div>
           </div>
-
         </div>
-        <div style="clear:both"></div>
-      </div>
-
-   <% end %>
-
+      <% end %>
+    </div>
   </article>
-
 </div>

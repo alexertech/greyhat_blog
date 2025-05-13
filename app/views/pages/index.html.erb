@@ -1,58 +1,59 @@
-<div class="flex-row">
-  <div class="flex-small">
+<div>
+  <article>
+    <div class="mb-4">
+      <%= image_tag "old_main.jpg", class: "img-fluid rounded w-100" %>
+    </div>
 
-    <!-- Content -->
-    <article>
-      <div style="height:10px"></div>
+    <h2 class="mb-4">Bienvenido a Greyhat</h2>
 
-      <%=image_tag "old_main.jpg", style:"width:100%;border-radius:5px;" %>
+    <div class="px-md-4 mb-5">
+      <p>En Greyhat, nos sumergimos en el mundo de la tecnología no solo como usuarios, sino como
+      pensadores críticos y exploradores conscientes. Realizamos <strong>desarrollo de aplicaciones</strong>, 
+      juegos, investigaciones y publicaciones sobre tecnología enfocado en la interacción humana y la
+      experiencia del usuario.</p>
+      
+      <p>Utilizando Ruby on Rails como pilar de nuestras creaciones, logramos equilibrar el uso de recursos
+      y la eficiencia en el desarrollo de aplicaciones web y móviles. Nuestro experticia en
+      tecnología y diseño se dedica a crear experiencias digitales que sean intuitivas, atractivas y
+      accesibles para todos.</p>
 
-      <header>
-        <h2>Bienvenido a Greyhat</h2>
-      </header>
+      <p class="fw-bold">Explora, Reflexiona, Conéctate.</p>
+    </div>
 
-      <div style="padding:0 20px 0 20px">
-        <div>
-          <p>En Greyhat, nos sumergimos en el mundo de la tecnología no solo como usuarios, sino como
-          pensadores críticos y exploradores conscientes. Realizamos <strong>desarrollo de aplicaciones</strong>, 
-          juegos, investigaciones y publicaciones sobre tecnología enfocado en la interacción humana y la
-          experiencia del usuario.</p>
-          <p>Utilizando Ruby on Rails como pilar de nuestras creaciones, logramos equilibrar el uso de recursos
-          y la eficiencia en el desarrollo de aplicaciones web y móviles. Nuestro experticia en
-          tecnología y diseño se dedica a crear experiencias digitales que sean intuitivas, atractivas y
-          accesibles para todos.</p>
+    <h2 class="mb-4">Últimos artículos</h2>
 
-          <p><strong>Explora, Reflexiona, Conéctate.</strong></p>
-        </div>
-      </div>
-
-      <header>
-        <h2>Últimos artículos</h2>
-      </header>
-
+    <div class="row">
       <% Post.order("id DESC").all.take(3).each do |post| %>
-
-        <div class="flex-row post_list">
-          <div class="flex-small one-fourth image_list">
-            <% if post.image.attached? %>
-              <%=image_tag post.image.variant(:thumb)%>
-            <% end %>
-          </div>
-          <div class="flex-small">
-            <strong>
-              <%= link_to post.title, post %>
-            </strong>
-
-            <div style="font-size:small">
-              <em><%= post.created_at.strftime("%d %b. %Y") %></em>
+        <div class="col-md-12 mb-4">
+          <div class="card shadow-sm">
+            <div class="row g-0">
+              <div class="col-md-3 d-flex align-items-center">
+                <% if post.image.attached? %>
+                  <div class="p-2" style="height: 170px; width: 100%;">
+                    <%= image_tag post.image.variant(:thumb), class: "rounded-start", style: "object-fit: cover; height: 100%; width: 100%;" %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-9">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <%= link_to post.title, post, class: "text-decoration-none" %>
+                  </h5>
+                  <p class="card-text small text-muted">
+                    <%= post.created_at.strftime("%d %b. %Y") %>
+                  </p>
+                  <% if post.body.present? %>
+                    <p class="card-text">
+                      <%= post.body.to_plain_text.truncate(150) %>
+                    </p>
+                    <%= link_to 'Leer artículo →', post, class: "btn btn-sm btn-outline-primary" %>
+                  <% end %>
+                </div>
+              </div>
             </div>
-
           </div>
-          <div style="clear:both"></div>
         </div>
-
-     <% end %>
-
-    </article>
-  </div>
+      <% end %>
+    </div>
+  </article>
 </div>
