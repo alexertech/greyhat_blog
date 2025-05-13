@@ -1,6 +1,7 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "controllers"
+// application.js
+import "@rails/activestorage";
+import "@rails/actiontext";
+import "controllers";
+import "bootstrap";
 import "trix"
 import "@rails/actiontext"
-import "@rails/activestorage"
-import "bootstrap"
