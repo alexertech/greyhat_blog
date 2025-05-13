@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida">
 
 	<%= csrf_meta_tags %>
 	<%= csp_meta_tag %>
@@ -13,17 +14,20 @@
 	<% else %>
 		<title>Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida</title>
 	<% end %>
-	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+	<!-- Preconnect to Google Fonts to improve loading performance -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+	
 	<%= stylesheet_link_tag 'application', media: 'all' %>
-<%= javascript_importmap_tags %>
+	<%= javascript_importmap_tags %>
 </head>
 
 <body>
 
-<div id="main_body" class="small-container">
-	<div id="header" class="vertical-center logo">
-		<div><%= image_tag  "logo.png"%></div>
+<div id="main_body" class="container-sm py-4 mx-auto" style="max-width: 900px;">
+	<div id="header" class="d-flex justify-content-center align-items-center logo">
+		<div><%= image_tag "logo.png", class: "img-fluid" %></div>
 	</div>
 	
 	<%= render 'partials/navigation' %>
@@ -33,13 +37,12 @@
 	</div>
 
 	<div id="footer">
-		<div class="vertical-center copyfoot">
+		<div class="d-flex justify-content-center align-items-center copyfoot py-2">
 			Greyhat &nbsp;&nbsp;<%=fa_icon "copyright"%>&nbsp;&nbsp;All rights reserved
 		</div>
 	</div>
 
 </div>
-<br><br>
 
 </body>
 

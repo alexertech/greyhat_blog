@@ -21,6 +21,8 @@ gem 'stimulus-rails'
 gem 'trix'
 gem 'actiontext'
 gem 'importmap-rails'
+gem 'bootstrap', '~> 5.3.0'
+gem 'sassc-rails'
 
 # Markdown Support with CodeStyling
 gem 'coderay', '~> 1.1.3'

@@ -4,7 +4,7 @@ class Post < ApplicationRecord
   after_create :update_slug
   before_update :assign_slug
   has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_limit: [170, 70]
+    attachable.variant :thumb, resize_to_fill: [300, 170]
   end
   has_rich_text :body
 

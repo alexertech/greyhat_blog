@@ -1,44 +1,70 @@
 
-<div style="height:10px"></div>
+<div>
+  <div class="mb-4">
+    <%= image_tag "about.jpg", class: "img-fluid rounded w-100" %>
+  </div>
 
-<%=image_tag "about.jpg",style:"width:100%;border-radius:5px;" %>
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <section class="mb-5">
+        <h2 class="mb-4">Acerca de Greyhat</h2>
+        <p>Greyhat es un espacio donde exploramos el equilibrio entre la innovación digital y la vida cotidiana.
+        Creemos que la tecnología no solo moldea nuestro mundo, sino que también refleja quiénes somos
+        y cómo vivimos.</p>
 
-<h2>Acerca de Greyhat</h2>
+        <p>Este concepto esta aplicado a nusetras creaciones, buscando ofrecer a nuestros usuarios experiencias
+        digitales que sean intuitivas, atractivas y accesibles para todos.</p>
+      </section>
 
-<p>Greyhat es un espacio donde exploramos el equilibrio entre la innovación digital y la vida cotidiana.
-Creemos que la tecnología no solo moldea nuestro mundo, sino que también refleja quiénes somos
-y cómo vivimos.</p>
+      <section class="mb-5">
+        <h2 class="mb-4">Nuestra Misión</h2>
+        <p>Desarrollar aplicaciones, juegos, investigaciones y publicaciones sobre tecnología centradas en
+        la interacción humana y la experiencia del usuario.</p>
 
-<p>Este concepto esta aplicado a nusetras creaciones, buscando ofrecer a nuestros usuarios experiencias
-digitales que sean intuitivas, atractivas y accesibles para todos.</p>
+        <p>Con nuestros artículos, ofrecer una perspectiva única en el vasto universo de la tecnología digital.
+        Desde análisis críticos sobre el uso excesivo de tecnología hasta consejos prácticos para manejar
+        el estrés en la era digital, Greyhat es tu guía para navegar en este mundo interconectado.</p>
+      </section>
 
-<h2 >Nuestra Misión</h2>
+      <section class="mb-5">
+        <h2 class="mb-4">Nuestro Enfoque</h2>
+        <p>Greyhat se centra en la sabiduría compartida, inspirada en la idea de que el conocimiento es
+        más valioso cuando se comparte. Aquí encontrarás artículos que abarcan desde el desarrollo
+        de software hasta reflexiones personales, todos con el objetivo de mejorar la comprensión y
+        el uso de la tecnología en nuestras vidas.</p>
+      </section>
 
-<p>Desarrollar aplicaciones, juegos, investigaciones y publicaciones sobre tecnología centradas en
-la interacción humana y la experiencia del usuario.</p>
+      <section>
+        <h2 class="mb-4">Conoce al Autor</h2>
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-3">
+          <div class="mb-3 mb-md-0 me-md-4">
+            <a href="http://linkedin.com/in/alexertech/" target="_blank">
+              <%= image_tag "0.jpg", class: "rounded", style: "width: 140px;" %>
+            </a>
+          </div>
+          <div>
+            <p>Detrás de Greyhat está Alex Barrios, un profesional con más de 20 años de experiencia en
+            distintos campos de las tecnologías de información. Con un sólido conocimiento en
+            Desarrollo de Software y certificado experto en Seguridad Informática.</p>
 
-<p>Con nuestros artículos, ofrecer una perspectiva única en el vasto universo de la tecnología digital.
-Desde análisis críticos sobre el uso excesivo de tecnología hasta consejos prácticos para manejar
-el estrés en la era digital, Greyhat es tu guía para navegar en este mundo interconectado.</p>
+            <p>Alex es proactivo, un apasionado de la tecnología con años de experiencia comprometido con
+            compartir sus conocimientos y experiencias, e intercambiar ideas y puntos de vistas
+            en busca de un crecimiento personal pleno en conjunto.</p>
+          </div>
+        </div>
 
-<h2>Nuestro Enfoque</h2>
-
-<p>Greyhat se centra en la sabiduría compartida, inspirada en la idea de que el conocimiento es
-más valioso cuando se comparte. Aquí encontrarás artículos que abarcan desde el desarrollo
-de software hasta reflexiones personales, todos con el objetivo de mejorar la comprensión y
-el uso de la tecnología en nuestras vidas.</p>
-
-
-<h2>Conoce al Autor</h2>
-
-<p><a href="http://linkedin.com/in/alexertech/" target="_blank">
-<%= image_tag "0.jpg", style:"width:140px;border-radius:5px;margin-right:20px", align:'right' %>
-</a>
-Detrás de Greyhat está Alex Barrios, un profesional con más de 20 años de experiencia en
-distintos campos de las tecnologías de información. Con un sólido conocimiento en
-Desarrollo de Software y certificado experto en Seguridad Informática.
-
-
-Alex es proactivo, un apasionado de la tecnología con años de experiencia comprometido con
-compartir sus conocimientos y experiencias, e intercambiar ideas y puntos de vistas
-en busca de un crecimiento personal pleno en conjunto.</p>
+        <div class="text-center mt-4">
+          <div class="d-inline-block me-3">
+            <%= image_tag "oscp-acclaim.png", alt: "OSCP Certification", width: "100" %>
+          </div>
+          <div class="d-inline-block me-3">
+            <%= image_tag "oswp-acclaim.png", alt: "OSWP Certification", width: "100" %>
+          </div>
+          <div class="d-inline-block">
+            <%= image_tag "oswe-acclaim.png", alt: "OSWE Certification", width: "100" %>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

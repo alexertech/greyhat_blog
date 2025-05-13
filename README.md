@@ -1,16 +1,44 @@
 # Greyhat Blog Engine
 
-A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI](https://taniarascia.github.io/primitive/) as CSS template. The live version is available at: [greyhat.cl](http://www.greyhat.cl)
+A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a responsive Bootstrap 5 UI. Visit the live version at: [greyhat.cl](http://www.greyhat.cl)
+
+## Features
+
+- **Responsive Design**: Mobile-friendly interface with Bootstrap 5
+- **Rich Content Editor**: Trix editor with image paste functionality
+- **Markdown Support**: Write blog posts with rich formatting
+- **Image Management**: ActiveStorage for image uploads and variants
+- **Analytics**: Visitor tracking for blog posts and pages
+- **Admin Dashboard**: Statistics and content management
+- **SEO-Friendly**: Meta descriptions and optimized content structure
+
+## Tech Stack
+
+- Ruby on Rails 7.2
+- PostgreSQL database
+- Bootstrap 5.3 for UI
+- Trix + ActionText for rich content
+- Stimulus for JavaScript functionality
+- Font Awesome for icons
+- Turbolinks for faster page loads
 
 ## Demo
 
 ![Greyhat Demo](greyhat.gif)
 
+## Recent Improvements
+
+- ✅ Migrated UI from Primitive CSS to Bootstrap 5
+- ✅ Added rich text editing with Trix editor
+- ✅ Implemented image paste functionality
+- ✅ Optimized performance with proper image handling
+- ✅ Improved responsive layout for all screen sizes
+- ✅ Enhanced service cards with icons and descriptions
+- ✅ Created consistent card-based design across the site
 
 ## To-Do:
 
 - General
-  - Migrate UI from Primitive CSS to Bulma CSS
   - Cleanup of older non used ruby folders and files
   - Cleanup of scaffolding code
   - Add historic visit tracking counter: Current solution only gives unique visitors
@@ -21,7 +49,6 @@ A blog engine written entirely in Ruby on Rails + PostgreSQL with [Primivite UI]
 - Posts
   - Blob rendering time is slower, need to create variant versions using Active Storage
   - Add checkbox to enable / disable if a post should be public
-  - ✅ Markdown support with Trix editor and image paste functionality
 
 - Comments
   - Allow comments in posts
