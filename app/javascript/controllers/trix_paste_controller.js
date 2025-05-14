@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { DirectUpload } from "@rails/activestorage"
-import Trix from "trix"
+import * as Trix from "trix"
 
 // This controller handles pasting images into Trix editor
 export default class extends Controller {

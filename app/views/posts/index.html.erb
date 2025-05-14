@@ -51,7 +51,7 @@
                       <%= link_to edit_post_path(post), class: "btn btn-outline-secondary" do %>
                         <i class="fa fa-edit"></i> Editar
                       <% end %>
-                      <%= link_to post, method: :delete, data: { confirm: '¿Está seguro de eliminar este artículo?' }, class: "btn btn-outline-danger" do %>
+                      <%= button_to post, method: :delete, form: { data: { turbo_confirm: '¿Está seguro de eliminar este artículo?' } }, class: "btn btn-outline-danger", form_class: "d-inline" do %>
                         <i class="fa fa-trash"></i>
                       <% end %>
                     </div>
