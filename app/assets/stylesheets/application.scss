@@ -79,6 +79,8 @@ a:hover {
 
 #image_post img {
   width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 // Footer
@@ -109,6 +111,17 @@ trix-editor {
   min-height: 15rem;
   max-height: 30rem;
   overflow-y: auto;
+}
+
+// Constrain post images to page width
+.trix-content img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+// Remove image captions in Trix editor
+.trix-content .attachment__caption {
+  display: none !important;
 }
 
 // Override Bootstrap's defaults with custom colors (AZUL)
