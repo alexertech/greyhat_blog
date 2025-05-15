@@ -39,17 +39,26 @@
 
     <!-- Comments Section -->
     <section class="mt-5 mb-5">
-      <h3 class="mb-4">
-        <span id="comment_count"><%= pluralize(@post.comments.count, "comment") %></span>
-      </h3>
-      
-      <div id="comments" class="mb-4">
-        <% @post.comments.order(created_at: :desc).each do |comment| %>
-          <%= render "comments/comment", comment: comment %>
+      <div class="comments-container">
+        <h3 class="mb-4 pb-2 border-bottom">
+          <i class="fa-solid fa-comments"></i> 
+          <span id="comment_count"><%= pluralize(@post.comments.count, "comentario") %></span>
+        </h3>
+        
+        <% if @post.comments.any? %>
+          <div id="comments" class="mb-5">
+            <% @post.comments.order(created_at: :desc).each do |comment| %>
+              <%= render "comments/comment", comment: comment %>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="alert alert-light text-center mb-5">
+            <p class="mb-0">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
+          </div>
         <% end %>
+        
+        <%= render "comments/form", post: @post, comment: Comment.new %>
       </div>
-      
-      <%= render "comments/form", post: @post, comment: Comment.new %>
     </section>
 
     <hr>

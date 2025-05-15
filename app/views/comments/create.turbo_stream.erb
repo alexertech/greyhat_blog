@@ -1,3 +1,4 @@
+<%# This file should be named create.turbo_stream.erb %>
 <% if @comment.persisted? %>
   <%= turbo_stream.prepend "comments" do %>
     <%= render "comments/comment", comment: @comment %>
@@ -8,6 +9,6 @@
   <% end %>
   
   <%= turbo_stream.update "comment_count" do %>
-    <%= pluralize(@post.comments.count, "comment") %>
+    <%= pluralize(@post.comments.count, "comentario") %>
   <% end %>
 <% end %> 

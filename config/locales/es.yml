@@ -1,0 +1,66 @@
+es:
+  activerecord:
+    models:
+      comment: "Comentario"
+    attributes:
+      comment:
+        username: "Nombre"
+        email: "Correo electrónico"
+        body: "Comentario"
+    errors:
+      models:
+        comment:
+          attributes:
+            username:
+              blank: "no puede estar en blanco"
+            email:
+              blank: "no puede estar en blanco"
+              invalid: "no es válido"
+            body:
+              blank: "no puede estar en blanco"
+              too_long: "es demasiado largo (máximo 140 caracteres)"
+  
+  errors:
+    messages:
+      spam_detected: "Spam detectado"
+  
+  comments:
+    no_links: "no puede contener enlaces"
+    
+  time:
+    formats:
+      default: "%A, %d de %B de %Y %H:%M:%S %z"
+      long: "%d de %B de %Y %H:%M"
+      short: "%d %b %H:%M"
+    am: "am"
+    pm: "pm"
+    
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d de %b"
+      long: "%d de %B de %Y"
+    day_names: [domingo, lunes, martes, miércoles, jueves, viernes, sábado]
+    abbr_day_names: [dom, lun, mar, mié, jue, vie, sáb]
+    month_names: [~, enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre]
+    abbr_month_names: [~, ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic]
+    order:
+      - :day
+      - :month
+      - :year
+      
+  will_paginate:
+    previous_label: "&#8592; Anterior"
+    next_label: "Siguiente &#8594;"
+    page_gap: "&hellip;"
+    page_entries_info:
+      single_page:
+        zero:  "No se encontraron %{model}"
+        one:   "Mostrando 1 %{model}"
+        other: "Mostrando todos los %{count} %{model}"
+      single_page_html:
+        zero:  "No se encontraron %{model}"
+        one:   "Mostrando <b>1</b> %{model}"
+        other: "Mostrando <b>todos&nbsp;los&nbsp;%{count}</b> %{model}"
+      multi_page: "Mostrando %{model} %{from} - %{to} de %{count} en total"
+      multi_page_html: "Mostrando %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de <b>%{count}</b> en total" 

@@ -14,6 +14,9 @@ class DashboardsController < ApplicationController
     @about_visits = Page.find(2).visits.count
     @services_visits = Page.find(3).visits.count
     @posts_visits = Visit.where(visitable_type: 'Post').count
+    
+    # Comment count for dashboard
+    @comment_count = Comment.count
   end
 
   def stats
@@ -33,5 +36,9 @@ class DashboardsController < ApplicationController
 
   def posts
     @posts = Post.most_visited(10)
+  end
+  
+  def comments
+    @comments = Comment.includes(:post).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 end

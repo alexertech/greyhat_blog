@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'dashboard' => 'dashboards#index'
   get 'dashboards/stats' => 'dashboards#stats'
   get 'dashboards/posts' => 'dashboards#posts'
+  get 'dashboards/comments' => 'dashboards#comments'
   devise_for :users
 
   resources :contacts
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
       get 'track_visit'
     end
   end
+  resources :comments, only: [:destroy]
   root 'pages#index' # Pagina principl
 
   get '/index' => 'pages#index'
