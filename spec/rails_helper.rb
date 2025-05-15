@@ -67,6 +67,10 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   
+  # Include Warden test helpers for system specs
+  config.include Warden::Test::Helpers, type: :system
+  config.after(type: :system) { Warden.test_reset! }
+  
   # Setup a custom login helper method
   config.include Module.new {
     def login_user(user = nil)

@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe Visit, type: :model do
+  before do
+    # Set locale to English for consistent tests
+    I18n.locale = :en
+  end
+  
+  after do
+    # Reset to default locale
+    I18n.locale = I18n.default_locale
+  end
+
   describe 'associations' do
     it 'belongs to visitable polymorphic association' do
       expect(Visit.reflect_on_association(:visitable).macro).to eq(:belongs_to)
