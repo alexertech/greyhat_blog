@@ -35,6 +35,13 @@
         <div class="card-body text-center">
           <h5 class="card-title">Comentarios</h5>
           <p class="card-text display-6"><%= @comment_count %></p>
+          <% if @pending_comment_count > 0 %>
+            <div class="mb-2">
+              <span class="badge bg-warning text-dark">
+                <%= @pending_comment_count %> pendientes de moderación
+              </span>
+            </div>
+          <% end %>
           <%= link_to "Moderar comentarios", dashboards_comments_path, class: "btn btn-primary" %>
         </div>
       </div>

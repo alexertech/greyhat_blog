@@ -16,7 +16,11 @@ Rails.application.routes.draw do
       get 'track_visit'
     end
   end
-  resources :comments, only: [:destroy]
+  resources :comments, only: [:destroy] do
+    member do
+      patch 'approve'
+    end
+  end
   root 'pages#index' # Pagina principl
 
   get '/index' => 'pages#index'

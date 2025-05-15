@@ -1,0 +1,12 @@
+<div class="comment-form-container bg-light p-4 rounded shadow-sm mb-5">
+  <div class="thank-you-message text-center">
+    <div class="text-success mb-3">
+      <i class="fa-solid fa-circle-check fa-3x"></i>
+    </div>
+    <h4 class="mb-3 text-primary">¡Gracias por tu comentario!</h4>
+    <p class="mb-4">Tu comentario ha sido recibido y está pendiente de moderación. Será revisado por nuestro equipo antes de ser publicado.</p>
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <%= link_to "Comentar de nuevo", post_path(post, anchor: "comments"), class: "btn btn-outline-primary" %>
+    </div>
+  </div>
+</div> 

@@ -6,6 +6,10 @@ class Comment < ApplicationRecord
   # Hidden field for honeypot spam detection
   attr_accessor :website
   
+  # Scopes
+  scope :approved, -> { where(approved: true) }
+  scope :pending, -> { where(approved: false) }
+  
   # Validations
   validates :username, presence: true
   validates :email, presence: true, email: true

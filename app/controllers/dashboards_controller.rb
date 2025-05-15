@@ -17,6 +17,7 @@ class DashboardsController < ApplicationController
     
     # Comment count for dashboard
     @comment_count = Comment.count
+    @pending_comment_count = Comment.pending.count
   end
 
   def stats
@@ -39,6 +40,15 @@ class DashboardsController < ApplicationController
   end
   
   def comments
-    @comments = Comment.includes(:post).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+    comments = Comment.includes(:post).order(created_at: :desc)
+    
+    case params[:filter]
+    when 'pending'
+      comments = comments.pending
+    when 'approved'
+      comments = comments.approved
+    end
+    
+    @comments = comments.paginate(page: params[:page], per_page: 20)
   end
 end
