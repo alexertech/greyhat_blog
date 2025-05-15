@@ -1,0 +1,9 @@
+<div class="comment mb-3 p-3 border rounded">
+  <div class="comment-header d-flex justify-content-between mb-2">
+    <div class="comment-author fw-bold"><%= comment.username %></div>
+    <div class="comment-date text-muted small"><%= time_ago_in_words(comment.created_at) %> ago</div>
+  </div>
+  <div class="comment-body">
+    <%= simple_format(comment.body) %>
+  </div>
+</div> 

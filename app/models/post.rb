@@ -10,6 +10,7 @@ class Post < ApplicationRecord
   end
   has_rich_text :body
   has_many :visits, as: :visitable, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
   def to_param
     slug

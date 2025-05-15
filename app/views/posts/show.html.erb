@@ -37,6 +37,23 @@
     
     <hr>
 
+    <!-- Comments Section -->
+    <section class="mt-5 mb-5">
+      <h3 class="mb-4">
+        <span id="comment_count"><%= pluralize(@post.comments.count, "comment") %></span>
+      </h3>
+      
+      <div id="comments" class="mb-4">
+        <% @post.comments.order(created_at: :desc).each do |comment| %>
+          <%= render "comments/comment", comment: comment %>
+        <% end %>
+      </div>
+      
+      <%= render "comments/form", post: @post, comment: Comment.new %>
+    </section>
+
+    <hr>
+
     <div class="row py-4">
       <div class="col-12">
         <h3 class="mb-3">Acerca del Autor</h3>

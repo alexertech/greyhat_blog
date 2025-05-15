@@ -1,0 +1,57 @@
+<%= form_with(model: [post, comment], id: "comment_form") do |form| %>
+  <% if comment.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% comment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="comment-form mb-4">
+    <h4>Leave a comment</h4>
+    
+    <div class="form-group mb-3">
+      <%= form.label :username, "Your Name" %>
+      <%= form.text_field :username, class: "form-control", placeholder: "Enter your name" %>
+    </div>
+    
+    <div class="form-group mb-3">
+      <%= form.label :email, "Email" %>
+      <%= form.email_field :email, class: "form-control", placeholder: "Enter your email (not displayed publicly)" %>
+    </div>
+    
+    <div class="form-group mb-3">
+      <%= form.label :body, "Comment (max 140 characters)" %>
+      <%= form.text_area :body, class: "form-control", rows: 3, maxlength: 140, 
+          placeholder: "Write your comment here (links not allowed)" %>
+      <small class="text-muted characters-count">
+        <span id="char-count">0</span>/140 characters
+      </small>
+    </div>
+    
+    <%# Honeypot field - hidden from users but visible to bots %>
+    <div style="display:none">
+      <%= form.label :website, "Website (leave empty)" %>
+      <%= form.text_field :website, class: "form-control", tabindex: -1, autocomplete: "off" %>
+    </div>
+    
+    <div class="form-group">
+      <%= form.submit "Submit Comment", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener('turbo:load', function() {
+    const bodyField = document.querySelector('#comment_body');
+    const charCount = document.querySelector('#char-count');
+    
+    if (bodyField && charCount) {
+      bodyField.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+      });
+    }
+  });
+</script> 

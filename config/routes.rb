@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :contacts
   resources :posts do
+    resources :comments, only: [:create]
     member do
       get 'track_visit'
     end
