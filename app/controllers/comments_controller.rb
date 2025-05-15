@@ -3,20 +3,30 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!, except: [:create]
   before_action :set_post, only: [:create]
-  before_action :set_comment, only: [:destroy]
+  before_action :set_comment, only: [:destroy, :approve]
   
   def create
     @comment = @post.comments.new(comment_params)
     
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to post_path(@post), notice: '¡Gracias por tu comentario!' }
-        format.turbo_stream { render turbo_stream: turbo_stream.prepend("comments", partial: "comments/comment", locals: { comment: @comment }) }
+        format.html { redirect_to post_path(@post), notice: '¡Gracias por tu comentario! Será revisado por nuestro equipo antes de ser publicado.' }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('comment_form', 
+          partial: 'comments/thank_you', locals: { post: @post }) }
       else
         format.html { redirect_to post_path(@post), alert: @comment.errors.full_messages.to_sentence }
         format.turbo_stream { render turbo_stream: turbo_stream.replace('comment_form', 
           partial: 'comments/form', locals: { post: @post, comment: @comment }) }
       end
+    end
+  end
+  
+  def approve
+    @comment.update(approved: true)
+    
+    respond_to do |format|
+      format.html { redirect_to dashboards_comments_path, notice: 'Comentario aprobado correctamente.' }
+      format.json { head :no_content }
     end
   end
   

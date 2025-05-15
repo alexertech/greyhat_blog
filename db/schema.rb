@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_15_211734) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_15_221051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -60,6 +60,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_211734) do
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "approved", default: false, null: false
+    t.index ["approved"], name: "index_comments_on_approved"
     t.index ["created_at"], name: "index_comments_on_created_at"
     t.index ["post_id"], name: "index_comments_on_post_id"
   end
