@@ -62,4 +62,18 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  
+  # Include Devise test helpers
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
+  
+  # Setup a custom login helper method
+  config.include Module.new {
+    def login_user(user = nil)
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user ||= User.create(email: 'test@example.com', password: 'password123456')
+      sign_in user
+      user
+    end
+  }, type: :controller
 end
