@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe Contact, type: :model do
+  before do
+    # Set locale to English for consistent tests regardless of application default
+    I18n.locale = :en
+  end
+  
+  after do
+    # Reset to default locale
+    I18n.locale = I18n.default_locale
+  end
+  
   describe 'validations' do
     it 'is valid with valid attributes' do
       contact = Contact.new(

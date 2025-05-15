@@ -23,6 +23,8 @@ es:
   errors:
     messages:
       spam_detected: "Spam detectado"
+      record_invalid: "La validación falló: %{errors}"
+      too_short: "es demasiado corto (mínimo %{count} caracteres)"
   
   comments:
     no_links: "no puede contener enlaces"
