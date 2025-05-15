@@ -8,7 +8,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-user = User.new(email: 'alex@dev', password: 'holahola')
+user = User.new(email: 'alex@dev', password: 'holaholahola')
 user.save
 
 Page.new(id: 1, name: 'index').save!
