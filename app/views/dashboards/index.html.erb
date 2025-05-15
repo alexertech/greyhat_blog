@@ -33,21 +33,19 @@
     <div class="col-md-3">
       <div class="card shadow-sm mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Visitas totales</h5>
-          <p class="card-text display-6"><%= @total_visits %></p>
-          <div class="small text-muted">
-            Hoy: <%= @visits_today %> | Semana: <%= @visits_this_week %>
-          </div>
+          <h5 class="card-title">Comentarios</h5>
+          <p class="card-text display-6"><%= @comment_count %></p>
+          <%= link_to "Moderar comentarios", dashboards_comments_path, class: "btn btn-primary" %>
         </div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card shadow-sm mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Visitas por hora</h5>
-          <p class="card-text display-6"><%= Visit.where('viewed_at >= ?', 1.hour.ago).count %></p>
+          <h5 class="card-title">Visitas totales</h5>
+          <p class="card-text display-6"><%= @total_visits %></p>
           <div class="small text-muted">
-            <%= Time.zone.now.strftime('%d/%m/%Y %H:%M') %>
+            Hoy: <%= @visits_today %> | Semana: <%= @visits_this_week %>
           </div>
         </div>
       </div>

@@ -19,11 +19,11 @@ class Comment < ApplicationRecord
   
   def no_links
     if body&.match?(/https?:\/\/|www\./)
-      errors.add(:body, "cannot contain links")
+      errors.add(:body, I18n.t('comments.no_links'))
     end
   end
   
   def honeypot_empty
-    errors.add(:base, "Spam detected") unless website.blank?
+    errors.add(:base, I18n.t('errors.messages.spam_detected')) unless website.blank?
   end
 end 

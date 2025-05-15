@@ -17,10 +17,15 @@ gem 'turbolinks', '~> 5'
 
 # Javascript
 gem 'stimulus-rails'
+gem 'turbo-rails'
 gem 'actiontext'
 gem 'importmap-rails'
 gem 'bootstrap', '~> 5.3.0'
 gem 'sassc-rails'
+
+# Pagination
+gem 'will_paginate', '~> 4.0'
+gem 'will_paginate-bootstrap4'
 
 # Markdown Support with CodeStyling
 gem 'coderay', '~> 1.1.3'

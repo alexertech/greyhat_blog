@@ -1,47 +1,59 @@
-<%= form_with(model: [post, comment], id: "comment_form") do |form| %>
-  <% if comment.errors.any? %>
-    <div class="alert alert-danger">
-      <ul>
-        <% comment.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="comment-form-container bg-light p-4 rounded shadow-sm mb-5">
+  <%= form_with(model: [post, comment], id: "comment_form", data: { turbo: true }) do |form| %>
+    <% if comment.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% comment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <div class="comment-form">
+      <h4 class="mb-4 border-bottom pb-2 text-primary">Dejar un comentario</h4>
+      
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= form.label :username, "Tu nombre", class: "form-label fw-bold" %>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+            <%= form.text_field :username, class: "form-control", placeholder: "Ingresa tu nombre" %>
+          </div>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+          <%= form.label :email, "Correo electrónico", class: "form-label fw-bold" %>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <%= form.email_field :email, class: "form-control", placeholder: "Ingresa tu correo (no será público)" %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group mb-3">
+        <%= form.label :body, "Comentario (máximo 140 caracteres)", class: "form-label fw-bold" %>
+        <%= form.text_area :body, class: "form-control", rows: 3, maxlength: 140, 
+            placeholder: "Escribe tu comentario aquí (no se permiten enlaces)" %>
+        <div class="d-flex justify-content-end">
+          <small class="text-muted mt-1">
+            <span id="char-count">0</span>/140 caracteres
+          </small>
+        </div>
+      </div>
+      
+      <%# Honeypot field - hidden from users but visible to bots %>
+      <div style="display:none">
+        <%= form.label :website, "Website (leave empty)" %>
+        <%= form.text_field :website, class: "form-control", tabindex: -1, autocomplete: "off" %>
+      </div>
+      
+      <div class="form-group d-grid mt-4">
+        <%= form.submit "Enviar comentario", class: "btn btn-primary" %>
+      </div>
     </div>
   <% end %>
-  
-  <div class="comment-form mb-4">
-    <h4>Leave a comment</h4>
-    
-    <div class="form-group mb-3">
-      <%= form.label :username, "Your Name" %>
-      <%= form.text_field :username, class: "form-control", placeholder: "Enter your name" %>
-    </div>
-    
-    <div class="form-group mb-3">
-      <%= form.label :email, "Email" %>
-      <%= form.email_field :email, class: "form-control", placeholder: "Enter your email (not displayed publicly)" %>
-    </div>
-    
-    <div class="form-group mb-3">
-      <%= form.label :body, "Comment (max 140 characters)" %>
-      <%= form.text_area :body, class: "form-control", rows: 3, maxlength: 140, 
-          placeholder: "Write your comment here (links not allowed)" %>
-      <small class="text-muted characters-count">
-        <span id="char-count">0</span>/140 characters
-      </small>
-    </div>
-    
-    <%# Honeypot field - hidden from users but visible to bots %>
-    <div style="display:none">
-      <%= form.label :website, "Website (leave empty)" %>
-      <%= form.text_field :website, class: "form-control", tabindex: -1, autocomplete: "off" %>
-    </div>
-    
-    <div class="form-group">
-      <%= form.submit "Submit Comment", class: "btn btn-primary" %>
-    </div>
-  </div>
-<% end %>
+</div>
 
 <script>
   document.addEventListener('turbo:load', function() {
@@ -49,8 +61,24 @@
     const charCount = document.querySelector('#char-count');
     
     if (bodyField && charCount) {
+      // Update character count on load
+      charCount.textContent = bodyField.value.length;
+      
       bodyField.addEventListener('input', function() {
         charCount.textContent = this.value.length;
+        
+        // Add visual feedback as the user approaches the limit
+        const count = this.value.length;
+        if (count > 120) {
+          charCount.classList.add('text-danger');
+          charCount.classList.remove('text-warning', 'text-muted');
+        } else if (count > 90) {
+          charCount.classList.add('text-warning');
+          charCount.classList.remove('text-danger', 'text-muted');
+        } else {
+          charCount.classList.add('text-muted');
+          charCount.classList.remove('text-warning', 'text-danger');
+        }
       });
     }
   });

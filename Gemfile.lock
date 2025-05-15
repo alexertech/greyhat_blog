@@ -357,6 +357,9 @@ GEM
     thor (1.3.2)
     tilt (2.6.0)
     timeout (0.4.3)
+    turbo-rails (2.0.13)
+      actionpack (>= 7.1.0)
+      railties (>= 7.1.0)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -377,6 +380,9 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    will_paginate (4.0.1)
+    will_paginate-bootstrap4 (0.0.1)
+      will_paginate
     zeitwerk (2.7.2)
 
 PLATFORMS
@@ -418,8 +424,11 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sprockets-rails
   stimulus-rails
+  turbo-rails
   turbolinks (~> 5)
   web-console (>= 3.3.0)
+  will_paginate (~> 4.0)
+  will_paginate-bootstrap4
 
 RUBY VERSION
    ruby 3.3.4p94
