@@ -11,6 +11,7 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
 - **Analytics**: Visitor tracking for blog posts and pages
 - **Admin Dashboard**: Statistics and content management
 - **SEO-Friendly**: Meta descriptions and optimized content structure
+- **Comment System**: Secure comment system with moderation queue
 
 ## Tech Stack
 
@@ -35,6 +36,23 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
 - ✅ Improved responsive layout for all screen sizes
 - ✅ Enhanced service cards with icons and descriptions
 - ✅ Created consistent card-based design across the site
+- ✅ Added secure comment system with moderation capabilities
+- ✅ Implemented anti-spam measures with honeypot field
+- ✅ Added real-time character counter for comments
+- ✅ Built comment moderation dashboard for administrators
+
+## Comments System
+
+The blog features a secure commenting system with the following features:
+
+- 140-character limit for concise comments
+- Required username and email fields
+- Anti-spam measures with honeypot field
+- No links allowed in comments
+- Automatic moderation queue for review
+- Admin dashboard for approving/rejecting comments
+- Beautiful avatar placeholders with username initials
+- Responsive design that works on all devices
 
 ## To-Do:
 
@@ -51,4 +69,6 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
   - Add checkbox to enable / disable if a post should be public
 
 - Comments
-  - Allow comments in posts
+  - ✅ Allow comments in posts
+  - Add email notifications for new comments
+  - Add CAPTCHA as an additional spam protection measure
