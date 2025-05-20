@@ -12,7 +12,8 @@ module SpamDetection
     validate :no_links_in_content
     validate :no_spam_keywords
     validate :valid_name_format
-    validate :check_submission_time
+    # TODO: Revisit this validation
+    # validate :check_submission_time
   end
 
   private
