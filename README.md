@@ -98,5 +98,4 @@ The blog features a secure commenting system with the following features:
 
 - Comments
   - ✅ Allow comments in posts
-  - Add email notifications for new comments
-  - Add CAPTCHA as an additional spam protection measure
+  - Add email notifications for new comments  - Add CAPTCHA as an additional spam protection measure

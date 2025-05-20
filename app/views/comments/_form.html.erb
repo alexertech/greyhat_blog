@@ -42,14 +42,20 @@
         </div>
       </div>
       
-      <%# Honeypot field - hidden from users but visible to bots %>
-      <div style="display:none">
+      <%# Primary honeypot field - hidden from users but visible to bots %>
+      <div style="display:none; position: absolute; left: -9999px;">
         <%= form.label :website, "Website (leave empty)" %>
         <%= form.text_field :website, class: "form-control", tabindex: -1, autocomplete: "off" %>
       </div>
       
+      <%# Secondary honeypot - visible but labeled to trick bots %>
+      <div class="mb-3 d-none">
+        <%= form.label :phone, "Si eres un humano, por favor deja esto en blanco", class: "form-label" %>
+        <%= form.text_field :phone, class: "form-control", autocomplete: "off" %>
+      </div>
+      
       <div class="form-group d-grid mt-4">
-        <%= form.submit "Enviar comentario", class: "btn btn-primary" %>
+        <%= form.submit "Enviar comentario", class: "btn btn-primary", id: "comment-submit-button", disabled: true %>
       </div>
     </div>
   <% end %>
@@ -59,6 +65,14 @@
   document.addEventListener('turbo:load', function() {
     const bodyField = document.querySelector('#comment_body');
     const charCount = document.querySelector('#char-count');
+    const submitButton = document.querySelector('#comment-submit-button');
+    
+    // Enable submit button after 1 second
+    setTimeout(function() {
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+    }, 1000);
     
     if (bodyField && charCount) {
       // Update character count on load
@@ -78,6 +92,30 @@
         } else {
           charCount.classList.add('text-muted');
           charCount.classList.remove('text-warning', 'text-danger');
+        }
+      });
+    }
+    
+    // Add form submission validation
+    const form = document.querySelector('#comment_form');
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        const username = form.querySelector('#comment_username');
+        const body = form.querySelector('#comment_body');
+        
+        // Check for links
+        const linkRegex = /(https?:\/\/|www\.|\.(com|net|org))/i;
+        if (linkRegex.test(username.value) || linkRegex.test(body.value)) {
+          event.preventDefault();
+          alert('Por favor no incluya enlaces en su comentario');
+          return false;
+        }
+        
+        // Check for minimum length
+        if (body.value.length < 3) {
+          event.preventDefault();
+          alert('Su comentario es demasiado corto');
+          return false;
         }
       });
     }

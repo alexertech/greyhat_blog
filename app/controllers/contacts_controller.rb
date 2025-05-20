@@ -17,25 +17,41 @@ class ContactsController < ApplicationController
   # GET /contacts/new
   def new
     @contact = Contact.new
+    # Store the current time in the session for time-based bot detection
+    session[:form_displayed_at] = Time.current
+    
+    # Reset the submission counter for this session
+    session[:contact_submissions_count] ||= 0
+    
+    # Check if showing success message
+    @success = flash[:success].present?
   end
 
   # POST /contacts
   # POST /contacts.json
-
   def create
     @contact = Contact.new(contact_params)
-    respond_to do |format|
-      if @contact.save
-        @contact = Contact.new
-        format.html do
-          render :new,
-                 locals: {
-                   notice: 'Mensaje guardado! Recibirá nuestra respuesta en breve.'
-                 }
-        end
-      else
-        format.html { render :new }
-      end
+    
+    # Set the time the form was displayed for time-based bot detection
+    @contact.form_displayed_at = session[:form_displayed_at]
+    
+    # Rate limiting - track submissions
+    session[:contact_submissions_count] ||= 0
+    session[:contact_submissions_count] += 1
+    
+    # If too many submissions in a short time, reject
+    if session[:contact_submissions_count] > 3
+      @contact.errors.add(:base, "Demasiados intentos. Por favor intente más tarde.")
+      return render :new
+    end
+    
+    if @contact.save
+      session[:contact_submissions_count] = 0
+      flash[:success] = true
+      flash[:notice] = 'Mensaje guardado! Recibirá nuestra respuesta en breve.'
+      redirect_to new_contact_path
+    else
+      render :new
     end
   end
 
