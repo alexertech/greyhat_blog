@@ -31,6 +31,12 @@
       <%= form.file_field :image, class: "form-control" %>
       <div class="form-text">Selecciona una imagen destacada para tu artículo.</div>
     </div>
+    
+    <div class="mb-3 form-check">
+      <%= form.check_box :draft, class: "form-check-input" %>
+      <%= form.label :draft, "Guardar como borrador", class: "form-check-label" %>
+      <div class="form-text">Los borradores no son visibles para usuarios que no han iniciado sesión.</div>
+    </div>
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
       <%= link_to 'Cancelar', posts_path, class: "btn btn-secondary me-md-2" %>

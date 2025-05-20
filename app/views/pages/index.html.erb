@@ -39,7 +39,7 @@
     <h2 class="mb-4">Últimos artículos</h2>
 
     <div class="row">
-      <% Post.order("id DESC").all.take(3).each do |post| %>
+      <% Post.published.order("created_at DESC").all.take(3).each do |post| %>
         <div class="col-md-12 mb-4">
           <div class="card shadow-sm">
             <div class="row g-0">

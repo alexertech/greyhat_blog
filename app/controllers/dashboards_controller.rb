@@ -36,7 +36,7 @@ class DashboardsController < ApplicationController
   end
 
   def posts
-    @posts = Post.most_visited(10)
+    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
   
   def comments

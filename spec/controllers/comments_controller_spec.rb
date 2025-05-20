@@ -22,7 +22,7 @@ RSpec.describe CommentsController, type: :controller do
         { username: 'New User', email: 'user@example.com', body: 'New comment text', website: '' } 
       }
 
-      it 'creates a new comment' do
+      it 'creates a new Comment' do
         expect {
           post :create, params: { post_id: post_obj.slug, comment: valid_attributes }
         }.to change(Comment, :count).by(1)
@@ -31,7 +31,7 @@ RSpec.describe CommentsController, type: :controller do
       it 'redirects to the post with notice' do
         post :create, params: { post_id: post_obj.slug, comment: valid_attributes }
         expect(response).to redirect_to(post_path(post_obj))
-        expect(flash[:notice]).to eq('¡Gracias por tu comentario!')
+        expect(flash[:notice]).to eq('¡Gracias por tu comentario! Será revisado por nuestro equipo antes de ser publicado.')
       end
     end
 

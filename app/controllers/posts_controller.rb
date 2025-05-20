@@ -5,15 +5,16 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, except: %i[show list]
   before_action :set_post, only: %i[show edit update destroy]
   before_action :track_visit, only: %i[show]
+  before_action :ensure_published_or_admin, only: %i[show]
 
   # GET /posts
   def index
-    @posts = Post.all
+    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   # Get /blog
   def list
-    @posts = Post.order('id DESC').all
+    @posts = Post.published.order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   # GET /posts/1
@@ -23,7 +24,7 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Post.new
+    @post = Post.new(draft: true)
   end
 
   # GET /posts/1/edit
@@ -82,7 +83,7 @@ class PostsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
-    params.require(:post).permit(:title, :body, :image)
+    params.require(:post).permit(:title, :body, :image, :draft)
   end
 
   def track_visit
@@ -95,5 +96,11 @@ class PostsController < ApplicationController
       user_agent: request.user_agent,
       referer: request.referer
     )
+  end
+  
+  def ensure_published_or_admin
+    return unless @post.draft? && !user_signed_in?
+    
+    redirect_to root_path, alert: "That post is not available."
   end
 end
