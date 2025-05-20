@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class Comment < ApplicationRecord
-  belongs_to :post
+  include SpamDetection
   
-  # Hidden field for honeypot spam detection
-  attr_accessor :website
+  belongs_to :post
   
   # Scopes
   scope :approved, -> { where(approved: true) }
@@ -15,19 +14,26 @@ class Comment < ApplicationRecord
   validates :email, presence: true, email: true
   validates :body, presence: true, length: { maximum: 140 }
   
-  # Custom validations
-  validate :no_links
-  validate :honeypot_empty
+  # Additional validations for comment quality
+  validate :message_quality
   
   private
   
-  def no_links
-    if body&.match?(/https?:\/\/|www\./)
-      errors.add(:body, I18n.t('comments.no_links'))
-    end
-  end
+
   
-  def honeypot_empty
-    errors.add(:base, I18n.t('errors.messages.spam_detected')) unless website.blank?
+  # Methods for specific comment validations
+  def message_quality
+    return if body.blank?
+    
+    # Check if message is too short
+    if body.length < 3
+      errors.add(:body, I18n.t('errors.messages.comment_too_short', default: "Comment is too short"))
+    end
+    
+    # Check for suspicious content patterns
+    words = body.downcase.scan(/\w+/)
+    if words.length >= 5 && words.uniq.length < words.length / 3
+      errors.add(:body, I18n.t('errors.messages.repetitive_content', default: "Comment appears to contain repetitive text"))
+    end
   end
 end 

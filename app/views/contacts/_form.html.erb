@@ -1,65 +1,117 @@
-<%= form_with(model: contact, local: true, class: "needs-validation", html: { novalidate: true }) do |form| %>
+<% if local_assigns[:success] %>
+  <div class="text-center my-5 py-5">
+    <i class="fas fa-thumbs-up fa-5x text-success mb-4"></i>
+    <h2 class="mb-3">¡Gracias por contactarnos!</h2>
+    <p class="lead">Hemos recibido su mensaje. Le responderemos a la brevedad posible.</p>
+  </div>
+<% else %>
+  <%= form_with(model: contact, local: true, class: "needs-validation", html: { novalidate: true, id: "contact-form" }) do |form| %>
 
-  <% if contact.errors.any? %>
-    <div class="alert alert-danger">
-      <h5>Por favor corrija los siguiente <%= pluralize(contact.errors.count, "error") %>:</h5>
-      <ul class="mb-0">
-        <% contact.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <% if contact.errors.any? %>
+      <div class="alert alert-danger">
+        <h5>Por favor corrija los siguiente <%= pluralize(contact.errors.count, "error") %>:</h5>
+        <ul class="mb-0">
+          <% contact.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :name, "Nombre", class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", required: true, autocomplete: "off" %>
+      <div class="invalid-feedback">
+        Por favor ingrese su nombre
+      </div>
     </div>
+
+    <div class="mb-3">
+      <%= form.label :email, "E-mail", class: "form-label" %>
+      <%= form.email_field :email, class: "form-control", required: true, autocomplete: "off" %>
+      <div class="invalid-feedback">
+        Por favor ingrese un email válido
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :message, "Mensaje", class: "form-label" %>
+      <%= form.text_area :message, class: "form-control", rows: 5, required: true, autocomplete: "off" %>
+      <div class="invalid-feedback">
+        Por favor ingrese su mensaje
+      </div>
+      <div class="form-text small" id="charCount">0 caracteres</div>
+    </div>
+
+    <!-- Primary honeypot field - completely hidden via CSS -->
+    <div class="field" style="display: none; position: absolute; left: -9999px;">
+      <%= form.label :website, "Website (leave blank)" %>
+      <%= form.text_field :website, autocomplete: "off" %>
+    </div>
+    
+    <!-- Secondary honeypot - visible but labeled to trick bots -->
+    <div class="mb-3 d-none">
+      <%= form.label :phone, "Si eres un humano, por favor deja esto en blanco", class: "form-label" %>
+      <%= form.text_field :phone, class: "form-control", autocomplete: "off" %>
+    </div>
+
+    <div class="d-grid">
+      <%= form.submit "Enviar", class: "btn btn-primary btn-lg", id: "submit-button", disabled: true %>
+    </div>
+
   <% end %>
 
-  <div class="mb-3">
-    <%= form.label :name, "Nombre", class: "form-label" %>
-    <%= form.text_field :name, class: "form-control", required: true %>
-    <div class="invalid-feedback">
-      Por favor ingrese su nombre
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :email, "E-mail", class: "form-label" %>
-    <%= form.email_field :email, class: "form-control", required: true %>
-    <div class="invalid-feedback">
-      Por favor ingrese un email válido
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :message, "Mensaje", class: "form-label" %>
-    <%= form.text_area :message, class: "form-control", rows: 5, required: true %>
-    <div class="invalid-feedback">
-      Por favor ingrese su mensaje
-    </div>
-  </div>
-
-  <div class="field" style="display: none;">
-    <!-- Honeypot field - should remain empty -->
-    <%= form.label :website, "Website (leave blank)" %>
-    <%= form.text_field :website, autocomplete: "off" %>
-  </div>
-
-  <div class="d-grid">
-    <%= form.submit "Enviar", class: "btn btn-primary btn-lg" %>
-  </div>
-
-<% end %>
-
-<script>
-  // Bootstrap form validation
-  document.addEventListener('DOMContentLoaded', function() {
-    var forms = document.querySelectorAll('.needs-validation');
-    
-    Array.prototype.slice.call(forms).forEach(function(form) {
-      form.addEventListener('submit', function(event) {
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
+  <script>
+    // Bootstrap form validation
+    document.addEventListener('DOMContentLoaded', function() {
+      var forms = document.querySelectorAll('.needs-validation');
+      var submitButton = document.getElementById('submit-button');
+      var messageField = document.querySelector('textarea[name="contact[message]"]');
+      var charCount = document.getElementById('charCount');
+      
+      // Enable submit button after 1 second
+      setTimeout(function() {
+        submitButton.disabled = false;
+      }, 1000);
+      
+      // Character counter for message field
+      if (messageField && charCount) {
+        messageField.addEventListener('input', function() {
+          charCount.textContent = messageField.value.length + ' caracteres';
+        });
+      }
+      
+      // Form validation 
+      Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          
+          // Additional client-side validation
+          var name = form.querySelector('input[name="contact[name]"]');
+          var email = form.querySelector('input[name="contact[email]"]');
+          var message = form.querySelector('textarea[name="contact[message]"]');
+          
+          // Basic link detection
+          var linkRegex = /(https?:\/\/|www\.|\.(com|net|org))/i;
+          if (linkRegex.test(name.value) || linkRegex.test(message.value)) {
+            event.preventDefault();
+            alert('Por favor no incluya enlaces en su mensaje');
+            return false;
+          }
+          
+          // Check message length
+          if (message.value.length < 10) {
+            event.preventDefault();
+            alert('Su mensaje es demasiado corto');
+            return false;
+          }
+          
+          form.classList.add('was-validated');
+        }, false);
+      });
     });
-  });
-</script>
+  </script>
+<% end %>

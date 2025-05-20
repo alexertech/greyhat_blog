@@ -10,13 +10,15 @@
             <div class="alert alert-success" id="notice"><%= notice %></div>
           <% end %>
 
-          <p class="lead mb-4"> ¿Interesado en nuestros servicios de <strong>Desarrollo Web</strong>, <strong>Consultoría en IA</strong>, <strong>Seguridad Informática</strong>, consultoría general, charlas o capacitaciones? Completa el siguiente formulario y nos pondremos en contacto a la brevedad.
-          </p>
-          <p class="mb-4">
-            Si prefieres una comunicación más directa, podemos coordinar una llamada o videollamada una vez que recibamos tu consulta inicial por esta vía.
-          </p>
+          <% unless @success %>
+            <p class="lead mb-4"> ¿Interesado en nuestros servicios de <strong>Desarrollo Web</strong>, <strong>Consultoría en IA</strong>, <strong>Seguridad Informática</strong>, consultoría general, charlas o capacitaciones? Completa el siguiente formulario y nos pondremos en contacto a la brevedad.
+            </p>
+            <p class="mb-4">
+              Si prefieres una comunicación más directa, podemos coordinar una llamada o videollamada una vez que recibamos tu consulta inicial por esta vía.
+            </p>
+          <% end %>
 
-          <%= render 'form', contact: @contact %>
+          <%= render 'form', contact: @contact, success: @success %>
         </div>
         <div class="card-footer text-muted small">
           <p class="mb-0">Nos comprometemos a proteger tu privacidad. La información que nos proporciones será utilizada únicamente para responder a tu consulta.</p>
