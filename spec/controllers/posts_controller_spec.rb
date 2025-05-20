@@ -49,25 +49,34 @@ RSpec.describe PostsController, type: :controller do
       expect(response).to be_successful
     end
 
-    it 'assigns all posts ordered by id DESC as @posts' do
-      post1 = Post.create(valid_attributes.merge(title: 'Post 1'))
-      post2 = Post.create(valid_attributes.merge(title: 'Post 2'))
+    it 'assigns all published posts ordered by creation date DESC as @posts' do
+      post1 = Post.create(valid_attributes.merge(title: 'Post 1', draft: false))
+      post2 = Post.create(valid_attributes.merge(title: 'Post 2', draft: false))
+      draft_post = Post.create(valid_attributes.merge(title: 'Draft Post', draft: true))
       get :list
       expect(assigns(:posts).to_a).to eq([post2, post1])
+      expect(assigns(:posts)).not_to include(draft_post)
     end
   end
 
   describe 'GET #show' do
-    it 'returns a successful response' do
-      post = Post.create(valid_attributes)
+    it 'returns a successful response for a published post' do
+      post = Post.create(valid_attributes.merge(draft: false))
       get :show, params: { id: post.slug }
       expect(response).to be_successful
     end
-
-    it 'assigns the requested post as @post' do
-      post = Post.create(valid_attributes)
+    
+    it 'redirects to root for a draft post when not logged in' do
+      post = Post.create(valid_attributes.merge(draft: true))
       get :show, params: { id: post.slug }
-      expect(assigns(:post)).to eq(post)
+      expect(response).to redirect_to(root_path)
+    end
+    
+    it 'returns a successful response for a draft post when logged in' do
+      login_user(user)
+      post = Post.create(valid_attributes.merge(draft: true))
+      get :show, params: { id: post.slug }
+      expect(response).to be_successful
     end
 
     it 'tracks the visit' do

@@ -41,9 +41,8 @@ RSpec.describe "Comments", type: :system do
         click_button 'Enviar comentario'
       end
       
-      expect(page).to have_content('¡Gracias por tu comentario!')
-      expect(page).to have_content('Test User')
-      expect(page).to have_content('This is a test comment')
+      expect(page).to have_content('¡Gracias por tu comentario! Será revisado por nuestro equipo antes de ser publicado.')
+      # The comment won't be displayed immediately since it needs approval
     end
     
     it "shows validation errors for invalid comments" do

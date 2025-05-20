@@ -91,18 +91,11 @@ RSpec.describe DashboardsController, type: :controller do
         expect(response).to be_successful
       end
 
-      it 'assigns most visited posts' do
-        # Create some test posts
-        post1 = Post.create(title: 'Post 1', body: 'Body 1')
-        post2 = Post.create(title: 'Post 2', body: 'Body 2')
-        
-        # Add visits to make post1 more visited
-        3.times { post1.visits.create(ip_address: '127.0.0.1', user_agent: 'Test') }
-        1.times { post2.visits.create(ip_address: '127.0.0.1', user_agent: 'Test') }
-        
+      it 'assigns posts in reverse chronological order' do
+        post1 = Post.create(title: 'Post 1')
+        post2 = Post.create(title: 'Post 2')
         get :posts
-        
-        expect(assigns(:posts)).to eq([post1, post2])
+        expect(assigns(:posts).to_a).to eq([post2, post1])
       end
     end
 

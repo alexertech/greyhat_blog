@@ -11,6 +11,9 @@ class Post < ApplicationRecord
   has_rich_text :body
   has_many :visits, as: :visitable, dependent: :destroy
   has_many :comments, dependent: :destroy
+  
+  scope :published, -> { where(draft: false) }
+  scope :drafts, -> { where(draft: true) }
 
   def to_param
     slug

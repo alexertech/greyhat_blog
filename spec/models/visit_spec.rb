@@ -160,4 +160,60 @@ RSpec.describe Visit, type: :model do
       expect(result.values.sum).not_to eq(10)
     end
   end
+
+  describe 'bot detection' do
+    let(:page) { Page.create(name: 'test') }
+    
+    let(:bot_user_agents) do
+      [
+        'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+        'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)',
+        'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+        'Twitterbot/1.0'
+      ]
+    end
+    
+    let(:human_user_agents) do
+      [
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1'
+      ]
+    end
+    
+    before do
+      bot_user_agents.each do |agent|
+        Visit.create(visitable: page, ip_address: '127.0.0.1', user_agent: agent)
+      end
+      
+      human_user_agents.each do |agent|
+        Visit.create(visitable: page, ip_address: '127.0.0.1', user_agent: agent)
+      end
+    end
+    
+    describe 'instance method' do
+      it 'correctly identifies bot user agents' do
+        bot_visits = Visit.where(user_agent: bot_user_agents)
+        expect(bot_visits.all?(&:bot?)).to be true
+      end
+      
+      it 'correctly identifies human user agents' do
+        human_visits = Visit.where(user_agent: human_user_agents)
+        expect(human_visits.none?(&:bot?)).to be true
+      end
+    end
+    
+    describe 'scopes' do
+      it 'returns only bot visits with the bots scope' do
+        expect(Visit.bots.count).to eq(bot_user_agents.length)
+        expect(Visit.bots.pluck(:user_agent)).to match_array(bot_user_agents)
+      end
+      
+      it 'returns only human visits with the humans scope' do
+        expect(Visit.humans.count).to eq(human_user_agents.length)
+        expect(Visit.humans.pluck(:user_agent)).to match_array(human_user_agents)
+      end
+    end
+  end
 end

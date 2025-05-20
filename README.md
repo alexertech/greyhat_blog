@@ -8,10 +8,12 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
 - **Rich Content Editor**: Trix editor with image paste functionality
 - **Markdown Support**: Write blog posts with rich formatting
 - **Image Management**: ActiveStorage for image uploads and variants
-- **Analytics**: Visitor tracking for blog posts and pages
+- **Analytics**: Visitor tracking with bot detection for blog posts and pages
 - **Admin Dashboard**: Statistics and content management
 - **SEO-Friendly**: Meta descriptions and optimized content structure
 - **Comment System**: Secure comment system with moderation queue
+- **Draft Mode**: Save posts as drafts before publishing
+- **Pagination**: Both admin and public views use pagination for better UX
 
 ## Tech Stack
 
@@ -22,6 +24,7 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
 - Stimulus for JavaScript functionality
 - Font Awesome for icons
 - Turbolinks for faster page loads
+- will_paginate with Bootstrap integration
 
 ## Demo
 
@@ -29,6 +32,9 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
 
 ## Recent Improvements
 
+- ✅ Added draft functionality for posts
+- ✅ Implemented pagination (10 items for admin, 20 for public views)
+- ✅ Added bot detection for analytics
 - ✅ Migrated UI from Primitive CSS to Bootstrap 5
 - ✅ Added rich text editing with Trix editor
 - ✅ Implemented image paste functionality
@@ -40,6 +46,29 @@ A modern blog engine built with Ruby on Rails 7 and PostgreSQL, featuring a resp
 - ✅ Implemented anti-spam measures with honeypot field
 - ✅ Added real-time character counter for comments
 - ✅ Built comment moderation dashboard for administrators
+
+## Post Management
+
+The blog now includes a comprehensive post management system:
+
+- Draft mode for works in progress
+- Draft indicator on admin views
+- New posts default to draft mode
+- Public views only show published posts
+- Admin dashboard shows post status and statistics
+- Paginated lists for better navigation
+- Ordered by newest posts first
+
+## Analytics System
+
+The analytics system now includes sophisticated features:
+
+- Visitor tracking for all content
+- Bot detection to filter out automated traffic
+- Analytics dashboard showing human vs bot traffic
+- Percentage breakdowns of traffic types
+- Historical data visualization
+- Referrer tracking and analysis
 
 ## Comments System
 
@@ -59,14 +88,13 @@ The blog features a secure commenting system with the following features:
 - General
   - Cleanup of older non used ruby folders and files
   - Cleanup of scaffolding code
-  - Add historic visit tracking counter: Current solution only gives unique visitors
 
 - Dashboard
   - Change dashboard interface metrics with graphics
 
 - Posts
   - Blob rendering time is slower, need to create variant versions using Active Storage
-  - Add checkbox to enable / disable if a post should be public
+  - ✅ Add checkbox to enable / disable if a post should be public
 
 - Comments
   - ✅ Allow comments in posts

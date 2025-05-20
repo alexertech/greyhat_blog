@@ -161,4 +161,52 @@
       </div>
     </div>
   </div>
+
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Visitas por tipo de visitante</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Tipo</th>
+                  <th>Total</th>
+                  <th>Último día</th>
+                  <th>Última semana</th>
+                  <th>Último mes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Humanos</td>
+                  <td><span class="badge bg-primary"><%= Visit.humans.count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.day.ago).count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.week.ago).count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.month.ago).count %></span></td>
+                </tr>
+                <tr>
+                  <td>Bots</td>
+                  <td><span class="badge bg-warning"><%= Visit.bots.count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.day.ago).count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.week.ago).count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.month.ago).count %></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Porcentaje Bots</strong></td>
+                  <td><span class="badge bg-danger"><%= Visit.count > 0 ? "#{(Visit.bots.count.to_f / Visit.count * 100).round(1)}%" : "0%" %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.day.ago).count > 0 ? "#{(Visit.bots.where('viewed_at >= ?', 1.day.ago).count.to_f / Visit.where('viewed_at >= ?', 1.day.ago).count * 100).round(1)}%" : "0%" %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.week.ago).count > 0 ? "#{(Visit.bots.where('viewed_at >= ?', 1.week.ago).count.to_f / Visit.where('viewed_at >= ?', 1.week.ago).count * 100).round(1)}%" : "0%" %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.month.ago).count > 0 ? "#{(Visit.bots.where('viewed_at >= ?', 1.month.ago).count.to_f / Visit.where('viewed_at >= ?', 1.month.ago).count * 100).round(1)}%" : "0%" %></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
