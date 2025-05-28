@@ -5,12 +5,6 @@
       <a href="/acerca" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/acerca') ? 'active' : '' %>">Acerca de</a>
       <a href="/articulos" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">Articulos</a>
       <a href="/servicios" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/servicios') ? 'active' : '' %>">Servicios</a>
-      <% if user_signed_in? %>
-        <a href="/dashboard" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/dashboard') ? 'active' : '' %>">Dashboard</a>
-        <%= link_to "Cerrar Sesión", destroy_user_session_path, method: :delete, class: "main-nav-item flex-fill py-3 text-center text-decoration-none text-white", data: { turbo_method: :delete } %>
-      <% else %>
-        <%= link_to "Iniciar Sesión", new_user_session_path, class: "main-nav-item flex-fill py-3 text-center text-decoration-none text-white #{current_page?(new_user_session_path) ? 'active' : ''}" %>
-      <% end %>
     </div>
   </div>
 </div>
