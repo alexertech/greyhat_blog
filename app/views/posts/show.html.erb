@@ -98,7 +98,7 @@
     <h2 class="mb-4">También te puede interesar</h2>
 
     <div class="row">
-      <% Post.published.order("RANDOM()").where.not(id: @post.id).all.take(3).each do |post| %>
+      <% @related_posts.each do |post| %>
         <div class="col-md-4 mb-4">
           <div class="card h-100">
             <% if post.image.attached? %>

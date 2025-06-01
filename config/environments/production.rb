@@ -42,6 +42,14 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
+  
+  # Active Storage optimizations
+  config.active_storage.variant_processor = :vips
+  config.active_storage.precompile_assets = true
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
+  
+  # Set URL expiration for better caching
+  config.active_storage.urls_expire_in = 1.hour
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
