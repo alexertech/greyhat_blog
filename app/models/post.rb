@@ -3,6 +3,7 @@
 class Post < ApplicationRecord
   after_create :update_slug
   before_update :assign_slug
+  after_commit :generate_image_variants, on: [:create, :update]
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_fill: [300, 170], format: :webp
     attachable.variant :medium, resize_to_fill: [600, 400], format: :webp
@@ -54,5 +55,20 @@ class Post < ApplicationRecord
 
   def update_slug
     update slug: assign_slug
+  end
+  
+  def generate_image_variants
+    return unless image.attached?
+    
+    # Generate variants synchronously
+    begin
+      image.variant(:thumb).processed
+      image.variant(:medium).processed  
+      image.variant(:banner).processed
+      
+      Rails.logger.info "Generated image variants for post #{id}"
+    rescue => e
+      Rails.logger.error "Failed to generate variants for post #{id}: #{e.message}"
+    end
   end
 end

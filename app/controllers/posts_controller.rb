@@ -9,17 +9,21 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+    @posts = Post.includes(:image_attachment).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   # Get /blog
   def list
-    @posts = Post.published.order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+    @posts = Post.published.includes(:image_attachment).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   # GET /posts/1
   def show
     @comment = Comment.new
+    @related_posts = Post.published.includes(:image_attachment)
+                        .where.not(id: @post.id)
+                        .order("RANDOM()")
+                        .limit(3)
   end
 
   # GET /posts/new
@@ -78,7 +82,7 @@ class PostsController < ApplicationController
   # end
 
   def set_post
-    @post = Post.find_by_slug(params[:id])
+    @post = Post.includes(:image_attachment).find_by_slug(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
