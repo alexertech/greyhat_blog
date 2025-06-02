@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  validates :title, presence: true, length: { minimum: 1 }
+  validates :body, presence: true
+  
   after_create :update_slug
   before_update :assign_slug
   after_commit :generate_image_variants, on: [:create, :update]

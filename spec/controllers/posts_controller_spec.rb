@@ -165,9 +165,6 @@ RSpec.describe PostsController, type: :controller do
 
       context 'with invalid params' do
         it 'does not create a new Post and re-renders the new template' do
-          # Instead of testing with invalid attributes, we'll skip the controller test
-          # and mark it as pending since we don't have validations in the Post model
-          pending "Post model doesn't have validations to test invalid params"
           expect {
             post :create, params: { post: invalid_attributes }
           }.to change(Post, :count).by(0)
@@ -218,9 +215,6 @@ RSpec.describe PostsController, type: :controller do
 
       context 'with invalid params' do
         it 'does not update the post and re-renders the edit template' do
-          # Instead of testing with invalid attributes, we'll skip the controller test
-          # and mark it as pending since we don't have validations in the Post model
-          pending "Post model doesn't have validations to test invalid params"
           post = Post.create(valid_attributes)
           put :update, params: { id: post.slug, post: invalid_attributes }
           expect(assigns(:post)).to eq(post)
