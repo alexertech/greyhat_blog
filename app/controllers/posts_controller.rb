@@ -9,12 +9,12 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.includes(:image_attachment).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   # Get /blog
   def list
-    @posts = Post.published.includes(:image_attachment).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+    @posts = Post.published.order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   # GET /posts/1
@@ -92,7 +92,7 @@ class PostsController < ApplicationController
 
   def track_visit
     # Keep the legacy counter for backward compatibility
-    @post.increment!(:unique_visits)
+    # @post.increment!(:unique_visits)
     
     # Record detailed visit data
     @post.visits.create(
