@@ -1,9 +1,14 @@
-<div class="row g-0">
+<div class="row g-0" data-controller="navigation-bookmarks">
   <div class="col">
     <div class="d-flex flex-row bg-dark rounded-top">
       <a href="/index" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/index') ? 'active' : '' %>">Inicio</a>
       <a href="/acerca" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/acerca') ? 'active' : '' %>">Acerca de</a>
       <a href="/articulos" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">Articulos</a>
+      <a href="/guardados" 
+         data-navigation-bookmarks-target="bookmarksLink"
+         class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white d-none <%= current_page?('/guardados') ? 'active' : '' %>">
+        <i class="fas fa-bookmark"></i> Guardados
+      </a>
       <a href="/servicios" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/servicios') ? 'active' : '' %>">Servicios</a>
       <% if user_signed_in? %>
         <a href="/dashboard" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white">Dash</a>
