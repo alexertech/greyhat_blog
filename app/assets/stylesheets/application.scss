@@ -759,8 +759,119 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
   color: white;
 }
 
-// Dark Mode for Stats Page
+// Chart Styling
+.chart-placeholder {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.simple-chart {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 12px;
+  height: 120px;
+  padding: 1rem 0;
+}
+
+.chart-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-bar {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 4px 4px 0 0;
+  width: 24px;
+  min-height: 10px;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: scaleY(1.1);
+}
+
+.chart-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.traffic-chart {
+  text-align: left;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.traffic-source-item {
+  .fw-bold {
+    color: var(--text-heading);
+    font-size: 0.9rem;
+  }
+}
+
+.progress {
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
+// Table styling improvements
+.table {
+  --bs-table-striped-bg: rgba(0,0,0,0.025);
+  
+  tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+  }
+}
+
+// Dark Mode for Stats Page and Tables
 [data-theme="dark"] {
+  // Chart backgrounds
+  .chart-placeholder {
+    background: rgba(30, 30, 30, 0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  // Progress bars
+  .progress {
+    background-color: rgba(255,255,255,0.1);
+  }
+  
+  // Table improvements for dark mode
+  .table {
+    --bs-table-striped-bg: rgba(255,255,255,0.02);
+    --bs-table-hover-bg: rgba(255,255,255,0.05);
+    
+    color: var(--text-primary);
+    
+    tbody tr:hover {
+      background-color: rgba(13, 110, 253, 0.1);
+    }
+  }
+  
+  .table-striped > tbody > tr:nth-of-type(odd) > td,
+  .table-striped > tbody > tr:nth-of-type(odd) > th {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+  
+  .table-hover > tbody > tr:hover > td,
+  .table-hover > tbody > tr:hover > th {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .table-dark {
+    --bs-table-striped-bg: rgba(255,255,255,0.05);
+    --bs-table-hover-bg: rgba(255,255,255,0.075);
+  }
+  
   // Stats page specific cards
   .card.shadow-sm {
     background: var(--card-bg);
