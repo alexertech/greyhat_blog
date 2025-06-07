@@ -86,24 +86,75 @@
           <h5 class="mb-0">Principales referidos</h5>
         </div>
         <div class="card-body">
+          <!-- Traffic Source Summary -->
+          <div class="row mb-3">
+            <div class="col-6">
+              <div class="text-center">
+                <h6 class="text-muted mb-1">Redes Sociales</h6>
+                <span class="badge bg-primary fs-6"><%= @social_media_visits %></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="text-center">
+                <h6 class="text-muted mb-1">Buscadores</h6>
+                <span class="badge bg-success fs-6"><%= @search_engine_visits %></span>
+              </div>
+            </div>
+          </div>
+          
           <div class="table-responsive">
             <table class="table table-striped table-hover">
               <thead class="table-dark">
                 <tr>
                   <th>Origen</th>
+                  <th>Tipo</th>
                   <th>Visitas</th>
                 </tr>
               </thead>
               <tbody>
-                <% @referrer_counts.each do |referrer, count| %>
+                <% @top_referrers.each do |referrer| %>
                 <tr>
-                  <td><%= referrer.truncate(40) %></td>
-                  <td><span class="badge bg-info"><%= count %></span></td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <% case referrer[:source_type] %>
+                      <% when :social %>
+                        <i class="fab fa-<%= referrer[:domain].include?('linkedin') ? 'linkedin' : referrer[:domain].include?('twitter') || referrer[:domain].include?('x.com') ? 'twitter' : referrer[:domain].include?('facebook') ? 'facebook' : 'share-alt' %> me-2 text-primary"></i>
+                      <% when :newsletter %>
+                        <i class="fas fa-newspaper me-2 text-warning"></i>
+                      <% when :search %>
+                        <i class="fas fa-search me-2 text-success"></i>
+                      <% when :tech_community %>
+                        <i class="fas fa-code me-2 text-info"></i>
+                      <% when :blog_platform %>
+                        <i class="fas fa-blog me-2 text-secondary"></i>
+                      <% else %>
+                        <i class="fas fa-globe me-2 text-muted"></i>
+                      <% end %>
+                      <small><%= referrer[:display_name] %></small>
+                    </div>
+                  </td>
+                  <td>
+                    <% case referrer[:source_type] %>
+                    <% when :social %>
+                      <span class="badge bg-primary">Social</span>
+                    <% when :newsletter %>
+                      <span class="badge bg-warning">Newsletter</span>
+                    <% when :search %>
+                      <span class="badge bg-success">Búsqueda</span>
+                    <% when :tech_community %>
+                      <span class="badge bg-info">Tech</span>
+                    <% when :blog_platform %>
+                      <span class="badge bg-secondary">Blog</span>
+                    <% else %>
+                      <span class="badge bg-light text-dark">Otro</span>
+                    <% end %>
+                  </td>
+                  <td><span class="badge bg-info"><%= referrer[:count] %></span></td>
                 </tr>
                 <% end %>
-                <% if @referrer_counts.empty? %>
+                <% if @top_referrers.empty? %>
                 <tr>
-                  <td colspan="2" class="text-center">No hay datos disponibles</td>
+                  <td colspan="3" class="text-center">No hay datos disponibles</td>
                 </tr>
                 <% end %>
               </tbody>

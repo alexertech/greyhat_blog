@@ -34,6 +34,12 @@ class DashboardsController < ApplicationController
                             .order('count_all DESC')
                             .limit(10)
                             .count
+    
+    # Enhanced referrer analysis
+    @top_referrers = analyze_referrers(@referrer_counts)
+    @social_media_visits = count_social_media_visits
+    @search_engine_visits = count_search_engine_visits
+    @direct_visits = Visit.where(referer: [nil, '']).count
   end
 
   def posts
@@ -51,5 +57,85 @@ class DashboardsController < ApplicationController
     end
     
     @comments = comments.paginate(page: params[:page], per_page: 20)
+  end
+
+  private
+
+  def analyze_referrers(referrer_counts)
+    referrer_counts.map do |referer, count|
+      {
+        url: referer,
+        count: count,
+        domain: extract_domain(referer),
+        source_type: categorize_referrer(referer),
+        display_name: format_referrer_name(referer)
+      }
+    end
+  end
+
+  def extract_domain(url)
+    return 'Direct' if url.blank?
+    
+    begin
+      URI.parse(url).host&.downcase&.gsub(/^www\./, '') || 'Unknown'
+    rescue URI::InvalidURIError
+      'Unknown'
+    end
+  end
+
+  def categorize_referrer(url)
+    return :direct if url.blank?
+    
+    domain = extract_domain(url)
+    
+    case domain
+    when /linkedin\.com/
+      :social
+    when /substack\.com/
+      :newsletter
+    when /twitter\.com/, /x\.com/, /facebook\.com/, /instagram\.com/, /tiktok\.com/
+      :social
+    when /google\./, /bing\.com/, /duckduckgo\.com/, /yahoo\.com/
+      :search
+    when /github\.com/, /stackoverflow\.com/, /dev\.to/
+      :tech_community
+    when /medium\.com/, /hackernoon\.com/
+      :blog_platform
+    else
+      :other
+    end
+  end
+
+  def format_referrer_name(url)
+    return 'Directo' if url.blank?
+    
+    domain = extract_domain(url)
+    
+    case domain
+    when 'linkedin.com' then 'LinkedIn'
+    when 'substack.com' then 'Substack'
+    when 'twitter.com', 'x.com' then 'Twitter/X'
+    when 'facebook.com' then 'Facebook'
+    when 'instagram.com' then 'Instagram'
+    when 'google.com', 'google.es' then 'Google'
+    when 'github.com' then 'GitHub'
+    when 'stackoverflow.com' then 'Stack Overflow'
+    when 'dev.to' then 'DEV Community'
+    when 'medium.com' then 'Medium'
+    else
+      domain&.humanize || 'Desconocido'
+    end
+  end
+
+  def count_social_media_visits
+    social_domains = %w[linkedin.com substack.com twitter.com x.com facebook.com instagram.com tiktok.com]
+    
+    Visit.where("referer ILIKE ANY (ARRAY[?])", social_domains.map { |domain| "%#{domain}%" }).count
+  end
+
+  def count_search_engine_visits
+    search_domains = %w[google. bing.com duckduckgo.com yahoo.com]
+    
+    Visit.where("referer ILIKE ANY (ARRAY[?])", search_domains.map { |domain| "%#{domain}%" }).count
   end
 end

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "tagContainer", "suggestions"]
+  static targets = ["input", "tagContainer", "suggestions", "aiSuggestions", "analyzeButton"]
   static values = { 
     existingTags: Array,
     currentTags: Array
@@ -106,7 +106,7 @@ export default class extends Controller {
     if (availableTags.length > 0) {
       const title = document.createElement('small')
       title.className = 'text-muted d-block mb-2'
-      title.textContent = 'Etiquetas sugeridas:'
+      title.textContent = 'Etiquetas populares:'
       this.suggestionsTarget.appendChild(title)
       
       availableTags.forEach(tag => {
@@ -119,5 +119,91 @@ export default class extends Controller {
         this.suggestionsTarget.appendChild(suggestion)
       })
     }
+  }
+
+  async analyzeContent() {
+    if (!this.hasAnalyzeButtonTarget) return
+    
+    // Get content from Trix editor or regular textarea
+    const contentElement = document.querySelector('trix-editor') || 
+                          document.querySelector('#post_body') ||
+                          document.querySelector('textarea[name*="body"]')
+    
+    if (!contentElement) {
+      alert('No se pudo encontrar el contenido del post para analizar')
+      return
+    }
+    
+    let content = ''
+    if (contentElement.tagName === 'TRIX-EDITOR') {
+      content = contentElement.value || contentElement.textContent
+    } else {
+      content = contentElement.value
+    }
+    
+    if (!content || content.trim().length < 50) {
+      alert('Escribe al menos 50 caracteres en el contenido del post para obtener sugerencias inteligentes')
+      return
+    }
+    
+    this.analyzeButtonTarget.disabled = true
+    this.analyzeButtonTarget.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analizando...'
+    
+    try {
+      const response = await fetch('/tags/suggest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          content: content,
+          existing_tags: this.tags.join(',')
+        })
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        this.displayAISuggestions(data.suggestions)
+      } else {
+        throw new Error('Error al analizar el contenido')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Error al analizar el contenido. Inténtalo de nuevo.')
+    } finally {
+      this.analyzeButtonTarget.disabled = false
+      this.analyzeButtonTarget.innerHTML = '<i class="fas fa-magic me-1"></i>Analizar contenido'
+    }
+  }
+  
+  displayAISuggestions(suggestions) {
+    if (!this.hasAiSuggestionsTarget || !suggestions || suggestions.length === 0) {
+      if (this.hasAiSuggestionsTarget) {
+        this.aiSuggestionsTarget.innerHTML = '<small class="text-muted">No se encontraron sugerencias relevantes</small>'
+      }
+      return
+    }
+    
+    this.aiSuggestionsTarget.innerHTML = ''
+    
+    const title = document.createElement('small')
+    title.className = 'text-muted d-block mb-2'
+    title.innerHTML = '<i class="fas fa-magic me-1"></i>Sugerencias inteligentes:'
+    this.aiSuggestionsTarget.appendChild(title)
+    
+    suggestions.forEach(tag => {
+      const suggestion = document.createElement('button')
+      suggestion.type = 'button'
+      suggestion.className = 'btn btn-outline-primary btn-sm me-1 mb-1'
+      suggestion.dataset.tagName = tag
+      suggestion.innerHTML = `<i class="fas fa-sparkles me-1"></i>${tag}`
+      suggestion.addEventListener('click', (e) => {
+        this.addTag(e)
+        // Remove the suggestion after adding it
+        suggestion.remove()
+      })
+      this.aiSuggestionsTarget.appendChild(suggestion)
+    })
   }
 }

@@ -9,9 +9,9 @@ class Post < ApplicationRecord
   after_commit :generate_image_variants, on: %i[create update]
   after_save :assign_tags
   has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_fill: [300, 170], format: :webp
-    attachable.variant :medium, resize_to_fill: [600, 400], format: :webp
-    attachable.variant :banner, resize_to_fill: [1200, 630], format: :webp
+    attachable.variant :thumb, resize_to_fill: [480, 148], format: :webp
+    attachable.variant :medium, resize_to_fill: [768, 237], format: :webp
+    attachable.variant :banner, resize_to_fill: [1536, 474], format: :webp
   end
   has_rich_text :body
   has_many :visits, as: :visitable, dependent: :destroy
