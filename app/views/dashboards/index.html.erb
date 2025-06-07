@@ -104,11 +104,21 @@
           </h5>
         </div>
         <div class="chart-body">
-          <div class="chart-placeholder" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+          <div class="chart-placeholder">
             <div class="text-center">
               <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
               <p class="text-muted">Gráfico de visitas diarias (últimos 30 días)</p>
               <p class="small text-muted">Total de visitas: <%= @daily_visits_chart.values.sum %></p>
+              
+              <!-- Simple Bar Chart -->
+              <div class="simple-chart mt-4">
+                <% @daily_visits_chart.last(7).each do |date, visits| %>
+                  <div class="chart-bar-item">
+                    <div class="chart-bar" style="height: <%= visits > 0 ? [20, (visits.to_f / @daily_visits_chart.values.max * 100).round].max : 10 %>px"></div>
+                    <small class="chart-label"><%= Date.parse(date.to_s).strftime("%d/%m") %></small>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
@@ -124,27 +134,36 @@
           </h5>
         </div>
         <div class="chart-body">
-          <div class="chart-placeholder" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+          <div class="chart-placeholder">
             <div class="text-center">
               <i class="fas fa-chart-pie fa-3x text-muted mb-3"></i>
               <p class="text-muted">Fuentes de Tráfico</p>
-              <div class="row text-center mt-3">
-                <div class="col-6 mb-2">
-                  <div class="badge bg-primary me-2">Social</div>
-                  <span><%= @social_media_visits %></span>
-                </div>
-                <div class="col-6 mb-2">
-                  <div class="badge bg-success me-2">Búsquedas</div>
-                  <span><%= @search_engine_visits %></span>
-                </div>
-                <div class="col-6 mb-2">
-                  <div class="badge bg-info me-2">Directo</div>
-                  <span><%= @direct_visits %></span>
-                </div>
-                <div class="col-6 mb-2">
-                  <div class="badge bg-warning me-2">Referencias</div>
-                  <span><%= @referral_visits %></span>
-                </div>
+              
+              <!-- Traffic Sources Chart -->
+              <div class="traffic-chart mt-4">
+                <% 
+                  total_visits = @social_media_visits + @search_engine_visits + @direct_visits + @referral_visits
+                  sources = [
+                    { name: 'Social', visits: @social_media_visits, color: '#3b82f6' },
+                    { name: 'Búsquedas', visits: @search_engine_visits, color: '#10b981' },
+                    { name: 'Directo', visits: @direct_visits, color: '#06b6d4' },
+                    { name: 'Referencias', visits: @referral_visits, color: '#f59e0b' }
+                  ]
+                %>
+                
+                <% sources.each do |source| %>
+                  <% percentage = total_visits > 0 ? (source[:visits].to_f / total_visits * 100).round(1) : 0 %>
+                  <div class="traffic-source-item mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="fw-bold"><%= source[:name] %></span>
+                      <span class="badge" style="background-color: <%= source[:color] %>"><%= source[:visits] %></span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                      <div class="progress-bar" role="progressbar" style="width: <%= percentage %>%; background-color: <%= source[:color] %>" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted"><%= percentage %>%</small>
+                  </div>
+                <% end %>
               </div>
             </div>
           </div>
