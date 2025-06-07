@@ -50,7 +50,10 @@
                       <span class="badge bg-success">Publicado</span>
                     <% end %>
                   </td>
-                  <td><span class="badge bg-primary"><%= post.unique_visits %></span></td>
+                  <td>
+                    <span class="badge bg-primary"><%= post.unique_visits %></span>
+                    <span class="badge bg-secondary"><%= post.total_visits %></span>
+                  </td>
                   <td class="text-center">
                     <div class="btn-group btn-group-sm">
                       <%= link_to post, class: "btn btn-outline-primary" do %>

@@ -30,7 +30,8 @@
                   Lectura de <%= (post.body.to_plain_text.split.size/200)+1 %> minutos
                   
                   <% if user_signed_in? %>
-                    · <span class="badge bg-info">Unique visitors: <%= post.unique_visits %></span>
+                    · <span class="badge bg-info">Unique: <%= post.unique_visits %></span>
+                    · <span class="badge bg-secondary">Total: <%= post.total_visits %></span>
                   <% end %>
                 </div>
                 <p class="card-text">

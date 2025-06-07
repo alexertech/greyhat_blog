@@ -26,6 +26,22 @@ RSpec.describe PagesController, type: :controller do
       expect(page.visits.last.ip_address).to be_present
       expect(page.visits.last.user_agent).to be_present
     end
+
+    it 'does not increment unique visits for same IP within 24 hours' do
+      page = Page.create(id: 1, name: 'index', unique_visits: 0)
+      
+      # First visit
+      get :index
+      expect(page.reload.unique_visits).to eq(1)
+      
+      # Second visit from same IP should not increment unique_visits
+      expect {
+        get :index
+      }.not_to change { page.reload.unique_visits }
+      
+      # But should still create a visit record
+      expect(page.visits.count).to eq(2)
+    end
   end
 
   describe 'GET #about' do

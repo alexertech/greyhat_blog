@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_20_175107) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_07_163941) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "vector"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -121,8 +120,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_175107) do
     t.datetime "viewed_at", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["ip_address", "viewed_at"], name: "index_visits_on_ip_address_and_viewed_at"
     t.index ["viewed_at"], name: "index_visits_on_viewed_at"
     t.index ["visitable_id", "visitable_type"], name: "index_visits_on_visitable_id_and_visitable_type"
+    t.index ["visitable_type", "visitable_id", "ip_address", "viewed_at"], name: "index_visits_on_unique_check"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

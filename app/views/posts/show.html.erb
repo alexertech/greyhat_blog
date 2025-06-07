@@ -18,7 +18,7 @@
 
     <% if user_signed_in? %>
       <div class="badge bg-info text-white mb-3">
-        Unique visitors: <%= @post.unique_visits %>
+        Unique visitors: <%= @post.unique_visits %> | Total visits: <%= @post.total_visits %> | Human visits: <%= @post.human_visits %>
       </div>
     <% end %>
 
@@ -39,7 +39,9 @@
         
         <% if user_signed_in? %>
           <span class="mx-1">&middot;</span>
-          <span class="badge bg-info">Unique visitors: <%= @post.unique_visits %></span>
+          <span class="badge bg-info">Unique: <%= @post.unique_visits %></span>
+          <span class="mx-1">&middot;</span>
+          <span class="badge bg-secondary">Total: <%= @post.total_visits %></span>
         <% end %>
       </div>
     </header>
