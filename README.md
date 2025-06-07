@@ -18,17 +18,21 @@ A modern, feature-rich blog engine built with Ruby on Rails 7.2 and PostgreSQL. 
 ### ✍️ **Content Management**
 - **Rich Text Editor**: Advanced Trix editor with image paste functionality
 - **Draft System**: Save posts as drafts before publishing
-- **Tag Management**: Interactive tag system with auto-suggestions
-- **Image Handling**: ActiveStorage with automatic WebP variants (thumb, medium, banner)
+- **Intelligent Tag System**: AI-powered tag suggestions with content analysis
+- **Tag Auto-Complete**: Interactive tag management with smart suggestions
+- **Image Handling**: ActiveStorage with optimized WebP variants (1536x474 banner, 768x237 medium, 480x148 thumb)
 - **SEO Optimization**: Meta descriptions, Open Graph, and Twitter Card support
 - **Reading Time**: Automatic reading time calculation
 
 ### 📊 **Analytics & Insights**
+- **Modern Dashboard**: Beautiful, responsive admin interface with comprehensive analytics
+- **Real-time Charts**: Interactive charts powered by Chart.js and Chartkick
 - **Advanced Visitor Tracking**: IP-based unique visit counting with 24-hour deduplication
+- **Search Analytics**: Popular search terms extraction and analysis
+- **Traffic Sources**: Social media, search engines, and referrer categorization
+- **Device Analytics**: Browser, OS, and device type breakdown with visual charts
 - **Bot Detection**: Sophisticated bot filtering with human vs. automated traffic separation
-- **Performance Analytics**: Visit statistics by page, time period, and content type
-- **Dashboard**: Beautiful admin interface with comprehensive statistics
-- **Referrer Tracking**: Source analysis and traffic pattern insights
+- **Performance Metrics**: Visit statistics by page, time period, and content type
 
 ### 💬 **Engagement Features**
 - **Comment System**: Secure commenting with moderation queue
@@ -53,6 +57,8 @@ A modern, feature-rich blog engine built with Ruby on Rails 7.2 and PostgreSQL. 
 | **Frontend** | Bootstrap 5.3, Stimulus JS |
 | **Rich Text** | Trix + ActionText |
 | **Images** | ActiveStorage with WebP variants |
+| **Charts** | Chart.js + Chartkick |
+| **Analytics** | Groupdate gem for time-based data |
 | **Icons** | Font Awesome 6.7 |
 | **Pagination** | will_paginate |
 | **Authentication** | Devise |
@@ -161,11 +167,14 @@ Main stylesheet: `app/assets/stylesheets/application.scss`
 4. Add title, content, tags, and featured image
 5. Toggle draft status as needed
 
-#### Tag Management
-- **Auto-suggestions**: Popular tags appear as clickable suggestions
-- **Manual entry**: Type comma-separated tags
-- **Interactive UI**: Click to add, X to remove tags
-- **Smart creation**: New tags created automatically
+#### Intelligent Tag Management
+- **AI-Powered Suggestions**: Content analysis generates relevant tag suggestions
+- **Technology Detection**: Automatically suggests tech-related tags (frameworks, languages, tools)
+- **Psychology & Wellness**: Smart suggestions for mental health and digital wellness content
+- **Auto-suggestions**: Popular existing tags appear as clickable suggestions
+- **Manual entry**: Type comma-separated tags or use the suggestion system
+- **Interactive UI**: Click to add, X to remove tags with smooth animations
+- **Smart creation**: New tags created automatically when you type custom ones
 
 #### Comment Moderation
 1. Go to Dashboard → "Moderar comentarios"
@@ -175,18 +184,21 @@ Main stylesheet: `app/assets/stylesheets/application.scss`
 
 ### Analytics & Insights
 
-#### Dashboard Metrics
-- **Visit Statistics**: Total, daily, weekly breakdowns
-- **Content Performance**: Most visited posts and pages
-- **Traffic Analysis**: Human vs. bot traffic percentages
-- **Referrer Data**: Traffic source analysis
+#### Modern Dashboard (`/dashboard`)
+- **Key Metrics Cards**: Total visits, published posts, approved comments, daily traffic
+- **Interactive Charts**: 30-day visit trends with Chart.js visualization
+- **Traffic Sources**: Pie chart breakdown of social media, search engines, direct, and referral traffic
+- **Popular Search Terms**: Real-time analysis of search queries that brought visitors
+- **Referrer Analysis**: Categorized traffic sources including LinkedIn, Substack, and other platforms
+- **Device Analytics**: Browser, operating system, and device type breakdowns with donut charts
+- **Top Content**: Most visited posts with engagement metrics and quick action buttons
 
-#### Advanced Analytics
-Access detailed stats at `/dashboards/stats`:
-- Daily visit trends (7, 30, 90 day views)
-- Hourly traffic patterns
-- Content type performance
-- Visitor behavior analysis
+#### Advanced Analytics (`/dashboards/stats`)
+- **Flexible Time Periods**: 7, 30, 90 day analysis views
+- **Hourly Traffic Patterns**: Understand peak usage times
+- **Content Performance**: Detailed post and page analytics
+- **Traffic Source Deep Dive**: Comprehensive referrer analysis with categorization
+- **Visitor Behavior**: Advanced metrics for content optimization
 
 ## 🔒 Security Features
 
