@@ -33,4 +33,5 @@ Rails.application.routes.draw do
 
   get '/articulos' => 'posts#list'
   get '/tags' => 'tags#index'
+  post '/tags/suggest' => 'tags#suggest'
 end

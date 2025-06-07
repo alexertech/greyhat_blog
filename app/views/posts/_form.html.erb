@@ -50,12 +50,25 @@
             action: "input->tag-manager#handleInput keydown->tag-manager#handleKeydown"
           } %>
       
+      <!-- AI Content Analysis -->
+      <div class="d-flex gap-2 mb-2">
+        <button type="button" 
+                class="btn btn-outline-primary btn-sm"
+                data-tag-manager-target="analyzeButton"
+                data-action="click->tag-manager#analyzeContent">
+          <i class="fas fa-magic me-1"></i>Analizar contenido
+        </button>
+      </div>
+      
+      <!-- AI Suggestions -->
+      <div data-tag-manager-target="aiSuggestions" class="mb-2"></div>
+      
       <!-- Tag Suggestions -->
       <div data-tag-manager-target="suggestions" class="mt-2"></div>
       
       <div class="form-text">
         <i class="fas fa-info-circle me-1"></i>
-        Separa las etiquetas con comas o presiona Enter. Haz clic en las sugerencias para añadirlas.
+        Separa las etiquetas con comas o presiona Enter. Haz clic en "Analizar contenido" para obtener sugerencias inteligentes basadas en el texto.
       </div>
     </div>
     

@@ -22,14 +22,22 @@
         <% end %>
       </div>
 
-      <% if @query.present? %>
+      <% if @query.present? || @tag.present? %>
         <div class="search-results">
           <div class="results-header mb-3">
             <h5 class="text-muted">
               <% if @posts.any? %>
-                <%= pluralize(@posts.count, 'resultado encontrado', 'resultados encontrados') %> para "<em><%= @query %></em>"
+                <% if @tag.present? %>
+                  <%= pluralize(@posts.count, 'artículo encontrado', 'artículos encontrados') %> con la etiqueta "<em><%= @tag %></em>"
+                <% else %>
+                  <%= pluralize(@posts.count, 'resultado encontrado', 'resultados encontrados') %> para "<em><%= @query %></em>"
+                <% end %>
               <% else %>
-                No se encontraron resultados para "<em><%= @query %></em>"
+                <% if @tag.present? %>
+                  No se encontraron artículos con la etiqueta "<em><%= @tag %></em>"
+                <% else %>
+                  No se encontraron resultados para "<em><%= @query %></em>"
+                <% end %>
               <% end %>
             </h5>
           </div>
@@ -59,6 +67,17 @@
                           <%= highlight(strip_tags(post.body.to_plain_text).truncate(200), @query, 
                               highlighter: '<mark class="bg-warning">\1</mark>') %>
                         </p>
+                        
+                        <!-- Tags -->
+                        <% if post.tags.any? %>
+                          <div class="mb-2">
+                            <% post.tags.limit(5).each do |tag| %>
+                              <%= link_to search_path(tag: tag.name), class: "badge bg-primary text-decoration-none me-1 mb-1" do %>
+                                <i class="fas fa-tag me-1"></i><%= tag.name %>
+                              <% end %>
+                            <% end %>
+                          </div>
+                        <% end %>
                         
                         <div class="card-text">
                           <small class="text-muted">

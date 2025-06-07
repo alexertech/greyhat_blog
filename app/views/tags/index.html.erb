@@ -1,0 +1,101 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="tags-header mb-5 text-center">
+        <h2 class="mb-3">
+          <i class="fas fa-tags me-2"></i>
+          Explorar por Etiquetas
+        </h2>
+        <p class="lead text-muted">
+          Descubre artículos por temas de interés. Haz clic en cualquier etiqueta para ver todos los artículos relacionados.
+        </p>
+      </div>
+
+      <% if @tags_with_counts.any? %>
+        <div class="tag-cloud mb-5">
+          <% @tags_with_counts.each do |tag| %>
+            <% 
+              # Calculate relative size based on post count
+              max_count = @tags_with_counts.first.posts_count.to_f
+              relative_size = (tag.posts_count.to_f / max_count * 1.5 + 0.8).round(1)
+              relative_size = [relative_size, 2.0].min # Cap at 2.0
+            %>
+            <%= link_to search_path(tag: tag.name), 
+                class: "tag-cloud-item badge bg-primary text-decoration-none me-2 mb-2 px-3 py-2",
+                style: "font-size: #{relative_size}rem; transition: all 0.2s ease;",
+                title: "#{pluralize(tag.posts_count, 'artículo')}" do %>
+              <i class="fas fa-tag me-1"></i>
+              <%= tag.name %>
+              <span class="badge bg-light text-dark ms-1"><%= tag.posts_count %></span>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="tags-stats mt-5 pt-4 border-top">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="stat-item">
+                <h4 class="text-primary"><%= @tags_with_counts.count %></h4>
+                <p class="text-muted mb-0">Etiquetas activas</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-item">
+                <h4 class="text-primary"><%= @total_posts %></h4>
+                <p class="text-muted mb-0">Artículos publicados</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-item">
+                <h4 class="text-primary"><%= @tags_with_counts.sum(&:posts_count) %></h4>
+                <p class="text-muted mb-0">Total de etiquetados</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="popular-tags mt-5">
+          <h4 class="mb-3">
+            <i class="fas fa-fire me-2 text-warning"></i>
+            Etiquetas Más Populares
+          </h4>
+          <div class="row">
+            <% @tags_with_counts.limit(6).each do |tag| %>
+              <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">
+                      <%= link_to search_path(tag: tag.name), class: "text-decoration-none" do %>
+                        <i class="fas fa-tag me-2"></i><%= tag.name %>
+                      <% end %>
+                    </h5>
+                    <p class="card-text text-muted">
+                      <%= pluralize(tag.posts_count, 'artículo') %>
+                    </p>
+                    <%= link_to "Ver artículos", search_path(tag: tag.name), class: "btn btn-outline-primary btn-sm" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <p class="text-muted">
+            ¿Buscas algo específico? 
+            <%= link_to "Utiliza la búsqueda", search_path, class: "text-decoration-none" %>
+            para encontrar artículos por contenido.
+          </p>
+        </div>
+      <% else %>
+        <div class="no-tags text-center py-5">
+          <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+          <h4 class="text-muted">No hay etiquetas disponibles</h4>
+          <p class="text-muted">
+            Aún no se han creado etiquetas para los artículos.
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

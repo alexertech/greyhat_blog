@@ -58,6 +58,7 @@ group :development, :test do
   gem 'rubocop'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 6.0', '>= 6.0.3'
+  gem 'factory_bot_rails', '~> 6.4'
   gem 'capybara', '~> 3.39'
   gem 'webdrivers', '~> 5.3'
 end
