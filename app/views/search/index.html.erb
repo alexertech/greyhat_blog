@@ -1,0 +1,111 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="search-header mb-4">
+        <h2 class="mb-3">
+          <i class="fas fa-search me-2"></i>
+          Buscar Artículos
+        </h2>
+        
+        <%= form_with url: search_path, method: :get, local: true, class: "search-form" do |form| %>
+          <div class="input-group mb-3">
+            <%= form.text_field :q, 
+                value: @query, 
+                placeholder: "Buscar en títulos y contenido...", 
+                class: "form-control form-control-lg",
+                autocomplete: "off" %>
+            <button class="btn btn-primary btn-lg" type="submit">
+              <i class="fas fa-search"></i>
+              <span class="d-none d-sm-inline ms-1">Buscar</span>
+            </button>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @query.present? %>
+        <div class="search-results">
+          <div class="results-header mb-3">
+            <h5 class="text-muted">
+              <% if @posts.any? %>
+                <%= pluralize(@posts.count, 'resultado encontrado', 'resultados encontrados') %> para "<em><%= @query %></em>"
+              <% else %>
+                No se encontraron resultados para "<em><%= @query %></em>"
+              <% end %>
+            </h5>
+          </div>
+
+          <% if @posts.any? %>
+            <div class="results-list">
+              <% @posts.each do |post| %>
+                <div class="card mb-3 search-result-card">
+                  <div class="row g-0">
+                    <% if post.image.attached? %>
+                      <div class="col-md-3">
+                        <%= link_to post do %>
+                          <%= image_tag post.image.variant(:thumb), 
+                              class: "img-fluid rounded-start h-100 w-100", 
+                              style: "object-fit: cover;" %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                    
+                    <div class="<%= post.image.attached? ? 'col-md-9' : 'col-12' %>">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <%= link_to post.title, post, class: "text-decoration-none" %>
+                        </h5>
+                        
+                        <p class="card-text">
+                          <%= highlight(strip_tags(post.body.to_plain_text).truncate(200), @query, 
+                              highlighter: '<mark class="bg-warning">\1</mark>') %>
+                        </p>
+                        
+                        <div class="card-text">
+                          <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            <%= post.created_at.strftime("%d %b %Y") %>
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-clock me-1"></i>
+                            <%= (post.body.to_plain_text.split.size/200)+1 %> min de lectura
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-eye me-1"></i>
+                            <%= post.total_visits %> visitas
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="no-results text-center py-5">
+              <i class="fas fa-search fa-3x text-muted mb-3"></i>
+              <h4 class="text-muted">No se encontraron artículos</h4>
+              <p class="text-muted">
+                Intenta con diferentes palabras clave o 
+                <%= link_to "explora todos los artículos", "/articulos", class: "text-decoration-none" %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="search-suggestions text-center py-5">
+          <i class="fas fa-lightbulb fa-3x text-muted mb-3"></i>
+          <h4 class="text-muted">¿Qué te gustaría encontrar?</h4>
+          <p class="text-muted mb-4">
+            Busca por título, contenido o palabras clave en nuestros artículos técnicos
+          </p>
+          <div class="suggestion-tags">
+            <span class="badge bg-light text-dark me-2 mb-2">seguridad</span>
+            <span class="badge bg-light text-dark me-2 mb-2">hacking</span>
+            <span class="badge bg-light text-dark me-2 mb-2">pentesting</span>
+            <span class="badge bg-light text-dark me-2 mb-2">python</span>
+            <span class="badge bg-light text-dark me-2 mb-2">linux</span>
+            <span class="badge bg-light text-dark me-2 mb-2">vulnerabilidades</span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
