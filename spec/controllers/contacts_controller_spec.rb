@@ -100,14 +100,15 @@ RSpec.describe ContactsController, type: :controller do
         }.to change(Contact, :count).by(1)
       end
 
-      it 'assigns a newly created but unsaved contact as @contact for the success message' do
+      it 'redirects to new contact path with success notice' do
         post :create, params: { contact: valid_attributes }
-        expect(assigns(:contact)).to be_a_new(Contact)
+        expect(response).to redirect_to(new_contact_path)
+        expect(flash[:notice]).to be_present
       end
 
-      it 'renders the new template with a success notice' do
+      it 'sets success flash flag' do
         post :create, params: { contact: valid_attributes }
-        expect(response).to render_template(:new)
+        expect(flash[:success]).to be_truthy
       end
     end
 

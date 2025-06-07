@@ -92,8 +92,8 @@ RSpec.describe DashboardsController, type: :controller do
       end
 
       it 'assigns posts in reverse chronological order' do
-        post1 = Post.create(title: 'Post 1')
-        post2 = Post.create(title: 'Post 2')
+        post1 = Post.create!(title: 'Post 1', body: 'Content 1')
+        post2 = Post.create!(title: 'Post 2', body: 'Content 2')
         get :posts
         expect(assigns(:posts).to_a).to eq([post2, post1])
       end

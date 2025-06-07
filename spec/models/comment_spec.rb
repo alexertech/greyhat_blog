@@ -9,7 +9,7 @@ RSpec.describe Comment, type: :model do
   def build_valid_comment(overrides = {})
     Comment.new({
       post: post_obj,
-      username: 'User123',
+      username: 'María García',
       email: 'user@example.com',
       body: 'This is a valid comment',
       website: ''
@@ -103,23 +103,19 @@ RSpec.describe Comment, type: :model do
       it 'is not valid if body contains http links' do
         comment = build_valid_comment(body: 'Check out https://example.com')
         expect(comment).not_to be_valid
-        expect(comment.errors[:body]).to include("no puede contener enlaces")
+        expect(comment.errors[:base]).to include("No se permiten enlaces en el contenido")
       end
       
       it 'is not valid if body contains www links' do
         comment = build_valid_comment(body: 'Visit www.example.com')
         expect(comment).not_to be_valid
-        expect(comment.errors[:body]).to include("no puede contener enlaces")
+        expect(comment.errors[:base]).to include("No se permiten enlaces en el contenido")
       end
       
       it 'rejects subtle link attempts' do
         comment = build_valid_comment(body: 'Go to example.com for more info')
-        # This should pass as we're only checking for https:// and www. patterns
-        expect(comment).to be_valid
-        
-        comment = build_valid_comment(body: 'Visit http://site.com now')
         expect(comment).not_to be_valid
-        expect(comment.errors[:body]).to include("no puede contener enlaces")
+        expect(comment.errors[:base]).to include("No se permiten enlaces en el contenido")
       end
     end
   end
@@ -133,7 +129,7 @@ RSpec.describe Comment, type: :model do
     it 'is destroyed when the associated post is destroyed' do
       post_with_comment = Post.create!(title: 'Post with comment', body: 'Test content')
       comment = post_with_comment.comments.create!(
-        username: 'User123',
+        username: 'María García',
         email: 'user@example.com',
         body: 'Test comment'
       )
