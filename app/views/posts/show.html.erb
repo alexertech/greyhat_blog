@@ -76,6 +76,17 @@
           <span class="badge bg-secondary">Total: <%= @post.total_visits %></span>
         <% end %>
       </div>
+      
+      <!-- Tags -->
+      <% if @post.tags.any? %>
+        <div class="mb-4">
+          <% @post.tags.each do |tag| %>
+            <span class="badge bg-primary me-1 mb-1 px-3 py-2" style="font-size: 0.875rem;">
+              <i class="fas fa-tag me-1"></i><%= tag.name %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
     </header>
 
 

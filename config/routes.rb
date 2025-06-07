@@ -32,4 +32,5 @@ Rails.application.routes.draw do
   get '/contacto_clean' => 'contacts#clean', :as => 'contacts_clean'
 
   get '/articulos' => 'posts#list'
+  get '/tags' => 'tags#index'
 end

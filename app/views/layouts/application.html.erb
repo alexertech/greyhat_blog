@@ -28,8 +28,39 @@
 <body>
 
 <div id="main_body" class="container-sm py-4 mx-auto" style="max-width: 900px;">
-	<div id="header" class="d-flex justify-content-center align-items-center logo">
-		<div><%= image_tag "logo.png", class: "img-fluid" %></div>
+	<div id="header" class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
+		<div class="logo d-flex justify-content-center flex-grow-1 order-1 order-md-0">
+			<%= image_tag "logo.png", class: "img-fluid" %>
+		</div>
+		
+		<!-- Header Search and Dark Mode (Desktop) -->
+		<div class="d-none d-md-flex align-items-center gap-2 order-2">
+			<%= form_with url: search_path, method: :get, local: true do |form| %>
+				<div class="input-group input-group-sm" style="width: 250px;">
+					<%= form.text_field :q, 
+						placeholder: "Buscar...", 
+						class: "form-control form-control-sm border-0",
+						style: "background-color: rgba(255,255,255,0.9); border-radius: 20px 0 0 20px;",
+						value: params[:q] %>
+					<button class="btn btn-primary btn-sm border-0" 
+							type="submit" 
+							style="border-radius: 0 20px 20px 0;">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			<% end %>
+			
+			<!-- Dark Mode Toggle -->
+			<div data-controller="dark-mode">
+				<button data-dark-mode-target="toggle"
+						data-action="click->dark-mode#toggle"
+						class="btn btn-outline-secondary btn-sm"
+						style="border-radius: 20px;"
+						aria-label="Toggle dark mode">
+					<i data-dark-mode-target="icon" class="fas fa-moon"></i>
+				</button>
+			</div>
+		</div>
 	</div>
 	
 	<%= render 'partials/navigation' %>
