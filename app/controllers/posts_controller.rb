@@ -9,12 +9,12 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+    @posts = Post.includes(:image_attachment).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   # Get /blog
   def list
-    @posts = Post.published.order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+    @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   # GET /posts/1
@@ -79,12 +79,12 @@ class PostsController < ApplicationController
   # end
 
   def set_post
-    @post = Post.includes(:image_attachment).find_by_slug(params[:id])
+    @post = Post.includes(:image_attachment, :visits, :tags, comments: :post).find_by_slug(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
-    params.require(:post).permit(:title, :body, :image, :draft)
+    params.require(:post).permit(:title, :body, :image, :draft, :tag_names)
   end
 
   def track_visit

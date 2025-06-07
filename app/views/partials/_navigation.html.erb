@@ -86,7 +86,7 @@
     </div>
 
     <!-- Desktop Navigation -->
-    <div class="d-none d-md-block bg-dark rounded-top">
+    <div class="d-none d-md-block bg-dark rounded">
       <div class="d-flex flex-row">
         <a href="/index" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/index') ? 'active' : '' %>">Inicio</a>
         <a href="/acerca" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/acerca') ? 'active' : '' %>">Acerca de</a>
@@ -100,31 +100,6 @@
         <% if user_signed_in? %>
           <a href="/dashboard" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white">Dashboard</a>
         <% end %>
-      </div>
-      
-      <!-- Search Bar and Dark Mode Toggle -->
-      <div class="search-bar-container px-3 pb-3 d-flex gap-2 align-items-center">
-        <%= form_with url: search_path, method: :get, local: true, class: "flex-grow-1" do |form| %>
-          <div class="input-group">
-            <%= form.text_field :q, 
-                placeholder: "Buscar artículos...", 
-                class: "form-control form-control-sm",
-                value: params[:q] %>
-            <button class="btn btn-outline-light btn-sm" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        <% end %>
-        
-        <!-- Dark Mode Toggle for Desktop -->
-        <div data-controller="dark-mode">
-          <button data-dark-mode-target="toggle"
-                  data-action="click->dark-mode#toggle"
-                  class="btn btn-outline-light btn-sm"
-                  aria-label="Toggle dark mode">
-            <i data-dark-mode-target="icon" class="fas fa-moon"></i>
-          </button>
-        </div>
       </div>
     </div>
   </div>

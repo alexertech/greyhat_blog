@@ -9,10 +9,11 @@ class DashboardsController < ApplicationController
     @visits_this_week = Visit.where('viewed_at >= ?', 1.week.ago).count
     @most_visited_posts = Post.most_visited(5)
     
-    # Visit counts by page
-    @home_visits = Page.find(1).visits.count
-    @about_visits = Page.find(2).visits.count
-    @services_visits = Page.find(3).visits.count
+    # Visit counts by page - optimized to avoid N+1 queries
+    pages_with_visits = Page.includes(:visits).where(id: [1, 2, 3]).index_by(&:id)
+    @home_visits = pages_with_visits[1]&.visits&.size || 0
+    @about_visits = pages_with_visits[2]&.visits&.size || 0
+    @services_visits = pages_with_visits[3]&.visits&.size || 0
     @posts_visits = Visit.where(visitable_type: 'Post').count
     
     # Comment count for dashboard
@@ -36,7 +37,7 @@ class DashboardsController < ApplicationController
   end
 
   def posts
-    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+    @posts = Post.includes(:visits).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
   
   def comments

@@ -32,6 +32,33 @@
       <div class="form-text">Selecciona una imagen destacada para tu artículo.</div>
     </div>
     
+    <div class="mb-3" 
+         data-controller="tag-manager" 
+         data-tag-manager-current-tags-value="<%= post.tags.pluck(:name).to_json %>">
+      <%= form.label :tag_names, "Etiquetas", class: "form-label" %>
+      
+      <!-- Tag Display Area -->
+      <div data-tag-manager-target="tagContainer" class="mb-2"></div>
+      
+      <!-- Hidden Input Field -->
+      <%= form.text_field :tag_names, 
+          value: post.tags.pluck(:name).join(', '), 
+          class: "form-control", 
+          placeholder: "Escribe etiquetas separadas por comas o selecciona de las sugerencias",
+          data: { 
+            tag_manager_target: "input",
+            action: "input->tag-manager#handleInput keydown->tag-manager#handleKeydown"
+          } %>
+      
+      <!-- Tag Suggestions -->
+      <div data-tag-manager-target="suggestions" class="mt-2"></div>
+      
+      <div class="form-text">
+        <i class="fas fa-info-circle me-1"></i>
+        Separa las etiquetas con comas o presiona Enter. Haz clic en las sugerencias para añadirlas.
+      </div>
+    </div>
+    
     <div class="mb-3 form-check">
       <%= form.check_box :draft, class: "form-check-input" %>
       <%= form.label :draft, "Guardar como borrador", class: "form-check-label" %>

@@ -37,6 +37,21 @@
                 <p class="card-text">
                   <%= post.body.to_plain_text.truncate(200) %>
                 </p>
+                
+                <!-- Tags -->
+                <% if post.tags.any? %>
+                  <div class="mb-2">
+                    <% post.tags.limit(3).each do |tag| %>
+                      <span class="badge bg-outline-secondary me-1 mb-1" style="border: 1px solid #6c757d; color: #6c757d;">
+                        <i class="fas fa-tag me-1"></i><%= tag.name %>
+                      </span>
+                    <% end %>
+                    <% if post.tags.count > 3 %>
+                      <span class="text-muted small">+<%= post.tags.count - 3 %> más</span>
+                    <% end %>
+                  </div>
+                <% end %>
+                
                 <%= link_to 'Leer artículo completo →', post, class: "btn btn-sm btn-outline-primary" %>
               </div>
             </div>

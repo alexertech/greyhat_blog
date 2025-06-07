@@ -7,6 +7,7 @@ class Post < ApplicationRecord
   after_create :update_slug
   before_update :assign_slug
   after_commit :generate_image_variants, on: %i[create update]
+  after_save :assign_tags
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_fill: [300, 170], format: :webp
     attachable.variant :medium, resize_to_fill: [600, 400], format: :webp
@@ -20,6 +21,8 @@ class Post < ApplicationRecord
 
   scope :published, -> { where(draft: false) }
   scope :drafts, -> { where(draft: true) }
+  
+  attr_accessor :tag_names
 
   def to_param
     slug
@@ -56,13 +59,20 @@ class Post < ApplicationRecord
   def related_posts(limit = 3)
     return Post.published.where.not(id: id).limit(limit) if tags.empty?
 
-    Post.published
-        .joins(:tags)
-        .where(tags: { id: tag_ids })
-        .where.not(id: id)
-        .group('posts.id')
-        .order('COUNT(tags.id) DESC, posts.created_at DESC')
-        .limit(limit)
+    # Use a subquery approach to avoid GROUP BY issues with includes
+    related_post_ids = Post.published
+                          .joins(:tags)
+                          .where(tags: { id: tag_ids })
+                          .where.not(id: id)
+                          .group('posts.id')
+                          .order('COUNT(tags.id) DESC, posts.created_at DESC')
+                          .limit(limit)
+                          .pluck(:id)
+    
+    return Post.published.where.not(id: id).limit(limit) if related_post_ids.empty?
+    
+    Post.where(id: related_post_ids)
+        .order(Arel.sql("array_position(ARRAY[#{related_post_ids.join(',')}], posts.id)"))
   end
 
   def self.visits_by_day(days = 7)
@@ -98,6 +108,20 @@ class Post < ApplicationRecord
       Rails.logger.info "Generated image variants for post #{id}"
     rescue StandardError => e
       Rails.logger.error "Failed to generate variants for post #{id}: #{e.message}"
+    end
+  end
+  
+  def assign_tags
+    return unless tag_names.present?
+    
+    # Clear existing tags
+    self.tags.clear
+    
+    # Parse and create/assign new tags
+    tag_list = tag_names.split(',').map(&:strip).reject(&:blank?)
+    tag_list.each do |tag_name|
+      tag = Tag.find_or_create_by(name: tag_name.downcase)
+      self.tags << tag unless self.tags.include?(tag)
     end
   end
 end
