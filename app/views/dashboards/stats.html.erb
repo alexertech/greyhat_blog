@@ -6,12 +6,35 @@
     </div>
   </div>
 
+  <!-- Performance Insights Section -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm performance-insights-card">
+        <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Insights de Rendimiento</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <% @insights.each_with_index do |insight, index| %>
+              <div class="col-md-<%= @insights.size == 1 ? '12' : @insights.size == 2 ? '6' : '4' %>">
+                <div class="alert alert-info mb-2">
+                  <i class="fas fa-info-circle me-2"></i><%= insight %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row mb-4">
     <div class="col-md-12">
       <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Visitas diarias</h5>
           <div class="btn-group" role="group">
+            <%= link_to "Hoy", dashboards_stats_path(period: 1), class: "btn btn-sm #{@period == 1 ? 'btn-light' : 'btn-outline-light'}" %>
             <%= link_to "7 días", dashboards_stats_path(period: 7), class: "btn btn-sm #{@period == 7 ? 'btn-light' : 'btn-outline-light'}" %>
             <%= link_to "30 días", dashboards_stats_path(period: 30), class: "btn btn-sm #{@period == 30 ? 'btn-light' : 'btn-outline-light'}" %>
             <%= link_to "90 días", dashboards_stats_path(period: 90), class: "btn btn-sm #{@period == 90 ? 'btn-light' : 'btn-outline-light'}" %>
@@ -46,10 +69,78 @@
     </div>
   </div>
 
+  <!-- Live Activity and Performance Analytics Row -->
   <div class="row mb-4">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="card shadow-sm">
         <div class="card-header bg-success text-white">
+          <h5 class="mb-0"><i class="fas fa-pulse me-2"></i>Actividad Reciente</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+            <% @recent_visits.each do |visit| %>
+              <div class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">
+                    <%= visit.visitable_type %>: <%= visit.visitable.try(:title) || visit.visitable.try(:name) || 'Sin título' %>
+                  </div>
+                  <small class="text-muted">
+                    <i class="fas fa-clock me-1"></i><%= time_ago_in_words(visit.viewed_at) %> ago
+                    <% if visit.referer.present? %>
+                      | <i class="fas fa-external-link-alt me-1"></i><%= URI.parse(visit.referer).host&.downcase&.gsub(/^www\./, '') rescue 'Unknown' %>
+                    <% end %>
+                  </small>
+                </div>
+                <span class="badge bg-<%= visit.bot? ? 'warning' : 'primary' %> rounded-pill">
+                  <%= visit.bot? ? 'Bot' : 'Human' %>
+                </span>
+              </div>
+            <% end %>
+            <% if @recent_visits.empty? %>
+              <div class="list-group-item text-center text-muted">
+                No hay actividad reciente
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Métricas de Rendimiento</h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-12 mb-3">
+              <h6 class="text-muted mb-1">Tasa de Rebote</h6>
+              <h3 class="text-<%= @bounce_rate > 70 ? 'danger' : @bounce_rate > 50 ? 'warning' : 'success' %>">
+                <%= @bounce_rate %>%
+              </h3>
+            </div>
+            <div class="col-12 mb-3">
+              <h6 class="text-muted mb-1">Duración Promedio</h6>
+              <h3 class="text-primary">
+                <%= @avg_session_duration > 60 ? "#{(@avg_session_duration / 60).round(1)}m" : "#{@avg_session_duration}s" %>
+              </h3>
+            </div>
+          </div>
+          
+          <h6 class="text-muted mb-2">Embudo de Conversión</h6>
+          <% @conversion_funnel.each do |stage, value| %>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <small><%= stage %></small>
+              <span class="badge bg-secondary"><%= value %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
           <h5 class="mb-0">Visitas por hora (últimas 24 horas)</h5>
         </div>
         <div class="card-body">
@@ -71,6 +162,43 @@
                 <% if @hourly_visits.empty? %>
                 <tr>
                   <td colspan="2" class="text-center">No hay datos disponibles</td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Top Exit Pages Section -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0"><i class="fas fa-sign-out-alt me-2"></i>Páginas de Salida</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+              <thead class="table-dark">
+                <tr>
+                  <th>Página</th>
+                  <th>Salidas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @top_exit_pages.each do |page, count| %>
+                <tr>
+                  <td><%= page.truncate(40) %></td>
+                  <td><span class="badge bg-warning text-dark"><%= count %></span></td>
+                </tr>
+                <% end %>
+                <% if @top_exit_pages.empty? %>
+                <tr>
+                  <td colspan="2" class="text-center">No hay datos suficientes</td>
                 </tr>
                 <% end %>
               </tbody>
