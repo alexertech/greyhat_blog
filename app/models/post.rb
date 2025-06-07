@@ -15,6 +15,8 @@ class Post < ApplicationRecord
   has_rich_text :body
   has_many :visits, as: :visitable, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :post_tags, dependent: :destroy
+  has_many :tags, through: :post_tags
 
   scope :published, -> { where(draft: false) }
   scope :drafts, -> { where(draft: true) }
@@ -49,6 +51,18 @@ class Post < ApplicationRecord
            ON posts.id = visit_counts.visitable_id")
       .order('visit_counts.visit_count DESC NULLS LAST')
       .limit(limit)
+  end
+
+  def related_posts(limit = 3)
+    return Post.published.where.not(id: id).limit(limit) if tags.empty?
+
+    Post.published
+        .joins(:tags)
+        .where(tags: { id: tag_ids })
+        .where.not(id: id)
+        .group('posts.id')
+        .order('COUNT(tags.id) DESC, posts.created_at DESC')
+        .limit(limit)
   end
 
   def self.visits_by_day(days = 7)

@@ -20,10 +20,7 @@ class PostsController < ApplicationController
   # GET /posts/1
   def show
     @comment = Comment.new
-    @related_posts = Post.published.includes(:image_attachment)
-                         .where.not(id: @post.id)
-                         .order('RANDOM()')
-                         .limit(3)
+    @related_posts = @post.related_posts.includes(:image_attachment, :tags)
   end
 
   # GET /posts/new

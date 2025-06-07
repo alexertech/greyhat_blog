@@ -215,3 +215,208 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
 .trix-dialog .trix-button--dialog-submit {
   font-size: initial; 
 }
+
+// Mobile Navigation Styles
+.mobile-nav-header {
+  .mobile-nav-toggle {
+    font-size: 1.25rem;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+    
+    &.active {
+      .navbar-toggler-icon i {
+        transform: rotate(90deg);
+      }
+    }
+  }
+}
+
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.mobile-nav-menu {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100%;
+  z-index: 1050;
+  overflow-y: auto;
+  transition: right 0.3s ease;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  
+  &.show {
+    right: 0;
+  }
+}
+
+.mobile-nav-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  min-height: 44px; // Touch-friendly
+  display: flex;
+  align-items: center;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white !important;
+  }
+  
+  &.active {
+    background-color: #0D6EFD;
+    color: white !important;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #ffffff;
+    }
+  }
+  
+  i {
+    width: 20px;
+    text-align: center;
+  }
+}
+
+// Prevent body scroll when mobile menu is open
+body.menu-open {
+  overflow: hidden;
+}
+
+// Dark mode CSS variables
+:root {
+  // Light mode (default)
+  --bg-primary: #e4e4e4;
+  --bg-secondary: #f8f9fa;
+  --bg-dark: #333;
+  --text-primary: rgba(0, 0, 0, 0.8);
+  --text-secondary: #6c757d;
+  --text-white: #ffffff;
+  --border-color: #dee2e6;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --navbar-bg: #333;
+}
+
+[data-theme="dark"] {
+  // Dark mode
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-dark: #0a0a0a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #adb5bd;
+  --text-white: #ffffff;
+  --border-color: #343a40;
+  --card-bg: #1e1e1e;
+  --input-bg: #2d3436;
+  --navbar-bg: #0a0a0a;
+  
+  // Override body background for dark mode
+  body {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1e1e1e 100%) !important;
+    color: var(--text-primary);
+  }
+  
+  // Dark mode overrides
+  #main {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+  
+  .card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+  
+  .form-control {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    
+    &:focus {
+      background-color: var(--input-bg);
+      border-color: #0D6EFD;
+      color: var(--text-primary);
+    }
+  }
+  
+  .btn-outline-light {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    
+    &:hover {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+  }
+  
+  .bg-light {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary);
+  }
+  
+  .text-muted {
+    color: var(--text-secondary) !important;
+  }
+  
+  .border {
+    border-color: var(--border-color) !important;
+  }
+  
+  .mobile-nav-menu, .mobile-nav-header {
+    background-color: var(--navbar-bg) !important;
+  }
+  
+  .search-result-card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+  }
+}
+
+// Improved touch targets for mobile
+@media (max-width: 767px) {
+  .btn {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+  
+  .bookmark-btn, .share-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  // Make cards more touch-friendly
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  // Improve form inputs on mobile
+  .form-control {
+    font-size: 16px; // Prevents zoom on iOS
+    min-height: 44px;
+  }
+}
