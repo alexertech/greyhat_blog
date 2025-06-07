@@ -1,136 +1,365 @@
-<div>
+
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Dashboard</h2>
     <div>
-      <%= link_to "Estadísticas detalladas", dashboards_stats_path, class: "btn btn-outline-primary btn-sm me-2" %>
-      <%= link_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+      <h1 class="dashboard-title mb-2">
+        <i class="fas fa-tachometer-alt me-3 text-primary"></i>
+        Panel de Control
+      </h1>
+      <p class="text-muted mb-0">Resumen de tu blog y analíticas</p>
+    </div>
+    <div class="d-flex gap-2">
+      <%= link_to "Ver Estadísticas", dashboards_stats_path, class: "btn btn-outline-primary" %>
+      <%= link_to "Gestionar Posts", dashboards_posts_path, class: "btn btn-outline-secondary" %>
     </div>
   </div>
 
-  <% if notice %>
-    <div class="alert alert-success" id="notice"><%= notice %></div>
-  <% end %>
-
+  <!-- Key Metrics Cards -->
   <div class="row mb-4">
-    <div class="col-md-3">
-      <div class="card shadow-sm mb-3">
-        <div class="card-body text-center">
-          <h5 class="card-title">Contactos</h5>
-          <p class="card-text display-6"><%= Contact.count %></p>
-          <%= link_to "Administrar contactos", contacts_url, class: "btn btn-primary" %>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-primary">
+            <i class="fas fa-eye"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= number_with_delimiter(@total_visits) %></div>
+            <div class="metric-label">Visitas Totales</div>
+            <div class="metric-change positive">
+              <i class="fas fa-arrow-up"></i> 
+              +<%= @visits_this_week %> esta semana
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm mb-3">
-        <div class="card-body text-center">
-          <h5 class="card-title">Artículos</h5>
-          <p class="card-text display-6"><%= Post.count %></p>
-          <%= link_to "Administrar artículos", posts_url, class: "btn btn-primary" %>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-success">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= @published_posts %></div>
+            <div class="metric-label">Artículos Publicados</div>
+            <div class="metric-change">
+              <%= @posts_this_month %> este mes
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm mb-3">
-        <div class="card-body text-center">
-          <h5 class="card-title">Comentarios</h5>
-          <p class="card-text display-6"><%= @comment_count %></p>
-          <% if @pending_comment_count > 0 %>
-            <div class="mb-2">
-              <span class="badge bg-warning text-dark">
-                <%= @pending_comment_count %> pendientes de moderación
-              </span>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-warning">
+            <i class="fas fa-comments"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= @approved_comment_count %></div>
+            <div class="metric-label">Comentarios Aprobados</div>
+            <div class="metric-change <%= @pending_comment_count > 0 ? 'attention' : '' %>">
+              <% if @pending_comment_count > 0 %>
+                <i class="fas fa-clock"></i> 
+                <%= @pending_comment_count %> pendientes
+              <% else %>
+                <i class="fas fa-check"></i> 
+                Todo al día
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-info">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= @visits_today %></div>
+            <div class="metric-label">Visitas Hoy</div>
+            <div class="metric-change">
+              <%= @visits_this_month %> este mes
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row mb-4">
+    <div class="col-lg-8 mb-4">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h5 class="chart-title">
+            <i class="fas fa-chart-line me-2"></i>
+            Visitas Diarias (Últimos 30 días)
+          </h5>
+        </div>
+        <div class="chart-body">
+          <div class="chart-placeholder" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+            <div class="text-center">
+              <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+              <p class="text-muted">Gráfico de visitas diarias (últimos 30 días)</p>
+              <p class="small text-muted">Total de visitas: <%= @daily_visits_chart.values.sum %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h5 class="chart-title">
+            <i class="fas fa-chart-pie me-2"></i>
+            Fuentes de Tráfico
+          </h5>
+        </div>
+        <div class="chart-body">
+          <div class="chart-placeholder" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+            <div class="text-center">
+              <i class="fas fa-chart-pie fa-3x text-muted mb-3"></i>
+              <p class="text-muted">Fuentes de Tráfico</p>
+              <div class="row text-center mt-3">
+                <div class="col-6 mb-2">
+                  <div class="badge bg-primary me-2">Social</div>
+                  <span><%= @social_media_visits %></span>
+                </div>
+                <div class="col-6 mb-2">
+                  <div class="badge bg-success me-2">Búsquedas</div>
+                  <span><%= @search_engine_visits %></span>
+                </div>
+                <div class="col-6 mb-2">
+                  <div class="badge bg-info me-2">Directo</div>
+                  <span><%= @direct_visits %></span>
+                </div>
+                <div class="col-6 mb-2">
+                  <div class="badge bg-warning me-2">Referencias</div>
+                  <span><%= @referral_visits %></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics Grid -->
+  <div class="row mb-4">
+    <!-- Popular Search Terms -->
+    <div class="col-lg-6 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-search me-2"></i>
+            Términos de Búsqueda Populares
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <% if @popular_search_terms.any? %>
+            <% @popular_search_terms.each_with_index do |(term, count), index| %>
+              <div class="search-term-item">
+                <div class="term-rank">#<%= index + 1 %></div>
+                <div class="term-content">
+                  <div class="term-name"><%= term %></div>
+                  <div class="term-count"><%= pluralize(count, 'búsqueda') %></div>
+                </div>
+                <div class="term-bar">
+                  <div class="term-progress" style="width: <%= (count.to_f / @popular_search_terms.values.max * 100).round(1) %>%"></div>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="no-data">
+              <i class="fas fa-search fa-2x text-muted mb-2"></i>
+              <p class="text-muted">No hay datos de búsquedas disponibles</p>
             </div>
           <% end %>
-          <%= link_to "Moderar comentarios", dashboards_comments_path, class: "btn btn-primary" %>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm mb-3">
-        <div class="card-body text-center">
-          <h5 class="card-title">Visitas totales</h5>
-          <p class="card-text display-6"><%= @total_visits %></p>
-          <div class="small text-muted">
-            Hoy: <%= @visits_today %> | Semana: <%= @visits_this_week %>
-          </div>
+
+    <!-- Top Referrers -->
+    <div class="col-lg-6 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-external-link-alt me-2"></i>
+            Principales Referentes
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <% if @top_referrers_preview.any? %>
+            <% @top_referrers_preview.each do |referrer| %>
+              <div class="referrer-item">
+                <div class="referrer-icon">
+                  <% case referrer[:source_type] %>
+                  <% when :social %>
+                    <i class="fab fa-<%= referrer[:domain].include?('linkedin') ? 'linkedin' : referrer[:domain].include?('twitter') ? 'twitter' : 'share-alt' %> text-primary"></i>
+                  <% when :newsletter %>
+                    <i class="fas fa-newspaper text-warning"></i>
+                  <% when :search %>
+                    <i class="fas fa-search text-success"></i>
+                  <% else %>
+                    <i class="fas fa-globe text-muted"></i>
+                  <% end %>
+                </div>
+                <div class="referrer-content">
+                  <div class="referrer-name"><%= referrer[:display_name] %></div>
+                  <div class="referrer-type">
+                    <span class="badge badge-<%= referrer[:source_type] %>">
+                      <%= referrer[:source_type].to_s.humanize %>
+                    </span>
+                  </div>
+                </div>
+                <div class="referrer-count">
+                  <span class="visit-count"><%= referrer[:count] %></span>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="no-data">
+              <i class="fas fa-external-link-alt fa-2x text-muted mb-2"></i>
+              <p class="text-muted">No hay datos de referentes disponibles</p>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Device Analytics -->
   <div class="row mb-4">
-    <div class="col-md-6">
-      <h3 class="mb-3">Estadísticas de página</h3>
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-dark">
-                <tr>
-                  <th>Página</th>
-                  <th>Total visitas</th>
-                  <th>Última semana</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Inicio</td>
-                  <td><span class="badge bg-primary"><%= @home_visits %></span></td>
-                  <td><span class="badge bg-secondary"><%= Page.find(1).recent_visits %></span></td>
-                </tr>
-                <tr>
-                  <td>Acerca</td>
-                  <td><span class="badge bg-primary"><%= @about_visits %></span></td>
-                  <td><span class="badge bg-secondary"><%= Page.find(2).recent_visits %></span></td>
-                </tr>
-                <tr>
-                  <td>Servicios</td>
-                  <td><span class="badge bg-primary"><%= @services_visits %></span></td>
-                  <td><span class="badge bg-secondary"><%= Page.find(3).recent_visits %></span></td>
-                </tr>
-                <tr>
-                  <td>Artículos (total)</td>
-                  <td><span class="badge bg-success"><%= @posts_visits %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Post').where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    <div class="col-lg-4 mb-4">
+      <div class="mini-chart-card">
+        <h6 class="mini-chart-title">Navegadores</h6>
+        <div class="mt-3">
+          <% @user_agents_summary[:browsers].each do |browser, count| %>
+            <div class="d-flex justify-content-between mb-2">
+              <span><%= browser %></span>
+              <span class="badge bg-primary"><%= count %></span>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
-    
-    <div class="col-md-6">
-      <h3 class="mb-3">Artículos más visitados</h3>
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-dark">
-                <tr>
-                  <th>Artículo</th>
-                  <th>Visitas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @most_visited_posts.each do |post| %>
-                  <tr>
-                    <td><%= link_to post.title, post, class: "text-decoration-none" %></td>
-                    <td><span class="badge bg-primary"><%= post.visits.count %></span></td>
-                  </tr>
-                <% end %>
-                <% if @most_visited_posts.empty? %>
-                  <tr>
-                    <td colspan="2" class="text-center">No hay datos disponibles</td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-            <div class="text-end mt-2">
-              <%= link_to "Ver todos", dashboards_posts_path, class: "btn btn-sm btn-outline-primary" %>
+
+    <div class="col-lg-4 mb-4">
+      <div class="mini-chart-card">
+        <h6 class="mini-chart-title">Dispositivos</h6>
+        <div class="mt-3">
+          <% @user_agents_summary[:devices].each do |device, count| %>
+            <div class="d-flex justify-content-between mb-2">
+              <span><%= device %></span>
+              <span class="badge bg-info"><%= count %></span>
             </div>
-          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+      <div class="mini-chart-card">
+        <h6 class="mini-chart-title">Sistemas Operativos</h6>
+        <div class="mt-3">
+          <% @user_agents_summary[:operating_systems].each do |os, count| %>
+            <div class="d-flex justify-content-between mb-2">
+              <span><%= os %></span>
+              <span class="badge bg-success"><%= count %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Most Visited Posts -->
+  <div class="row">
+    <div class="col-12">
+      <div class="posts-card">
+        <div class="posts-header">
+          <h5 class="posts-title">
+            <i class="fas fa-fire me-2"></i>
+            Artículos Más Visitados
+          </h5>
+          <%= link_to "Ver Todos", dashboards_posts_path, class: "btn btn-sm btn-outline-primary" %>
+        </div>
+        <div class="posts-body">
+          <% if @most_visited_posts.any? %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Artículo</th>
+                    <th>Visitas Totales</th>
+                    <th>Visitas Únicas</th>
+                    <th>Comentarios</th>
+                    <th>Publicado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @most_visited_posts.each_with_index do |post, index| %>
+                    <tr>
+                      <td>
+                        <div class="post-info">
+                          <div class="post-rank">#<%= index + 1 %></div>
+                          <div class="post-details">
+                            <div class="post-title">
+                              <%= link_to post.title, post, class: "text-decoration-none" %>
+                            </div>
+                            <div class="post-tags">
+                              <% post.tags.limit(3).each do |tag| %>
+                                <span class="badge bg-light text-dark me-1"><%= tag.name %></span>
+                              <% end %>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="metric-badge bg-primary"><%= post.total_visits %></span>
+                      </td>
+                      <td>
+                        <span class="metric-badge bg-success"><%= post.unique_visits %></span>
+                      </td>
+                      <td>
+                        <span class="metric-badge bg-info"><%= post.comments.approved.count %></span>
+                      </td>
+                      <td class="text-muted">
+                        <%= post.created_at.strftime("%d/%m/%Y") %>
+                      </td>
+                      <td>
+                        <div class="btn-group" role="group">
+                          <%= link_to post, class: "btn btn-sm btn-outline-primary" do %>
+                            <i class="fas fa-eye"></i>
+                          <% end %>
+                          <%= link_to edit_post_path(post), class: "btn btn-sm btn-outline-secondary" do %>
+                            <i class="fas fa-edit"></i>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <div class="no-data">
+              <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+              <h6 class="text-muted">No hay artículos publicados</h6>
+              <p class="text-muted">Comienza creando tu primer artículo</p>
+              <%= link_to "Crear Artículo", new_post_path, class: "btn btn-primary" %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

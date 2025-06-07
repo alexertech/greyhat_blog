@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 class TagsController < ApplicationController
   before_action :authenticate_user!, only: [:suggest]
   protect_from_forgery with: :exception
