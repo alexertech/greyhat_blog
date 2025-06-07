@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get '/guardados', to: 'bookmarks#index', as: 'bookmarks'
   # Active Storage direct uploads
   post '/rails/active_storage/direct_uploads', to: 'active_storage/direct_uploads#create'
   get 'dashboard' => 'dashboards#index'

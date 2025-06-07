@@ -1,0 +1,35 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+          <i class="fas fa-bookmark me-2"></i>
+          Artículos Guardados
+        </h2>
+        <button class="btn btn-outline-danger btn-sm" 
+                data-controller="bookmarks-list"
+                data-action="click->bookmarks-list#clearAllBookmarks">
+          <i class="fas fa-trash"></i> Limpiar todo
+        </button>
+      </div>
+
+      <div data-controller="bookmarks-list">
+        <!-- Empty State -->
+        <div data-bookmarks-list-target="emptyState" class="text-center py-5">
+          <i class="fas fa-bookmark fa-3x text-muted mb-3"></i>
+          <h4 class="text-muted">No tienes artículos guardados</h4>
+          <p class="text-muted">
+            Guarda artículos interesantes usando el botón <i class="fas fa-bookmark"></i> 
+            que encontrarás en cada post.
+          </p>
+          <%= link_to "Explorar artículos", "/articulos", class: "btn btn-primary" %>
+        </div>
+
+        <!-- Bookmarks Container -->
+        <div data-bookmarks-list-target="container">
+          <!-- Bookmarks will be loaded here by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
