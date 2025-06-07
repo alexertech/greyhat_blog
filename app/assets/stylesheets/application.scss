@@ -351,22 +351,40 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
 .dashboard-title {
   font-size: 2rem;
   font-weight: 600;
-  color: var(--bs-body-color);
+  color: var(--text-heading);
 }
 
-// Metric Cards
+// Metric Cards with Enhanced Colors
 .metric-card {
-  background: var(--bs-body-bg);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border: 1px solid var(--bs-border-color);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255,255,255,0.8) 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0D6EFD, #6f42c1, #20c997, #fd7e14);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .metric-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.metric-card:hover::before {
+  opacity: 1;
 }
 
 .metric-card-body {
@@ -377,76 +395,108 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
 }
 
 .metric-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  font-size: 1.5rem;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.metric-icon.bg-primary {
+  background: linear-gradient(135deg, #0D6EFD 0%, #6f42c1 100%);
+}
+
+.metric-icon.bg-success {
+  background: linear-gradient(135deg, #20c997 0%, #198754 100%);
+}
+
+.metric-icon.bg-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+}
+
+.metric-icon.bg-info {
+  background: linear-gradient(135deg, #0dcaf0 0%, #6f42c1 100%);
 }
 
 .metric-value {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--bs-body-color);
+  color: var(--text-heading);
+  margin-bottom: 0.25rem;
 }
 
 .metric-label {
   font-size: 0.9rem;
-  color: var(--bs-secondary-color);
-  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .metric-change {
-  font-size: 0.8rem;
-  color: var(--bs-secondary-color);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .metric-change.positive {
-  color: var(--bs-success);
+  color: #20c997;
 }
 
 .metric-change.attention {
-  color: var(--bs-warning);
+  color: #fd7e14;
 }
 
-// Chart Cards
+// Enhanced Chart Cards
 .chart-card, .analytics-card, .posts-card, .mini-chart-card {
-  background: var(--bs-body-bg);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border: 1px solid var(--bs-border-color);
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid var(--border-color);
   height: 100%;
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover, .analytics-card:hover, .posts-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
 .chart-header, .analytics-header, .posts-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--bs-border-color);
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.02) 0%, rgba(111, 66, 193, 0.02) 100%);
+  border-radius: 16px 16px 0 0;
 }
 
 .chart-title, .analytics-title, .posts-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: var(--bs-body-color);
+  color: var(--text-heading);
 }
 
 .chart-body, .analytics-body, .posts-body {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .mini-chart-card {
-  padding: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(13, 110, 253, 0.02) 100%);
 }
 
 .mini-chart-title {
   margin-bottom: 1rem;
   font-weight: 600;
-  color: var(--bs-body-color);
+  color: var(--text-heading);
+  font-size: 1.1rem;
 }
 
 // Search Terms
@@ -583,10 +633,169 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
   padding: 2rem;
 }
 
-// Dark Mode
+// Enhanced Dark Mode Styles for Dashboard
 [data-bs-theme="dark"] {
-  .metric-card, .chart-card, .analytics-card, .posts-card, .mini-chart-card {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  .metric-card {
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(30,30,30,0.8) 100%);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.1);
+  }
+  
+  .metric-card:hover {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+  
+  .chart-card, .analytics-card, .posts-card, .mini-chart-card {
+    background: var(--card-bg);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.1);
+  }
+  
+  .chart-card:hover, .analytics-card:hover, .posts-card:hover {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+  
+  .chart-header, .analytics-header, .posts-header {
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(111, 66, 193, 0.05) 100%);
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+  
+  .mini-chart-card {
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(13, 110, 253, 0.05) 100%);
+  }
+  
+  // Enhanced metric icons for dark mode
+  .metric-icon {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  
+  .metric-icon.bg-primary {
+    background: linear-gradient(135deg, #4285f4 0%, #8b5cf6 100%);
+  }
+  
+  .metric-icon.bg-success {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  }
+  
+  .metric-icon.bg-warning {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  }
+  
+  .metric-icon.bg-info {
+    background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%);
+  }
+}
+
+// Enhanced Stats Page Styling
+.performance-insights-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+// Enhanced card headers with gradients
+.card-header.bg-warning {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: white !important;
+  border: none;
+}
+
+.card-header.bg-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: white !important;
+}
+
+.card-header.bg-info {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: white !important;
+}
+
+.card-header.bg-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+}
+
+.card-header.bg-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: white !important;
+}
+
+.card-header.bg-dark {
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%) !important;
+  color: white !important;
+}
+
+// Enhanced badges with better colors
+.badge {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.badge.bg-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: white;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: white;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: white;
+}
+
+.badge.bg-info {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  color: white;
+}
+
+.badge.bg-secondary {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+  color: white;
+}
+
+// Dark Mode for Stats Page
+[data-theme="dark"] {
+  // Stats page specific cards
+  .card.shadow-sm {
+    background: var(--card-bg);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  
+  .card-header {
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+  
+  // Enhanced performance cards for dark mode
+  .card-header.bg-warning {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    color: white !important;
+  }
+  
+  .card-header.bg-success {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  }
+  
+  .card-header.bg-info {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+  }
+  
+  .card-header.bg-danger {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  }
+  
+  .card-header.bg-primary {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+  }
+  
+  .card-header.bg-dark {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
   }
 }
 
