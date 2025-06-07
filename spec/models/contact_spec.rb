@@ -73,7 +73,7 @@ RSpec.describe Contact, type: :model do
       # Force validation to run
       contact.valid?
       
-      expect(contact.errors[:base]).to include('Spam detected')
+      expect(contact.errors[:base]).to include('Spam detectado')
     end
   end
 end 

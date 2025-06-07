@@ -28,14 +28,17 @@ RSpec.describe "Comments", type: :system do
       expect(page).to have_field('Tu nombre')
       expect(page).to have_field('Correo electrónico')
       expect(page).to have_field('Comentario (máximo 140 caracteres)')
-      expect(page).to have_button('Enviar comentario')
+      expect(page).to have_button('Enviar comentario', disabled: true)
     end
     
-    it "creates a valid comment" do
+    it "creates a valid comment", js: true do
       visit post_path(blog_post)
       
+      # Wait for button to be enabled (1 second delay)
+      sleep 1.1
+      
       within("#comment_form") do
-        fill_in 'Tu nombre', with: 'Test User'
+        fill_in 'Tu nombre', with: 'María García'
         fill_in 'Correo electrónico', with: 'test@example.com'
         fill_in 'Comentario (máximo 140 caracteres)', with: 'This is a test comment'
         click_button 'Enviar comentario'
@@ -45,8 +48,11 @@ RSpec.describe "Comments", type: :system do
       # The comment won't be displayed immediately since it needs approval
     end
     
-    it "shows validation errors for invalid comments" do
+    it "shows validation errors for invalid comments", js: true do
       visit post_path(blog_post)
+      
+      # Wait for button to be enabled (1 second delay)  
+      sleep 1.1
       
       within("#comment_form") do
         # Submit without filling in fields
