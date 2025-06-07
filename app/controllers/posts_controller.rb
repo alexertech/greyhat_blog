@@ -21,9 +21,9 @@ class PostsController < ApplicationController
   def show
     @comment = Comment.new
     @related_posts = Post.published.includes(:image_attachment)
-                        .where.not(id: @post.id)
-                        .order("RANDOM()")
-                        .limit(3)
+                         .where.not(id: @post.id)
+                         .order('RANDOM()')
+                         .limit(3)
   end
 
   # GET /posts/new
@@ -91,9 +91,12 @@ class PostsController < ApplicationController
   end
 
   def track_visit
-    # Keep the legacy counter for backward compatibility
-    # @post.increment!(:unique_visits)
-    
+    # Only increment unique visits if this IP hasn't visited in the last 24 hours
+    unless @post.visits.where(ip_address: request.remote_ip)
+                .where('viewed_at >= ?', 24.hours.ago).exists?
+      @post.increment!(:unique_visits)
+    end
+
     # Record detailed visit data
     @post.visits.create(
       ip_address: request.remote_ip,
@@ -101,10 +104,10 @@ class PostsController < ApplicationController
       referer: request.referer
     )
   end
-  
+
   def ensure_published_or_admin
     return unless @post.draft? && !user_signed_in?
-    
-    redirect_to root_path, alert: "That post is not available."
+
+    redirect_to root_path, alert: 'That post is not available.'
   end
 end

@@ -5,6 +5,9 @@
       <a href="/acerca" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/acerca') ? 'active' : '' %>">Acerca de</a>
       <a href="/articulos" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">Articulos</a>
       <a href="/servicios" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/servicios') ? 'active' : '' %>">Servicios</a>
-    </div>
+      <% if user_signed_in? %>
+        <a href="/dashboard" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white">Dash</a>
+      <% end %>
+      </div>
   </div>
 </div>

@@ -89,6 +89,22 @@ RSpec.describe PostsController, type: :controller do
       expect(post.visits.last.ip_address).to be_present
       expect(post.visits.last.user_agent).to be_present
     end
+
+    it 'does not increment unique visits for same IP within 24 hours' do
+      post = Post.create(valid_attributes.merge(unique_visits: 0))
+      
+      # First visit
+      get :show, params: { id: post.slug }
+      expect(post.reload.unique_visits).to eq(1)
+      
+      # Second visit from same IP should not increment unique_visits
+      expect {
+        get :show, params: { id: post.slug }
+      }.not_to change { post.reload.unique_visits }
+      
+      # But should still create a visit record
+      expect(post.visits.count).to eq(2)
+    end
   end
 
   describe 'GET #new' do

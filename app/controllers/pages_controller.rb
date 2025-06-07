@@ -23,9 +23,12 @@ class PagesController < ApplicationController
   private
 
   def track_visit
-    # Keep the legacy counter for backward compatibility
-    @page.increment!(:unique_visits)
-    
+    # Only increment unique visits if this IP hasn't visited in the last 24 hours
+    unless @page.visits.where(ip_address: request.remote_ip)
+                .where('viewed_at >= ?', 24.hours.ago).exists?
+      @page.increment!(:unique_visits)
+    end
+
     # Record detailed visit data
     @page.visits.create(
       ip_address: request.remote_ip,
