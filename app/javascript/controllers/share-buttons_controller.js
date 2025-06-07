@@ -14,12 +14,22 @@ export default class extends Controller {
   }
 
   shareLinkedIn() {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(this.urlValue)}`
+    const params = new URLSearchParams({
+      url: this.urlValue,
+      title: this.titleValue,
+      summary: this.descriptionValue,
+      source: 'Greyhat'
+    })
+    const url = `https://www.linkedin.com/sharing/share-offsite/?${params.toString()}`
     this.openPopup(url)
   }
 
   shareFacebook() {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.urlValue)}`
+    const params = new URLSearchParams({
+      u: this.urlValue,
+      quote: `${this.titleValue} - ${this.descriptionValue}`
+    })
+    const url = `https://www.facebook.com/sharer/sharer.php?${params.toString()}`
     this.openPopup(url)
   }
 
