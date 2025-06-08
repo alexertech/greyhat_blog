@@ -112,7 +112,7 @@
               
               <!-- Simple Bar Chart -->
               <div class="simple-chart mt-4">
-                <% @daily_visits_chart.last(7).each do |date, visits| %>
+                <% @daily_visits_chart.to_a.last(7).each do |date, visits| %>
                   <div class="chart-bar-item">
                     <div class="chart-bar" style="height: <%= visits > 0 ? [20, (visits.to_f / @daily_visits_chart.values.max * 100).round].max : 10 %>px"></div>
                     <small class="chart-label"><%= Date.parse(date.to_s).strftime("%d/%m") %></small>
