@@ -8,8 +8,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Database setup: `bundle exec rails db:prepare`
 - Run all tests: `bundle exec rspec`
 - Run single test: `bundle exec rspec spec/path/to_spec.rb:LINE_NUMBER`
-- Deploy: `bundle exec cap production deploy`
-- Run migrations: `bundle exec rails db:migrate`
+- Deploy: `bundle exec cap production deploy` (automatically runs migrations)
+- Run migrations locally: `bundle exec rails db:migrate`
+
+## Deployment
+- **Automatic Migrations**: Database migrations run automatically during deployment
+- **Deploy Flow**: Code update → Bundle install → Migrate → Restart app
+- **Rollback Safe**: Migrations are applied before app restart for safety
 
 ## Project Overview
 Greyhat.cl is a technology reflection blog focused on the balance between technology and life. Content themes include professional development for developers, conscious technology use, AI impact on work, and mental wellness in tech.
@@ -40,6 +45,7 @@ Greyhat.cl is a technology reflection blog focused on the balance between techno
 - **SiteHealth Model**: Complete health monitoring system with anomaly detection
 - **Database Migrations**: Added action_type to visits, site_healths table
 - **Error Resilience**: Comprehensive nil-safe view implementations
+- **Post Model Fix**: Fixed infinite loop bug in slug generation callbacks
 
 ## Code Style Guidelines
 - Ruby: Use frozen_string_literal for all Ruby files

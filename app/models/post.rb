@@ -127,7 +127,7 @@ class Post < ApplicationRecord
   end
 
   def update_slug
-    update slug: assign_slug
+    update_column(:slug, title.parameterize.to_s)
   end
 
   def generate_image_variants
@@ -148,14 +148,18 @@ class Post < ApplicationRecord
   def assign_tags
     return unless tag_names.present?
 
-    # Clear existing tags
-    tags.clear
+    begin
+      # Clear existing tags
+      tags.clear
 
-    # Parse and create/assign new tags
-    tag_list = tag_names.split(',').map(&:strip).reject(&:blank?)
-    tag_list.each do |tag_name|
-      tag = Tag.find_or_create_by(name: tag_name.downcase)
-      tags << tag unless tags.include?(tag)
+      # Parse and create/assign new tags
+      tag_list = tag_names.split(',').map(&:strip).reject(&:blank?)
+      tag_list.each do |tag_name|
+        tag = Tag.find_or_create_by(name: tag_name.downcase)
+        tags << tag unless tags.include?(tag)
+      end
+    rescue StandardError => e
+      Rails.logger.error "Failed to assign tags for post #{id}: #{e.message}"
     end
   end
 end
