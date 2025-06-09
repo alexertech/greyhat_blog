@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_09_173758) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_09_190315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_09_173758) do
     t.boolean "approved", default: false, null: false
     t.index ["approved"], name: "index_comments_on_approved"
     t.index ["created_at"], name: "index_comments_on_created_at"
+    t.index ["post_id", "approved"], name: "idx_comments_post_approved"
     t.index ["post_id"], name: "index_comments_on_post_id"
   end
 
@@ -98,6 +99,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_09_173758) do
     t.string "slug"
     t.integer "unique_visits", default: 0
     t.boolean "draft", default: false, null: false
+    t.index ["draft", "created_at"], name: "index_posts_on_draft_and_created_at", where: "(draft = false)"
+    t.index ["slug"], name: "index_posts_on_slug"
   end
 
   create_table "site_healths", force: :cascade do |t|
@@ -151,7 +154,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_09_173758) do
     t.datetime "updated_at", null: false
     t.integer "action_type", default: 0
     t.string "session_id"
+    t.index ["action_type"], name: "index_visits_on_action_type"
     t.index ["ip_address", "viewed_at"], name: "index_visits_on_ip_address_and_viewed_at"
+    t.index ["ip_address"], name: "index_visits_on_ip_address"
+    t.index ["user_agent"], name: "index_visits_on_user_agent"
     t.index ["viewed_at"], name: "index_visits_on_viewed_at"
     t.index ["visitable_id", "visitable_type"], name: "index_visits_on_visitable_id_and_visitable_type"
     t.index ["visitable_type", "visitable_id", "ip_address", "viewed_at"], name: "index_visits_on_unique_check"

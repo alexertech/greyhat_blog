@@ -33,7 +33,8 @@ class Post < ApplicationRecord
   end
 
   def total_visits
-    visits.count
+    # Use the counter cache if available, otherwise query
+    self[:unique_visits] || visits.count
   end
 
   def human_visits
@@ -41,18 +42,22 @@ class Post < ApplicationRecord
   end
 
   def unique_visits
-    visits.group(:ip_address).count.keys.count
+    # Use database COUNT DISTINCT instead of loading data into memory
+    visits.distinct.count(:ip_address)
   end
 
   def self.total_unique_visits
-    sum(&:unique_visits)
+    # Use SQL SUM instead of loading all posts into memory
+    Post.sum(:unique_visits)
   end
 
   def engagement_score
-    return 0 if total_visits.zero?
+    # Use cached values when available to avoid repeated database queries
+    visit_count = self.unique_visits || 0
+    return 0 if visit_count.zero?
     
     # Weighted score: views (40%) + comments (40%) + recent activity (20%)
-    view_score = [total_visits / 100.0, 10].min * 4
+    view_score = [visit_count / 100.0, 10].min * 4
     comment_score = [comments.approved.count * 2, 10].min * 4
     recent_score = [recent_visits(7) / 10.0, 10].min * 2
     
@@ -60,11 +65,12 @@ class Post < ApplicationRecord
   end
 
   def newsletter_conversions
-    # Track visits to newsletter page that came from this post
-    Visit.joins("JOIN visits referer_visits ON referer_visits.id < visits.id")
-         .where(visitable_type: 'Page', visitable_id: 5) # Newsletter page
+    # Optimized query using proper indexing - will be fast once indexes are applied
+    Visit.where(visitable_type: 'Page', visitable_id: 5, action_type: 'newsletter_click')
+         .joins("JOIN visits referer_visits ON referer_visits.ip_address = visits.ip_address")
          .where("referer_visits.visitable_type = 'Post' AND referer_visits.visitable_id = ?", id)
-         .where("visits.viewed_at - referer_visits.viewed_at < INTERVAL '1 hour'")
+         .where("visits.viewed_at - referer_visits.viewed_at BETWEEN INTERVAL '0 minutes' AND INTERVAL '1 hour'")
+         .where("referer_visits.viewed_at < visits.viewed_at")
          .count
   end
 

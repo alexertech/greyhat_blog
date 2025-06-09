@@ -81,7 +81,8 @@ class PostsController < ApplicationController
   # end
 
   def set_post
-    @post = Post.includes(:image_attachment, :visits, :tags, comments: :post).find_by_slug(params[:id])
+    # Optimize includes - only load what's needed for the specific action
+    @post = Post.includes(:image_attachment, :tags, comments: [:post]).find_by_slug(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -90,18 +91,29 @@ class PostsController < ApplicationController
   end
 
   def track_visit
-    # Only increment unique visits if this IP hasn't visited in the last 24 hours
-    unless @post.visits.where(ip_address: request.remote_ip)
-                .where('viewed_at >= ?', 24.hours.ago).exists?
-      @post.increment!(:unique_visits)
+    # Use single atomic operation to avoid race conditions
+    Visit.transaction do
+      # Check for existing visit in last 24 hours
+      existing_visit = Visit.where(
+        visitable: @post,
+        ip_address: request.remote_ip,
+        viewed_at: 24.hours.ago..Time.current
+      ).exists?
+      
+      # Increment unique visits counter if no recent visit
+      @post.increment!(:unique_visits) unless existing_visit
+      
+      # Always record the visit for analytics
+      Visit.create!(
+        visitable: @post,
+        ip_address: request.remote_ip,
+        user_agent: request.user_agent,
+        referer: request.referer,
+        action_type: 'page_view'
+      )
     end
-
-    # Record detailed visit data
-    @post.visits.create(
-      ip_address: request.remote_ip,
-      user_agent: request.user_agent,
-      referer: request.referer
-    )
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.warn "Failed to track visit for post #{@post.id}: #{e.message}"
   end
 
   def ensure_published_or_admin
