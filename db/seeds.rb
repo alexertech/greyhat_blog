@@ -9,12 +9,12 @@ puts "🌱 Seeding Greyhat Blog Engine..."
 # Create admin user
 puts "👤 Creating admin user..."
 unless User.exists?(email: 'admin@example.com')
-  admin = User.create!(
+  User.create!(
     email: 'admin@example.com',
-    password: 'password123',
-    password_confirmation: 'password123'
+    password: 'password123456',
+    password_confirmation: 'password123456'
   )
-  puts "   ✅ Admin user created: admin@example.com / password123"
+  puts "   ✅ Admin user created: admin@example.com / password123456"
 else
   puts "   ⚠️  Admin user already exists"
 end
@@ -57,88 +57,25 @@ puts "📝 Creating sample blog posts..."
 sample_posts = [
   {
     title: "Bienvenido a Greyhat Blog Engine",
-    body: <<~HTML
-      <div><h2>¡Bienvenido a tu nuevo blog!</h2>
-
-      <p>Este es tu primer artículo de ejemplo. Greyhat Blog Engine te proporciona todas las herramientas que necesitas para crear contenido excepcional.</p>
-
-      <h3>Características principales:</h3>
-      <ul>
-        <li><strong>Editor rico:</strong> Escribe con formato, imágenes y enlaces</li>
-        <li><strong>Sistema de etiquetas:</strong> Organiza tu contenido eficientemente</li>
-        <li><strong>Análisis avanzado:</strong> Conoce a tu audiencia</li>
-        <li><strong>Modo oscuro:</strong> Experiencia visual mejorada</li>
-        <li><strong>Responsive:</strong> Perfecto en cualquier dispositivo</li>
-      </ul>
-
-      <p>¡Comienza a escribir y comparte tu conocimiento con el mundo!</p></div>
-    HTML
-    ,
+    body: '<div><h2>¡Bienvenido a tu nuevo blog!</h2><p>Este es tu primer artículo de ejemplo. Greyhat Blog Engine te proporciona todas las herramientas que necesitas para crear contenido excepcional.</p><h3>Características principales:</h3><ul><li><strong>Editor rico:</strong> Escribe con formato, imágenes y enlaces</li><li><strong>Sistema de etiquetas:</strong> Organiza tu contenido eficientemente</li><li><strong>Análisis avanzado:</strong> Conoce a tu audiencia</li><li><strong>Modo oscuro:</strong> Experiencia visual mejorada</li><li><strong>Responsive:</strong> Perfecto en cualquier dispositivo</li></ul><p>¡Comienza a escribir y comparte tu conocimiento con el mundo!</p></div>',
     tags: ['bienvenida', 'tutorial', 'características'],
     draft: false
   },
   {
     title: "Guía de Desarrollo Web Moderno",
-    body: <<~HTML
-      <div><h2>El paisaje actual del desarrollo web</h2>
-
-      <p>El desarrollo web ha evolucionado dramáticamente en los últimos años. En esta guía, exploraremos las tecnologías y prácticas que definen el desarrollo moderno.</p>
-
-      <h3>Tecnologías Frontend</h3>
-      <p>El frontend moderno se caracteriza por frameworks reactivos, herramientas de construcción avanzadas y un enfoque en la experiencia del usuario.</p>
-
-      <h3>Backend robusto</h3>
-      <p>Ruby on Rails sigue siendo una excelente opción para desarrollar aplicaciones web robustas y escalables, especialmente cuando se combina con PostgreSQL.</p>
-
-      <blockquote><p>"La simplicidad es la máxima sofisticación" - Leonardo da Vinci</p></blockquote>
-
-      <p>Esta filosofía aplica perfectamente al desarrollo web moderno.</p></div>
-    HTML
-    ,
+    body: '<div><h2>El paisaje actual del desarrollo web</h2><p>El desarrollo web ha evolucionado dramáticamente en los últimos años. En esta guía, exploraremos las tecnologías y prácticas que definen el desarrollo moderno.</p><h3>Tecnologías Frontend</h3><p>El frontend moderno se caracteriza por frameworks reactivos, herramientas de construcción avanzadas y un enfoque en la experiencia del usuario.</p><h3>Backend robusto</h3><p>Ruby on Rails sigue siendo una excelente opción para desarrollar aplicaciones web robustas y escalables, especialmente cuando se combina con PostgreSQL.</p><blockquote><p>"La simplicidad es la máxima sofisticación" - Leonardo da Vinci</p></blockquote><p>Esta filosofía aplica perfectamente al desarrollo web moderno.</p></div>',
     tags: ['desarrollo', 'web', 'frontend', 'backend', 'rails'],
     draft: false
   },
   {
     title: "Seguridad en Aplicaciones Web: Mejores Prácticas",
-    body: <<~HTML
-      <div><h2>Fundamentos de seguridad web</h2>
-
-      <p>La seguridad debe ser una prioridad desde el primer día de desarrollo. En este artículo, cubrimos las prácticas esenciales para mantener tu aplicación segura.</p>
-
-      <h3>Principales vulnerabilidades</h3>
-      <ul>
-        <li><strong>XSS (Cross-Site Scripting):</strong> Sanitización de entrada y escape de salida</li>
-        <li><strong>SQL Injection:</strong> Uso de consultas preparadas</li>
-        <li><strong>CSRF:</strong> Tokens de protección anti-falsificación</li>
-        <li><strong>Autenticación:</strong> Implementación robusta y segura</li>
-      </ul>
-
-      <h3>Rails Security</h3>
-      <p>Ruby on Rails incluye muchas protecciones de seguridad por defecto, pero es importante entender cómo funcionan y cómo implementar capas adicionales de seguridad.</p>
-
-      <p><strong>Recuerda:</strong> La seguridad es un proceso continuo, no un destino.</p></div>
-    HTML
-    ,
+    body: '<div><h2>Fundamentos de seguridad web</h2><p>La seguridad debe ser una prioridad desde el primer día de desarrollo. En este artículo, cubrimos las prácticas esenciales para mantener tu aplicación segura.</p><h3>Principales vulnerabilidades</h3><ul><li><strong>XSS (Cross-Site Scripting):</strong> Sanitización de entrada y escape de salida</li><li><strong>SQL Injection:</strong> Uso de consultas preparadas</li><li><strong>CSRF:</strong> Tokens de protección anti-falsificación</li><li><strong>Autenticación:</strong> Implementación robusta y segura</li></ul><h3>Rails Security</h3><p>Ruby on Rails incluye muchas protecciones de seguridad por defecto, pero es importante entender cómo funcionan y cómo implementar capas adicionales de seguridad.</p><p><strong>Recuerda:</strong> La seguridad es un proceso continuo, no un destino.</p></div>',
     tags: ['seguridad', 'web', 'rails', 'desarrollo', 'buenas-prácticas'],
     draft: false
   },
   {
     title: "Draft: Próximas Características del Blog",
-    body: <<~HTML
-      <div><h2>Características en desarrollo</h2>
-
-      <p>Este es un artículo en borrador que muestra las próximas características que se añadirán al blog:</p>
-
-      <ul>
-        <li>Sistema de newsletters</li>
-        <li>Comentarios mejorados</li>
-        <li>Integración con redes sociales</li>
-        <li>API RESTful</li>
-      </ul>
-
-      <p><em>Nota: Este artículo no es visible para visitantes públicos.</em></p></div>
-    HTML
-    ,
+    body: '<div><h2>Características en desarrollo</h2><p>Este es un artículo en borrador que muestra las próximas características que se añadirán al blog:</p><ul><li>Sistema de newsletters</li><li>Comentarios mejorados</li><li>Integración con redes sociales</li><li>API RESTful</li></ul><p><em>Nota: Este artículo no es visible para visitantes públicos.</em></p></div>',
     tags: ['desarrollo', 'características', 'roadmap'],
     draft: true
   }
@@ -148,10 +85,12 @@ sample_posts.each_with_index do |post_data, index|
   unless Post.exists?(title: post_data[:title])
     post = Post.new(
       title: post_data[:title],
-      body: post_data[:body],
       draft: post_data[:draft],
-      tag_names: post_data[:tags].join(', ')
+      slug: post_data[:title].parameterize
     )
+    
+    # Set the ActionText body content
+    post.body = post_data[:body]
     
     # Try to attach sample image if it exists
     image_path = Rails.root.join('app', 'assets', 'images', 'new_main.jpg')
@@ -164,9 +103,18 @@ sample_posts.each_with_index do |post_data, index|
     end
     
     if post.save
+      # Assign tags after saving
+      tag_list = post_data[:tags]
+      tag_list.each do |tag_name|
+        tag = Tag.find_or_create_by(name: tag_name.downcase)
+        post.tags << tag unless post.tags.include?(tag)
+      end
       puts "   ✅ Created post: #{post.title}"
     else
-      puts "   ❌ Failed to create post: #{post.title} - #{post.errors.full_messages.join(', ')}"
+      puts "   ❌ Failed to create post: #{post.title}"
+      puts "   Errors: #{post.errors.full_messages.join(', ')}"
+      puts "   Post body valid: #{post.body.present?}"
+      puts "   Post body class: #{post.body.class}"
     end
   else
     puts "   ⚠️  Post already exists: #{post_data[:title]}"
@@ -201,7 +149,7 @@ sample_comments = [
 published_posts.each do |post|
   sample_comments.each do |comment_data|
     unless Comment.exists?(post: post, email: comment_data[:email])
-      comment = Comment.create!(
+      Comment.create!(
         post: post,
         username: comment_data[:username],
         email: comment_data[:email],
@@ -261,7 +209,7 @@ puts ""
 puts "🎉 Seeding completed successfully!"
 puts ""
 puts "📋 Summary:"
-puts "   • Admin user: admin@example.com / password123"
+puts "   • Admin user: admin@example.com / password123456"
 puts "   • Sample posts: #{Post.count} total (#{Post.published.count} published, #{Post.drafts.count} drafts)"
 puts "   • Tags: #{Tag.count} available"
 puts "   • Comments: #{Comment.count} total (#{Comment.approved.count} approved)"
