@@ -9,7 +9,16 @@ class DashboardsController < ApplicationController
     @visits_today = Visit.where('viewed_at >= ?', Time.zone.now.beginning_of_day).count
     @visits_this_week = Visit.where('viewed_at >= ?', 1.week.ago).count
     @visits_this_month = Visit.where('viewed_at >= ?', 1.month.ago).count
+    
+    # Content Performance
     @most_visited_posts = Post.most_visited(5)
+    begin
+      @top_performing_posts = Post.published.sort_by(&:engagement_score).reverse.first(5)
+      @trending_posts = Post.published.select { |p| p.performance_trend > 0 }.sort_by(&:performance_trend).reverse.first(3)
+    rescue => e
+      @top_performing_posts = []
+      @trending_posts = []
+    end
 
     # Content metrics
     @total_posts = Post.count
@@ -33,6 +42,28 @@ class DashboardsController < ApplicationController
     @daily_visits_chart = Visit.count_by_date(30)
     @hourly_visits_chart = Visit.count_by_hour
 
+    # Newsletter Conversion Funnel
+    begin
+      @funnel_data = Visit.funnel_analysis(7)
+      @newsletter_conversion_rate = Visit.newsletter_conversion_rate(7)
+    rescue => e
+      @funnel_data = {
+        index_visits: 0, article_visits: 0, newsletter_page_visits: 0, 
+        newsletter_clicks: 0, index_to_articles: 0, articles_to_newsletter: 0, 
+        newsletter_conversion: 0
+      }
+      @newsletter_conversion_rate = 0
+    end
+    
+    # Site Health Monitoring
+    begin
+      @site_health = SiteHealth.health_status
+      @traffic_anomaly = SiteHealth.traffic_anomaly_detection
+    rescue => e
+      @site_health = { status: 'unknown', uptime: 0, avg_response_time: 0, error_count: 0, last_check: nil }
+      @traffic_anomaly = { current_hour_visits: 0, average_hourly: 0, is_anomaly: false, threshold: 0 }
+    end
+    
     # Legacy variables for tests
     @home_visits = Visit.joins('JOIN pages ON visits.visitable_id = pages.id')
                         .where("visits.visitable_type = 'Page' AND pages.name = 'index'")
@@ -89,6 +120,15 @@ class DashboardsController < ApplicationController
 
     # Performance insights
     @insights = generate_performance_insights
+    
+    # Content Strategy Insights
+    begin
+      @content_insights = generate_content_insights
+      @tag_performance = analyze_tag_performance
+    rescue => e
+      @content_insights = ['Datos insuficientes para generar insights']
+      @tag_performance = {}
+    end
   end
 
   def posts
@@ -420,5 +460,56 @@ class DashboardsController < ApplicationController
     insights << "Has tenido #{today_visits} visitas hoy" if today_visits.positive?
 
     insights.presence || ['¡Sigue creando contenido increíble!']
+  end
+
+  def generate_content_insights
+    insights = []
+
+    # Best performing content type
+    if Post.published.any?
+      top_tag = Tag.joins(:posts)
+                   .joins("JOIN visits ON visits.visitable_id = posts.id AND visits.visitable_type = 'Post'")
+                   .group('tags.name')
+                   .order('COUNT(visits.id) DESC')
+                   .first
+
+      if top_tag
+        insights << "Contenido sobre '#{top_tag.name}' genera más engagement"
+      end
+
+      # Publishing timing insights
+      best_day = Visit.joins("JOIN posts ON visits.visitable_id = posts.id")
+                     .where(visitable_type: 'Post')
+                     .where('posts.created_at >= ?', 30.days.ago)
+                     .group("EXTRACT(DOW FROM posts.created_at)")
+                     .order('COUNT(*) DESC')
+                     .first
+
+      if best_day
+        day_name = Date::DAYNAMES[best_day[0].to_i]
+        insights << "Los #{day_name}s son tu mejor día para publicar"
+      end
+
+      # Newsletter conversion insights
+      conversion_rate = Visit.newsletter_conversion_rate(30)
+      if conversion_rate > 5
+        insights << "Excelente tasa de conversión a newsletter: #{conversion_rate}%"
+      elsif conversion_rate > 0
+        insights << "Tasa de conversión a newsletter: #{conversion_rate}% - ¡mejorable!"
+      end
+    end
+
+    insights.presence || ['Publica más contenido para generar insights']
+  end
+
+  def analyze_tag_performance
+    return {} unless Post.published.any?
+
+    Tag.joins(:posts)
+       .joins("JOIN visits ON visits.visitable_id = posts.id AND visits.visitable_type = 'Post'")
+       .group('tags.name')
+       .order('COUNT(visits.id) DESC')
+       .limit(10)
+       .count
   end
 end

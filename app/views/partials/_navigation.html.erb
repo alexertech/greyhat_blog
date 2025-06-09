@@ -63,6 +63,11 @@
              class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">
             <i class="fas fa-newspaper me-2"></i> Artículos
           </a>
+          <a href="/newsletter" 
+             data-action="click->mobile-navigation#close"
+             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/newsletter') ? 'active' : '' %>">
+            <i class="fas fa-envelope me-2"></i> Newsletter
+          </a>
           <a href="/guardados" 
              data-navigation-bookmarks-target="bookmarksLink"
              data-action="click->mobile-navigation#close"
@@ -91,6 +96,7 @@
         <a href="/index" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/index') ? 'active' : '' %>">Inicio</a>
         <a href="/acerca" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/acerca') ? 'active' : '' %>">Acerca de</a>
         <a href="/articulos" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">Artículos</a>
+        <a href="/newsletter" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/newsletter') ? 'active' : '' %>">Newsletter</a>
         <a href="/guardados" 
            data-navigation-bookmarks-target="bookmarksLink"
            class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white d-none <%= current_page?('/guardados') ? 'active' : '' %>">

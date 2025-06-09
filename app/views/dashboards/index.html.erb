@@ -93,6 +93,242 @@
     </div>
   </div>
 
+  <!-- Newsletter Conversion Funnel & Site Health -->
+  <div class="row mb-4">
+    <div class="col-lg-8 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-funnel-dollar me-2"></i>
+            Newsletter Conversion Funnel (7 días)
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <div class="funnel-container">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="funnel-step">
+                  <div class="funnel-icon bg-primary">
+                    <i class="fas fa-home"></i>
+                  </div>
+                  <div class="funnel-content">
+                    <div class="funnel-value"><%= (@funnel_data || {})[:index_visits] || 0 %></div>
+                    <div class="funnel-label">Inicio</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="funnel-step">
+                  <div class="funnel-icon bg-success">
+                    <i class="fas fa-newspaper"></i>
+                  </div>
+                  <div class="funnel-content">
+                    <div class="funnel-value"><%= (@funnel_data || {})[:article_visits] || 0 %></div>
+                    <div class="funnel-label">Artículos</div>
+                    <div class="funnel-conversion text-success">
+                      <%= (@funnel_data || {})[:index_to_articles] || 0 %>%
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="funnel-step">
+                  <div class="funnel-icon bg-warning">
+                    <i class="fas fa-envelope"></i>
+                  </div>
+                  <div class="funnel-content">
+                    <div class="funnel-value"><%= (@funnel_data || {})[:newsletter_page_visits] || 0 %></div>
+                    <div class="funnel-label">Newsletter</div>
+                    <div class="funnel-conversion text-warning">
+                      <%= (@funnel_data || {})[:articles_to_newsletter] || 0 %>%
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="funnel-step">
+                  <div class="funnel-icon bg-info">
+                    <i class="fas fa-mouse-pointer"></i>
+                  </div>
+                  <div class="funnel-content">
+                    <div class="funnel-value"><%= (@funnel_data || {})[:newsletter_clicks] || 0 %></div>
+                    <div class="funnel-label">Suscripciones</div>
+                    <div class="funnel-conversion text-info">
+                      <%= (@funnel_data || {})[:newsletter_conversion] || 0 %>%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-3 text-center">
+              <div class="alert alert-info">
+                <strong>Tasa de Conversión Total:</strong> <%= @newsletter_conversion_rate || 0 %>%
+                <small class="text-muted">(de artículos a newsletter)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-heartbeat me-2"></i>
+            Site Health Status
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <div class="health-status">
+            <div class="health-main-status">
+              <div class="health-indicator health-<%= (@site_health || {})[:status] || 'unknown' %>">
+                <% case (@site_health || {})[:status] %>
+                <% when 'excellent' %>
+                  <i class="fas fa-check-circle fa-2x text-success"></i>
+                <% when 'good' %>
+                  <i class="fas fa-thumbs-up fa-2x text-primary"></i>
+                <% when 'warning' %>
+                  <i class="fas fa-exclamation-triangle fa-2x text-warning"></i>
+                <% else %>
+                  <i class="fas fa-times-circle fa-2x text-danger"></i>
+                <% end %>
+              </div>
+              <div class="health-status-text">
+                <div class="health-main-label"><%= ((@site_health || {})[:status] || 'unknown').humanize %></div>
+                <div class="health-timestamp">
+                  <% if (@site_health || {})[:last_check] %>
+                    Último check: <%= time_ago_in_words((@site_health || {})[:last_check]) %> ago
+                  <% else %>
+                    Sin datos de health check
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            
+            <div class="health-metrics mt-3">
+              <div class="health-metric">
+                <div class="health-metric-label">Uptime (24h)</div>
+                <div class="health-metric-value"><%= (@site_health || {})[:uptime] || 0 %>%</div>
+              </div>
+              <div class="health-metric">
+                <div class="health-metric-label">Tiempo Respuesta</div>
+                <div class="health-metric-value"><%= ((@site_health || {})[:avg_response_time] || 0).round %>ms</div>
+              </div>
+              <div class="health-metric">
+                <div class="health-metric-label">Errores (1h)</div>
+                <div class="health-metric-value <%= ((@site_health || {})[:error_count] || 0) > 0 ? 'text-warning' : 'text-success' %>">
+                  <%= (@site_health || {})[:error_count] || 0 %>
+                </div>
+              </div>
+            </div>
+
+            <% if (@traffic_anomaly || {})[:is_anomaly] %>
+              <div class="alert alert-warning mt-3">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Anomalía de Tráfico:</strong> Tráfico inusualmente alto
+                (<%= (@traffic_anomaly || {})[:current_hour_visits] || 0 %> vs <%= ((@traffic_anomaly || {})[:average_hourly] || 0).round %> promedio)
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Performance & Insights -->
+  <div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-trophy me-2"></i>
+            Top Performing Content
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <% if (@top_performing_posts || []).any? %>
+            <% (@top_performing_posts || []).each_with_index do |post, index| %>
+              <div class="performance-item">
+                <div class="performance-rank">#<%= index + 1 %></div>
+                <div class="performance-content">
+                  <div class="performance-title">
+                    <%= link_to post.title.truncate(40), post, class: "text-decoration-none" %>
+                  </div>
+                  <div class="performance-stats">
+                    <span class="badge bg-primary me-1">Score: <%= post.engagement_score rescue 0 %></span>
+                    <span class="badge bg-success me-1"><%= post.total_visits %> visitas</span>
+                    <span class="badge bg-info"><%= post.comments.approved.count %> comentarios</span>
+                  </div>
+                </div>
+                <div class="performance-trend">
+                  <% trend = post.performance_trend rescue 0 %>
+                  <% if trend > 0 %>
+                    <span class="trend-positive">
+                      <i class="fas fa-arrow-up"></i> +<%= trend %>%
+                    </span>
+                  <% elsif trend < 0 %>
+                    <span class="trend-negative">
+                      <i class="fas fa-arrow-down"></i> <%= trend %>%
+                    </span>
+                  <% else %>
+                    <span class="trend-neutral">
+                      <i class="fas fa-minus"></i> 0%
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="no-data">
+              <i class="fas fa-trophy fa-2x text-muted mb-2"></i>
+              <p class="text-muted">Publica más contenido para ver métricas de rendimiento</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-lightbulb me-2"></i>
+            Content Strategy Insights
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <div class="insights-container">
+            <% (@content_insights || []).each do |insight| %>
+              <div class="insight-item">
+                <i class="fas fa-lightbulb text-warning me-2"></i>
+                <%= insight %>
+              </div>
+            <% end %>
+          </div>
+
+          <% if (@tag_performance || {}).any? %>
+            <div class="mt-4">
+              <h6 class="mb-3">Rendimiento por Tema</h6>
+              <% (@tag_performance || {}).first(5).each do |tag_name, visits| %>
+                <div class="tag-performance-item">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-bold"><%= tag_name %></span>
+                    <span class="badge bg-primary"><%= visits %> visitas</span>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-primary" style="width: <%= (visits.to_f / @tag_performance.values.max * 100).round(1) %>%"></div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Charts Row -->
   <div class="row mb-4">
     <div class="col-lg-8 mb-4">
@@ -348,7 +584,7 @@
                         <span class="metric-badge bg-primary"><%= post.total_visits %></span>
                       </td>
                       <td>
-                        <span class="metric-badge bg-success"><%= post.unique_visits %></span>
+                        <span class="metric-badge bg-success"><%= post.unique_visits rescue 0 %></span>
                       </td>
                       <td>
                         <span class="metric-badge bg-info"><%= post.comments.approved.count %></span>

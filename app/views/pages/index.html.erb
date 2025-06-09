@@ -24,7 +24,7 @@
                   </h5>
                   <p class="card-text small text-muted">
                     <%= post.created_at.strftime("%d %b. %Y") %>
-                      <span class="text-muted">• <%= post.total_visits %> lecturas</span>
+                      <span class="text-muted">• <%= post.total_visits rescue 0 %> lecturas</span>
                   </p>
                   <% if post.body.present? %>
                     <p class="card-text"> <%= post.body.to_plain_text.truncate(150) %>

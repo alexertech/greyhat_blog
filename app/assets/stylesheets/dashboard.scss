@@ -1,3 +1,184 @@
-// Place all the styles related to the Dashboard controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+// Dashboard Styles
+
+// Newsletter Funnel Styles
+.funnel-container {
+  .funnel-step {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f8f9fa;
+    margin-bottom: 1rem;
+    
+    .funnel-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+      color: white;
+      
+      i {
+        font-size: 1.2rem;
+      }
+    }
+    
+    .funnel-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .funnel-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    
+    .funnel-conversion {
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+  }
+}
+
+// Site Health Styles
+.health-status {
+  .health-main-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    
+    .health-indicator {
+      flex-shrink: 0;
+    }
+    
+    .health-main-label {
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    
+    .health-timestamp {
+      font-size: 0.8rem;
+      color: #666;
+    }
+  }
+  
+  .health-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    
+    .health-metric {
+      text-align: center;
+      padding: 0.75rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+      
+      .health-metric-label {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 0.25rem;
+      }
+      
+      .health-metric-value {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  }
+}
+
+// Content Performance Styles
+.performance-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .performance-rank {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #666;
+    min-width: 30px;
+  }
+  
+  .performance-content {
+    flex: 1;
+    
+    .performance-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .performance-stats {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+    }
+  }
+  
+  .performance-trend {
+    .trend-positive {
+      color: #28a745;
+      font-weight: bold;
+    }
+    
+    .trend-negative {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    
+    .trend-neutral {
+      color: #6c757d;
+    }
+  }
+}
+
+// Insights Styles
+.insights-container {
+  .insight-item {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #ffc107;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.tag-performance-item {
+  margin-bottom: 1rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Health Status Colors
+.health-excellent {
+  color: #28a745;
+}
+
+.health-good {
+  color: #007bff;
+}
+
+.health-warning {
+  color: #ffc107;
+}
+
+.health-critical {
+  color: #dc3545;
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_07_175510) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_09_173758) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -100,6 +100,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_07_175510) do
     t.boolean "draft", default: false, null: false
   end
 
+  create_table "site_healths", force: :cascade do |t|
+    t.string "metric_type", null: false
+    t.decimal "value", precision: 10, scale: 2, null: false
+    t.text "metadata"
+    t.datetime "checked_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checked_at"], name: "index_site_healths_on_checked_at"
+    t.index ["metric_type", "checked_at"], name: "index_site_healths_on_metric_type_and_checked_at"
+    t.index ["metric_type"], name: "index_site_healths_on_metric_type"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -137,6 +149,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_07_175510) do
     t.datetime "viewed_at", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "action_type", default: 0
+    t.string "session_id"
     t.index ["ip_address", "viewed_at"], name: "index_visits_on_ip_address_and_viewed_at"
     t.index ["viewed_at"], name: "index_visits_on_viewed_at"
     t.index ["visitable_id", "visitable_type"], name: "index_visits_on_visitable_id_and_visitable_type"
