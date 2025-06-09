@@ -16,6 +16,33 @@ class PagesController < ApplicationController
     @page = Page.find(3)
   end
 
+  def newsletter
+    @page = Page.find(5)
+    @sample_post = Post.published.order(created_at: :desc).limit(5).sample
+  end
+
+  def track_newsletter_click
+    # Track newsletter subscription click
+    @page = Page.find(5)
+    
+    @page.visits.create(
+      ip_address: request.remote_ip,
+      user_agent: request.user_agent,
+      referer: request.referer,
+      action_type: 'newsletter_click'
+    )
+
+    # Record health check if response time tracking is enabled
+    start_time = Time.current
+    response_time = (Time.current - start_time) * 1000
+    SiteHealth.record_response_time(response_time)
+
+    render json: { status: 'success' }
+  rescue StandardError => e
+    SiteHealth.record_error('newsletter_click_error', { message: e.message })
+    render json: { status: 'error' }, status: 500
+  end
+
   def contact
     @page = Page.find(4)
   end

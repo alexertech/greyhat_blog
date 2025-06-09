@@ -1,0 +1,183 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <div class="mb-4">
+          <i class="fas fa-newspaper fa-4x text-primary"></i>
+        </div>
+        <h1 class="display-4 fw-bold mb-3">Newsletter Greyhat</h1>
+        <p class="lead text-muted">
+          Reflexiones semanales sobre el equilibrio entre tecnología y vida digital
+        </p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="row mb-5">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h3 class="h4 mb-3">
+                <i class="fas fa-lightbulb text-warning me-2"></i>
+                ¿Qué encontrarás?
+              </h3>
+              <ul class="list-unstyled">
+                <li class="mb-3">
+                  <i class="fas fa-check-circle text-success me-3"></i>
+                  <strong>Reflexiones profundas</strong> sobre el impacto de la tecnología en nuestras vidas
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-check-circle text-success me-3"></i>
+                  <strong>Herramientas y técnicas</strong> para un desarrollo profesional consciente
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-check-circle text-success me-3"></i>
+                  <strong>Análisis exclusivos</strong> de tendencias tecnológicas emergentes
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-check-circle text-success me-3"></i>
+                  <strong>Estrategias prácticas</strong> para mantener el equilibrio trabajo-vida
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h3 class="h4 mb-3">
+                <i class="fas fa-users text-info me-2"></i>
+                Para quien es
+              </h3>
+              <ul class="list-unstyled">
+                <li class="mb-3">
+                  <i class="fas fa-code text-primary me-3"></i>
+                  <strong>Desarrolladores</strong> que buscan crecer profesionalmente
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-laptop text-primary me-3"></i>
+                  <strong>Profesionales tech</strong> en cualquier etapa de su carrera
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-brain text-primary me-3"></i>
+                  <strong>Personas curiosas</strong> sobre el futuro de la tecnología
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-balance-scale text-primary me-3"></i>
+                  <strong>Quienes buscan equilibrio</strong> entre tecnología y bienestar
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5 pt-4">
+        <p class="text-muted mb-3">
+          <i class="fas fa-external-link-alt me-2"></i>
+          Serás redirigido a Substack para completar tu suscripción
+        </p>
+        <a href="https://alexertech.substack.com/subscribe" 
+           target="_blank" 
+           rel="noopener"
+           class="btn btn-primary btn-lg px-5"
+           data-controller="newsletter-tracking"
+           data-action="click->newsletter-tracking#trackClick">
+          <i class="fas fa-envelope me-2"></i>
+          Suscribirse ahora
+        </a>
+      </div>
+
+      <!-- Sample Content Section -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              <h3 class="h4 mb-4">
+                <i class="fas fa-eye text-secondary me-2"></i>
+                Ejemplo de contenido
+              </h3>
+              
+              <div class="bg-light rounded p-4">
+                <% if @sample_post %>
+                  <h5 class="fw-bold mb-3">"<%= @sample_post.title %>"</h5>
+                  <p class="text-muted mb-3">
+                    <em>Publicado el <%= @sample_post.created_at.strftime("%d de %B, %Y") %></em>
+                  </p>
+                  <blockquote class="blockquote">
+                    <p class="mb-3">
+                      "<%= @sample_post.body.to_plain_text.truncate(200) %>"
+                    </p>
+                  </blockquote>
+                  <p class="small text-muted mb-0">
+                    <% if @sample_post.tags.any? %>
+                      <strong>Temas abordados:</strong> <%= @sample_post.tags.pluck(:name).join(', ') %>.
+                    <% else %>
+                      <strong>Temas:</strong> Reflexiones sobre tecnología, desarrollo profesional y equilibrio digital.
+                    <% end %>
+                  </p>
+                <% else %>
+                  <h5 class="fw-bold mb-3">"Reflexiones sobre Tecnología y Vida"</h5>
+                  <p class="text-muted mb-3">
+                    <em>Ejemplo de contenido del newsletter...</em>
+                  </p>
+                  <blockquote class="blockquote">
+                    <p class="mb-3">
+                      "Cada semana exploramos cómo la tecnología impacta nuestras vidas profesionales y personales, buscando siempre ese equilibrio que nos permita crecer sin perder nuestra humanidad..."
+                    </p>
+                  </blockquote>
+                  <p class="small text-muted mb-0">
+                    <strong>Temas abordados:</strong> Desarrollo profesional, equilibrio tecnológico, reflexiones sobre el futuro.
+                  </p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="row mt-5 text-center">
+        <div class="col-md-3 mb-3">
+          <div class="h3 fw-bold text-primary">Semanal</div>
+          <p class="text-muted mb-0">Frecuencia de envío</p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h3 fw-bold text-primary">5 min</div>
+          <p class="text-muted mb-0">Tiempo de lectura</p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h3 fw-bold text-primary">0 spam</div>
+          <p class="text-muted mb-0">Garantizado</p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h3 fw-bold text-primary">Gratis</div>
+          <p class="text-muted mb-0">Siempre</p>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="text-center mt-5 pt-4 border-top">
+        <p class="lead mb-4">
+          ¿Listo para reflexionar sobre tecnología de una manera diferente?
+        </p>
+        <p class="text-muted mb-3">
+          <i class="fas fa-external-link-alt me-2"></i>
+          Serás redirigido a Substack para completar tu suscripción
+        </p>
+        <a href="https://alexertech.substack.com/subscribe" 
+           target="_blank" 
+           rel="noopener"
+           class="btn btn-primary btn-lg px-5"
+           data-controller="newsletter-tracking"
+           data-action="click->newsletter-tracking#trackClick">
+          <i class="fas fa-envelope me-2"></i>
+          Suscribirse ahora
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>

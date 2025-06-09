@@ -40,8 +40,42 @@ class Post < ApplicationRecord
     visits.humans.count
   end
 
+  def unique_visits
+    visits.group(:ip_address).count.keys.count
+  end
+
   def self.total_unique_visits
     sum(&:unique_visits)
+  end
+
+  def engagement_score
+    return 0 if total_visits.zero?
+    
+    # Weighted score: views (40%) + comments (40%) + recent activity (20%)
+    view_score = [total_visits / 100.0, 10].min * 4
+    comment_score = [comments.approved.count * 2, 10].min * 4
+    recent_score = [recent_visits(7) / 10.0, 10].min * 2
+    
+    (view_score + comment_score + recent_score).round(1)
+  end
+
+  def newsletter_conversions
+    # Track visits to newsletter page that came from this post
+    Visit.joins("JOIN visits referer_visits ON referer_visits.id < visits.id")
+         .where(visitable_type: 'Page', visitable_id: 5) # Newsletter page
+         .where("referer_visits.visitable_type = 'Post' AND referer_visits.visitable_id = ?", id)
+         .where("visits.viewed_at - referer_visits.viewed_at < INTERVAL '1 hour'")
+         .count
+  end
+
+  def performance_trend(days = 7)
+    current_period = recent_visits(days)
+    previous_period = visits.where('viewed_at >= ? AND viewed_at < ?', 
+                                   (days * 2).days.ago, days.days.ago).count
+    
+    return 0 if previous_period.zero?
+    
+    ((current_period - previous_period) / previous_period.to_f * 100).round(1)
   end
 
   def self.total_visit_count
