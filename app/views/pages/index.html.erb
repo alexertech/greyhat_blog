@@ -7,7 +7,7 @@
     <h2 class="mb-4">Últimos artículos</h2>
 
     <div class="row">
-      <% Post.published.includes(:image_attachment).order("created_at DESC").limit(3).each do |post| %>
+      <% Post.published.includes(:image_attachment).order("created_at DESC").limit(6).each do |post| %>
         <div class="col-md-12 mb-4">
           <div class="card shadow-sm">
             <div class="row g-0">
@@ -24,10 +24,18 @@
                   </h5>
                   <p class="card-text small text-muted">
                     <%= post.created_at.strftime("%d %b. %Y") %>
+                      <span class="text-muted">• <%= post.total_visits %> lecturas</span>
                   </p>
                   <% if post.body.present? %>
                     <p class="card-text"> <%= post.body.to_plain_text.truncate(150) %>
                     </p>
+                    <% if post.tags.any? %>
+                      <div class="mb-2">
+                        <% post.tags.limit(3).each do |tag| %>
+                          <%= link_to tag.name, search_path(tag: tag.name), class: "badge bg-light text-dark text-decoration-none me-1" %>
+                        <% end %>
+                      </div>
+                    <% end %>
                     <%= link_to 'Leer artículo →', post, class: "btn btn-sm btn-outline-primary" %>
                   <% end %>
                 </div>
