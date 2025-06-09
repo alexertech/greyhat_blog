@@ -14,6 +14,17 @@ set :linked_files, %w[config/database.yml config/master.key config/credentials.y
 set :linked_dirs, %w[storage log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
 
 namespace :deploy do
+  desc 'Run database migrations'
+  task :migrate do
+    on roles(:db) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :bundle, :exec, :rails, 'db:migrate'
+        end
+      end
+    end
+  end
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
@@ -21,6 +32,8 @@ namespace :deploy do
     end
   end
 
+  # Run migrations before restarting the app
+  after :updated, 'deploy:migrate'
   after :publishing, 'deploy:restart'
   after :finishing, 'deploy:cleanup'
 end
