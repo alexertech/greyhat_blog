@@ -9,9 +9,25 @@
       </h1>
       <p class="text-muted mb-0">Resumen de tu blog y analíticas</p>
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
+      <%= link_to new_post_path, class: "btn btn-primary" do %>
+        <i class="fas fa-plus me-2"></i>Nuevo Post
+      <% end %>
       <%= link_to "Ver Estadísticas", dashboards_stats_path, class: "btn btn-outline-primary" %>
       <%= link_to "Gestionar Posts", dashboards_posts_path, class: "btn btn-outline-secondary" %>
+      <% comment_classes = "btn btn-outline-warning" %>
+      <% comment_classes += " position-relative" if @pending_comment_count > 0 %>
+      <%= link_to dashboards_comments_path, class: comment_classes do %>
+        <i class="fas fa-comments me-2"></i>Comentarios
+        <% if @pending_comment_count > 0 %>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            <%= @pending_comment_count %>
+          </span>
+        <% end %>
+      <% end %>
+      <%= link_to contacts_path, class: "btn btn-outline-info" do %>
+        <i class="fas fa-envelope me-2"></i>Contactos
+      <% end %>
     </div>
   </div>
 
@@ -27,8 +43,13 @@
             <div class="metric-value"><%= number_with_delimiter(@total_visits) %></div>
             <div class="metric-label">Visitas Totales</div>
             <div class="metric-change positive">
-              <i class="fas fa-arrow-up"></i> 
-              +<%= @visits_this_week %> esta semana
+              <% if @visits_today > 0 %>
+                <i class="fas fa-calendar-day"></i> 
+                <%= @visits_today %> hoy • <%= @visits_this_week %> esta semana
+              <% else %>
+                <i class="fas fa-arrow-up"></i> 
+                +<%= @visits_this_week %> esta semana
+              <% end %>
             </div>
           </div>
         </div>
@@ -53,43 +74,64 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-      <div class="metric-card">
-        <div class="metric-card-body">
-          <div class="metric-icon bg-warning">
-            <i class="fas fa-comments"></i>
-          </div>
-          <div class="metric-content">
-            <div class="metric-value"><%= @approved_comment_count %></div>
-            <div class="metric-label">Comentarios Aprobados</div>
-            <div class="metric-change <%= @pending_comment_count > 0 ? 'attention' : '' %>">
+      <%= link_to dashboards_comments_path, class: "text-decoration-none" do %>
+        <div class="metric-card <%= 'metric-card-highlight' if @pending_comment_count > 0 %>">
+          <div class="metric-card-body">
+            <div class="metric-icon bg-warning">
+              <i class="fas fa-comments"></i>
               <% if @pending_comment_count > 0 %>
-                <i class="fas fa-clock"></i> 
-                <%= @pending_comment_count %> pendientes
-              <% else %>
-                <i class="fas fa-check"></i> 
-                Todo al día
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  <%= @pending_comment_count %>
+                </span>
               <% end %>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value"><%= @approved_comment_count %></div>
+              <div class="metric-label">Comentarios Aprobados</div>
+              <div class="metric-change <%= @pending_comment_count > 0 ? 'attention' : '' %>">
+                <% if @pending_comment_count > 0 %>
+                  <i class="fas fa-clock"></i> 
+                  <%= @pending_comment_count %> pendientes
+                <% else %>
+                  <i class="fas fa-check"></i> 
+                  Todo al día
+                <% end %>
+              </div>
+            </div>
+            <div class="metric-action">
+              <i class="fas fa-arrow-right"></i>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-      <div class="metric-card">
-        <div class="metric-card-body">
-          <div class="metric-icon bg-info">
-            <i class="fas fa-calendar-day"></i>
-          </div>
-          <div class="metric-content">
-            <div class="metric-value"><%= @visits_today %></div>
-            <div class="metric-label">Visitas Hoy</div>
-            <div class="metric-change">
-              <%= @visits_this_month %> este mes
+      <%= link_to contacts_path, class: "text-decoration-none" do %>
+        <div class="metric-card">
+          <div class="metric-card-body">
+            <div class="metric-icon bg-info">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value"><%= @total_contacts %></div>
+              <div class="metric-label">Contactos Totales</div>
+              <div class="metric-change">
+                <% if @contacts_this_month > 0 %>
+                  <i class="fas fa-arrow-up"></i> 
+                  +<%= @contacts_this_month %> este mes
+                <% else %>
+                  <i class="fas fa-inbox"></i>
+                  Sin contactos nuevos
+                <% end %>
+              </div>
+            </div>
+            <div class="metric-action">
+              <i class="fas fa-arrow-right"></i>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
 
@@ -546,7 +588,12 @@
             <i class="fas fa-fire me-2"></i>
             Artículos Más Visitados
           </h5>
-          <%= link_to "Ver Todos", dashboards_posts_path, class: "btn btn-sm btn-outline-primary" %>
+          <div class="d-flex gap-2">
+            <%= link_to new_post_path, class: "btn btn-sm btn-success" do %>
+              <i class="fas fa-plus me-1"></i>Nuevo Post
+            <% end %>
+            <%= link_to "Ver Todos", dashboards_posts_path, class: "btn btn-sm btn-outline-primary" %>
+          </div>
         </div>
         <div class="posts-body">
           <% if @most_visited_posts.any? %>
@@ -608,11 +655,18 @@
               </table>
             </div>
           <% else %>
-            <div class="no-data">
+            <div class="no-data text-center py-5">
               <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
-              <h6 class="text-muted">No hay artículos publicados</h6>
-              <p class="text-muted">Comienza creando tu primer artículo</p>
-              <%= link_to "Crear Artículo", new_post_path, class: "btn btn-primary" %>
+              <h6 class="text-muted mb-2">No hay artículos publicados</h6>
+              <p class="text-muted mb-4">Comienza creando tu primer artículo para generar contenido y analíticas</p>
+              <div class="d-flex gap-2 justify-content-center">
+                <%= link_to new_post_path, class: "btn btn-primary" do %>
+                  <i class="fas fa-plus me-2"></i>Crear Primer Artículo
+                <% end %>
+                <%= link_to dashboards_posts_path, class: "btn btn-outline-secondary" do %>
+                  <i class="fas fa-list me-2"></i>Gestionar Posts
+                <% end %>
+              </div>
             </div>
           <% end %>
         </div>
