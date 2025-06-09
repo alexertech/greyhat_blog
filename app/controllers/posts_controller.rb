@@ -14,7 +14,9 @@ class PostsController < ApplicationController
 
   # Get /blog
   def list
-    @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+    @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags).order(created_at: :desc).paginate(
+      page: params[:page], per_page: 20
+    )
   end
 
   # GET /posts/1

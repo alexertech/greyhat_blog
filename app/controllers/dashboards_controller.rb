@@ -10,41 +10,41 @@ class DashboardsController < ApplicationController
     @visits_this_week = Visit.where('viewed_at >= ?', 1.week.ago).count
     @visits_this_month = Visit.where('viewed_at >= ?', 1.month.ago).count
     @most_visited_posts = Post.most_visited(5)
-    
+
     # Content metrics
     @total_posts = Post.count
     @published_posts = Post.published.count
     @draft_posts = Post.drafts.count
     @posts_this_month = Post.where('created_at >= ?', 1.month.ago).count
-    
+
     # Engagement metrics
     @comment_count = Comment.count
     @pending_comment_count = Comment.pending.count
     @approved_comment_count = Comment.approved.count
     @comments_this_month = Comment.where('created_at >= ?', 1.month.ago).count
-    
+
     # Traffic source metrics
     @social_media_visits = count_social_media_visits
     @search_engine_visits = count_search_engine_visits
     @direct_visits = Visit.where(referer: [nil, '']).count
     @referral_visits = @total_visits - @social_media_visits - @search_engine_visits - @direct_visits
-    
+
     # Charts data
     @daily_visits_chart = Visit.count_by_date(30)
     @hourly_visits_chart = Visit.count_by_hour
-    
+
     # Legacy variables for tests
-    @home_visits = Visit.joins("JOIN pages ON visits.visitable_id = pages.id")
-                       .where("visits.visitable_type = 'Page' AND pages.name = 'index'")
-                       .count
+    @home_visits = Visit.joins('JOIN pages ON visits.visitable_id = pages.id')
+                        .where("visits.visitable_type = 'Page' AND pages.name = 'index'")
+                        .count
     @posts_visits = Visit.where(visitable_type: 'Post').count
-    
+
     # Popular search terms
     @popular_search_terms = extract_popular_search_terms
-    
+
     # Device/Browser analytics
     @user_agents_summary = analyze_user_agents
-    
+
     # Top referrers for quick view
     @top_referrers_preview = analyze_referrers(
       Visit.where.not(referer: [nil, ''])
@@ -57,36 +57,36 @@ class DashboardsController < ApplicationController
 
   def stats
     @period = params[:period].present? ? params[:period].to_i : 7
-    
+
     @daily_visits = Visit.count_by_date(@period)
     @hourly_visits = Visit.count_by_hour
     @page_visits = Page.visits_by_day(@period)
     @post_visits = Post.visits_by_day(@period)
-    
+
     @referrer_counts = Visit.where.not(referer: [nil, ''])
                             .group(:referer)
                             .order('count_all DESC')
                             .limit(10)
                             .count
-    
+
     # Enhanced referrer analysis
     @top_referrers = analyze_referrers(@referrer_counts)
     @social_media_visits = count_social_media_visits
     @search_engine_visits = count_search_engine_visits
     @direct_visits = Visit.where(referer: [nil, '']).count
-    
+
     # Performance Analytics
     @bounce_rate = calculate_bounce_rate
     @avg_session_duration = calculate_avg_session_duration
     @top_exit_pages = find_top_exit_pages
     @conversion_funnel = analyze_conversion_funnel
-    
+
     # Live Activity (last 24 hours)
     @recent_visits = Visit.includes(:visitable)
                           .where('viewed_at >= ?', 24.hours.ago)
                           .order(viewed_at: :desc)
                           .limit(20)
-    
+
     # Performance insights
     @insights = generate_performance_insights
   end
@@ -94,17 +94,17 @@ class DashboardsController < ApplicationController
   def posts
     @posts = Post.includes(:visits).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
-  
+
   def comments
     comments = Comment.includes(:post).order(created_at: :desc)
-    
+
     case params[:filter]
     when 'pending'
       comments = comments.pending
     when 'approved'
       comments = comments.approved
     end
-    
+
     @comments = comments.paginate(page: params[:page], per_page: 20)
   end
 
@@ -124,7 +124,7 @@ class DashboardsController < ApplicationController
 
   def extract_domain(url)
     return 'Direct' if url.blank?
-    
+
     begin
       URI.parse(url).host&.downcase&.gsub(/^www\./, '') || 'Unknown'
     rescue URI::InvalidURIError
@@ -134,9 +134,9 @@ class DashboardsController < ApplicationController
 
   def categorize_referrer(url)
     return :direct if url.blank?
-    
+
     domain = extract_domain(url)
-    
+
     case domain
     when /linkedin\.com/
       :social
@@ -157,9 +157,9 @@ class DashboardsController < ApplicationController
 
   def format_referrer_name(url)
     return 'Directo' if url.blank?
-    
+
     domain = extract_domain(url)
-    
+
     case domain
     when 'linkedin.com' then 'LinkedIn'
     when 'substack.com' then 'Substack'
@@ -178,44 +178,42 @@ class DashboardsController < ApplicationController
 
   def count_social_media_visits
     social_domains = %w[linkedin.com substack.com twitter.com x.com facebook.com instagram.com tiktok.com]
-    
-    Visit.where("referer ILIKE ANY (ARRAY[?])", social_domains.map { |domain| "%#{domain}%" }).count
+
+    Visit.where('referer ILIKE ANY (ARRAY[?])', social_domains.map { |domain| "%#{domain}%" }).count
   end
 
   def count_search_engine_visits
     search_domains = %w[google. bing.com duckduckgo.com yahoo.com]
-    
-    Visit.where("referer ILIKE ANY (ARRAY[?])", search_domains.map { |domain| "%#{domain}%" }).count
+
+    Visit.where('referer ILIKE ANY (ARRAY[?])', search_domains.map { |domain| "%#{domain}%" }).count
   end
 
   def extract_popular_search_terms
     # Extract search terms from Google referrers
     search_referrers = Visit.where("referer ILIKE '%google%' AND referer ILIKE '%q=%'")
                             .pluck(:referer)
-    
+
     search_terms = {}
     search_referrers.each do |referer|
-      begin
-        uri = URI.parse(referer)
-        params = CGI.parse(uri.query || '')
-        query = params['q']&.first || params['query']&.first
-        
-        if query.present?
-          term = query.downcase.strip
-          search_terms[term] = (search_terms[term] || 0) + 1
-        end
-      rescue URI::InvalidURIError, StandardError
-        # Skip invalid URIs
+      uri = URI.parse(referer)
+      params = CGI.parse(uri.query || '')
+      query = params['q']&.first || params['query']&.first
+
+      if query.present?
+        term = query.downcase.strip
+        search_terms[term] = (search_terms[term] || 0) + 1
       end
+    rescue URI::InvalidURIError, StandardError
+      # Skip invalid URIs
     end
-    
+
     # Also check for search within site
-    internal_searches = Visit.joins("JOIN pages ON visits.visitable_id = pages.id")
+    internal_searches = Visit.joins('JOIN pages ON visits.visitable_id = pages.id')
                              .where("visits.visitable_type = 'Page' AND visits.referer ILIKE '%/buscar%'")
                              .count
-    
-    search_terms['búsqueda interna'] = internal_searches if internal_searches > 0
-    
+
+    search_terms['búsqueda interna'] = internal_searches if internal_searches.positive?
+
     search_terms.sort_by { |_, count| -count }.first(10).to_h
   end
 
@@ -284,19 +282,19 @@ class DashboardsController < ApplicationController
     # For simplicity, we'll consider visits that lasted less than 30 seconds as bounces
     total_visits = Visit.count
     return 0 if total_visits.zero?
-    
+
     # This is a simplified bounce rate calculation
     # In a real scenario, you'd track session duration properly
     recent_visits = Visit.where('viewed_at >= ?', 1.month.ago).count
     return 0 if recent_visits.zero?
-    
+
     # Estimate bounce rate based on single-page visits from same IP within short timeframe
     bounces = Visit.where('viewed_at >= ?', 1.month.ago)
                    .group(:ip_address)
                    .having('COUNT(*) = 1')
                    .count
                    .size
-    
+
     ((bounces.to_f / recent_visits) * 100).round(1)
   end
 
@@ -305,16 +303,16 @@ class DashboardsController < ApplicationController
     # In production, you'd want to track actual session data
     total_visits = Visit.where('viewed_at >= ?', 1.week.ago).count
     return 0 if total_visits.zero?
-    
+
     # Simple heuristic: more page views per visitor = longer sessions
     unique_visitors = Visit.where('viewed_at >= ?', 1.week.ago)
-                          .distinct
-                          .count(:ip_address)
-    
+                           .distinct
+                           .count(:ip_address)
+
     return 0 if unique_visitors.zero?
-    
+
     avg_pages_per_visitor = total_visits.to_f / unique_visitors
-    
+
     # Estimate 1-2 minutes per page view
     (avg_pages_per_visitor * 90).round # seconds
   end
@@ -323,34 +321,34 @@ class DashboardsController < ApplicationController
     # Find pages that are commonly the last in a user's session
     # This is simplified - in production you'd track actual session ends
     exit_pages = {}
-    
+
     # Get unique IP addresses from recent visits
     unique_ips = Visit.where('viewed_at >= ?', 1.week.ago)
-                     .distinct
-                     .pluck(:ip_address)
-    
+                      .distinct
+                      .pluck(:ip_address)
+
     unique_ips.each do |ip|
       # Get unique dates for this IP
       unique_dates = Visit.where(ip_address: ip)
                           .where('viewed_at >= ?', 1.week.ago)
-                          .group(Arel.sql("DATE(viewed_at)"))
-                          .pluck(Arel.sql("DATE(viewed_at)"))
-      
+                          .group(Arel.sql('DATE(viewed_at)'))
+                          .pluck(Arel.sql('DATE(viewed_at)'))
+
       unique_dates.each do |date|
         # Find the last visit for this IP on this day
         last_visit = Visit.includes(:visitable)
-                         .where(ip_address: ip)
-                         .where(Arel.sql("DATE(viewed_at) = ?"), date)
-                         .order(:viewed_at)
-                         .last
-        
+                          .where(ip_address: ip)
+                          .where(Arel.sql('DATE(viewed_at) = ?'), date)
+                          .order(:viewed_at)
+                          .last
+
         if last_visit&.visitable
           page_name = "#{last_visit.visitable_type}: #{last_visit.visitable.try(:title) || last_visit.visitable.try(:name)}"
           exit_pages[page_name] = (exit_pages[page_name] || 0) + 1
         end
       end
     end
-    
+
     exit_pages.sort_by { |_, count| -count }.first(10).to_h
   end
 
@@ -358,50 +356,50 @@ class DashboardsController < ApplicationController
     # Simple conversion funnel: Home → Post → Contact
     total_visitors = Visit.distinct.count(:ip_address)
     return {} if total_visitors.zero?
-    
+
     # Visitors who viewed home page
-    home_visitors = Visit.joins("JOIN pages ON visits.visitable_id = pages.id")
+    home_visitors = Visit.joins('JOIN pages ON visits.visitable_id = pages.id')
                          .where("visits.visitable_type = 'Page' AND pages.name = 'index'")
                          .distinct
                          .count(:ip_address)
-    
+
     # Visitors who viewed any post
     post_visitors = Visit.where(visitable_type: 'Post')
                          .distinct
                          .count(:ip_address)
-    
+
     # Visitors who contacted
-    contact_visitors = Visit.joins("JOIN pages ON visits.visitable_id = pages.id")
+    contact_visitors = Visit.joins('JOIN pages ON visits.visitable_id = pages.id')
                             .where("visits.visitable_type = 'Page' AND pages.name = 'contact'")
                             .distinct
                             .count(:ip_address)
-    
+
     {
       'Total Visitantes' => total_visitors,
       'Vieron Inicio' => home_visitors,
       'Leyeron Artículos' => post_visitors,
       'Visitaron Contacto' => contact_visitors,
-      'Conversión a Artículos' => total_visitors > 0 ? "#{((post_visitors.to_f / total_visitors) * 100).round(1)}%" : "0%",
-      'Conversión a Contacto' => total_visitors > 0 ? "#{((contact_visitors.to_f / total_visitors) * 100).round(1)}%" : "0%"
+      'Conversión a Artículos' => total_visitors.positive? ? "#{((post_visitors.to_f / total_visitors) * 100).round(1)}%" : '0%',
+      'Conversión a Contacto' => total_visitors.positive? ? "#{((contact_visitors.to_f / total_visitors) * 100).round(1)}%" : '0%'
     }
   end
 
   def generate_performance_insights
     insights = []
-    
+
     # Traffic growth insight
     current_week = Visit.where('viewed_at >= ?', 1.week.ago).count
     previous_week = Visit.where('viewed_at >= ? AND viewed_at < ?', 2.weeks.ago, 1.week.ago).count
-    
-    if previous_week > 0
+
+    if previous_week.positive?
       growth = ((current_week - previous_week).to_f / previous_week * 100).round(1)
-      if growth > 0
+      if growth.positive?
         insights << "Tu tráfico aumentó #{growth}% esta semana"
-      elsif growth < 0
+      elsif growth.negative?
         insights << "Tu tráfico disminuyó #{growth.abs}% esta semana"
       end
     end
-    
+
     # Top traffic source insight
     if @social_media_visits > @search_engine_visits && @social_media_visits > @direct_visits
       social_percentage = ((@social_media_visits.to_f / Visit.count) * 100).round
@@ -410,19 +408,17 @@ class DashboardsController < ApplicationController
       search_percentage = ((@search_engine_visits.to_f / Visit.count) * 100).round
       insights << "Los buscadores generan el #{search_percentage}% de tu tráfico"
     end
-    
+
     # Popular content insight
     most_visited = Post.most_visited(1).first
     if most_visited && most_visited.visits.count > 10
       insights << "Tu artículo más popular es '#{most_visited.title.truncate(40)}'"
     end
-    
+
     # Recent activity insight
     today_visits = Visit.where('viewed_at >= ?', Time.zone.now.beginning_of_day).count
-    if today_visits > 0
-      insights << "Has tenido #{today_visits} visitas hoy"
-    end
-    
-    insights.presence || ["¡Sigue creando contenido increíble!"]
+    insights << "Has tenido #{today_visits} visitas hoy" if today_visits.positive?
+
+    insights.presence || ['¡Sigue creando contenido increíble!']
   end
 end

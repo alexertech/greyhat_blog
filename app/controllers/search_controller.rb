@@ -5,7 +5,7 @@ class SearchController < ApplicationController
     @query = params[:q].to_s.strip
     @tag = params[:tag].to_s.strip
     @posts = []
-    
+
     if @tag.present?
       # Tag-based search
       @posts = Post.published

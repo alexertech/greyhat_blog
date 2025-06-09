@@ -21,7 +21,7 @@ class Post < ApplicationRecord
 
   scope :published, -> { where(draft: false) }
   scope :drafts, -> { where(draft: true) }
-  
+
   attr_accessor :tag_names
 
   def to_param
@@ -61,16 +61,16 @@ class Post < ApplicationRecord
 
     # Use a subquery approach to avoid GROUP BY issues with includes
     related_post_ids = Post.published
-                          .joins(:tags)
-                          .where(tags: { id: tag_ids })
-                          .where.not(id: id)
-                          .group('posts.id')
-                          .order('COUNT(tags.id) DESC, posts.created_at DESC')
-                          .limit(limit)
-                          .pluck(:id)
-    
+                           .joins(:tags)
+                           .where(tags: { id: tag_ids })
+                           .where.not(id: id)
+                           .group('posts.id')
+                           .order('COUNT(tags.id) DESC, posts.created_at DESC')
+                           .limit(limit)
+                           .pluck(:id)
+
     return Post.published.where.not(id: id).limit(limit) if related_post_ids.empty?
-    
+
     Post.where(id: related_post_ids)
         .order(Arel.sql("array_position(ARRAY[#{related_post_ids.join(',')}], posts.id)"))
   end
@@ -110,18 +110,18 @@ class Post < ApplicationRecord
       Rails.logger.error "Failed to generate variants for post #{id}: #{e.message}"
     end
   end
-  
+
   def assign_tags
     return unless tag_names.present?
-    
+
     # Clear existing tags
-    self.tags.clear
-    
+    tags.clear
+
     # Parse and create/assign new tags
     tag_list = tag_names.split(',').map(&:strip).reject(&:blank?)
     tag_list.each do |tag_name|
       tag = Tag.find_or_create_by(name: tag_name.downcase)
-      self.tags << tag unless self.tags.include?(tag)
+      tags << tag unless tags.include?(tag)
     end
   end
 end
