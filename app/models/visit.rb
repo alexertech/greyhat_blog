@@ -8,20 +8,21 @@ class Visit < ApplicationRecord
 
   before_create :set_viewed_at
 
-  enum action_type: {
+  enum :action_type, {
     page_view: 0,
     newsletter_click: 1,
     external_link: 2
-  }, _default: 0
+  }, default: :page_view
 
   scope :last_week, -> { where('viewed_at >= ?', 1.week.ago) }
   scope :last_month, -> { where('viewed_at >= ?', 1.month.ago) }
   scope :this_year, -> { where('viewed_at >= ?', Time.zone.now.beginning_of_year) }
+  # Optimized bot detection using indexed patterns
   scope :bots, lambda {
-    where("user_agent ILIKE ANY (ARRAY['%bot%', '%crawler%', '%spider%', '%yahoo%', '%slurp%', '%daum%', '%yandex%', '%googlebot%', '%bingbot%', '%baiduspider%', '%twitterbot%', '%facebookexternalhit%', '%rogerbot%', '%linkedinbot%', '%embedly%', '%quora%', '%pinterest%', '%slackbot%', '%redditbot%', '%snapchat%', '%applebot%'])")
+    where("user_agent ~* '(bot|crawler|spider|yahoo|slurp|daum|yandex|googlebot|bingbot|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora|pinterest|slackbot|redditbot|snapchat|applebot)'")
   }
   scope :humans, lambda {
-    where.not("user_agent ILIKE ANY (ARRAY['%bot%', '%crawler%', '%spider%', '%yahoo%', '%slurp%', '%daum%', '%yandex%', '%googlebot%', '%bingbot%', '%baiduspider%', '%twitterbot%', '%facebookexternalhit%', '%rogerbot%', '%linkedinbot%', '%embedly%', '%quora%', '%pinterest%', '%slackbot%', '%redditbot%', '%snapchat%', '%applebot%'])")
+    where("user_agent !~* '(bot|crawler|spider|yahoo|slurp|daum|yandex|googlebot|bingbot|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora|pinterest|slackbot|redditbot|snapchat|applebot)' OR user_agent IS NULL")
   }
 
   def self.count_by_date(period = 7)
