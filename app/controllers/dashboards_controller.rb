@@ -4,11 +4,29 @@ class DashboardsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # Core metrics
-    @total_visits = Visit.count
-    @visits_today = Visit.where('viewed_at >= ?', Time.zone.now.beginning_of_day).count
-    @visits_this_week = Visit.where('viewed_at >= ?', 1.week.ago).count
-    @visits_this_month = Visit.where('viewed_at >= ?', 1.month.ago).count
+    # Core metrics - optimized with single query
+    begin
+      visits_stats = Visit.group(
+        "CASE 
+           WHEN viewed_at >= '#{Time.zone.now.beginning_of_day}' THEN 'today'
+           WHEN viewed_at >= '#{1.week.ago}' THEN 'week'
+           WHEN viewed_at >= '#{1.month.ago}' THEN 'month'
+           ELSE 'total'
+         END"
+      ).count
+      
+      @total_visits = Visit.count
+      @visits_today = visits_stats['today'] || 0
+      @visits_this_week = visits_stats['week'] || 0
+      @visits_this_month = visits_stats['month'] || 0
+    rescue => e
+      # Fallback to simple queries if optimized version fails
+      Rails.logger.error "Dashboard optimization error: #{e.message}"
+      @total_visits = Visit.count
+      @visits_today = Visit.where('viewed_at >= ?', Time.zone.now.beginning_of_day).count
+      @visits_this_week = Visit.where('viewed_at >= ?', 1.week.ago).count
+      @visits_this_month = Visit.where('viewed_at >= ?', 1.month.ago).count
+    end
     
     # Content Performance - Optimized queries
     @most_visited_posts = Post.most_visited(5)
@@ -40,11 +58,20 @@ class DashboardsController < ApplicationController
     @draft_posts = Post.drafts.count
     @posts_this_month = Post.where('created_at >= ?', 1.month.ago).count
 
-    # Engagement metrics
+    # Engagement metrics - optimized with single query
+    comment_stats = Comment.group(:approved).count
+    comment_time_stats = Comment.group(
+      "CASE WHEN created_at >= '#{1.month.ago}' THEN 'month' ELSE 'older' END"
+    ).count
+    
     @comment_count = Comment.count
-    @pending_comment_count = Comment.pending.count
-    @approved_comment_count = Comment.approved.count
-    @comments_this_month = Comment.where('created_at >= ?', 1.month.ago).count
+    @pending_comment_count = comment_stats[false] || 0
+    @approved_comment_count = comment_stats[true] || 0
+    @comments_this_month = comment_time_stats['month'] || 0
+
+    # Contact metrics
+    @total_contacts = Contact.count
+    @contacts_this_month = Contact.where('created_at >= ?', 1.month.ago).count
 
     # Traffic source metrics
     @social_media_visits = count_social_media_visits
@@ -146,7 +173,12 @@ class DashboardsController < ApplicationController
   end
 
   def posts
-    @posts = Post.includes(:visits).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+    # Optimized query to avoid N+1 problems and improve performance
+    @posts = Post.left_joins(:visits)
+                 .select('posts.*, COUNT(visits.id) as visits_count')
+                 .group('posts.id')
+                 .order(created_at: :desc)
+                 .paginate(page: params[:page], per_page: 10)
   end
 
   def comments
