@@ -16,13 +16,13 @@ export default class extends Controller {
   updateBookmarksVisibility() {
     const hasBookmarks = this.hasBookmarks()
     
-    if (this.hasBookmarksLinkTarget) {
+    this.bookmarksLinkTargets.forEach(target => {
       if (hasBookmarks) {
-        this.bookmarksLinkTarget.classList.remove('d-none')
+        target.classList.remove('d-none')
       } else {
-        this.bookmarksLinkTarget.classList.add('d-none')
+        target.classList.add('d-none')
       }
-    }
+    })
   }
 
   hasBookmarks() {
