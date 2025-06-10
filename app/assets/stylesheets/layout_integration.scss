@@ -101,21 +101,13 @@
   }
   
   &:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-4px);
     box-shadow: 
       0 16px 48px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.95);
     
     &::before {
       opacity: 1;
-    }
-    
-    .post-image {
-      transform: scale(1.05);
-    }
-    
-    .post-meta .badge {
-      transform: scale(1.05);
     }
   }
   
@@ -232,7 +224,6 @@
         
         &:hover {
           background: rgba(13, 110, 253, 0.15);
-          transform: translateY(-1px);
         }
       }
     }
@@ -388,6 +379,10 @@
     
     &:hover {
       background: rgba(30, 30, 30, 0.95);
+      
+      &::before {
+        opacity: 1;
+      }
     }
     
     .post-title {
@@ -417,6 +412,10 @@
         &:hover {
           background: rgba(30, 30, 30, 0.95);
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+          
+          &::before {
+            opacity: 1;
+          }
         }
         
         .post-title {
@@ -485,11 +484,30 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
       overflow: hidden;
+      position: relative;
+      
+      // Gradient bar at top (similar to post-card)
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #0d6efd, #6f42c1, #20c997);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+      }
       
       &:hover {
         transform: translateY(-4px);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         background: rgba(255, 255, 255, 0.95);
+        
+        &::before {
+          opacity: 1;
+        }
       }
       
       .post-item-content {
@@ -537,7 +555,6 @@
           
           &:hover {
             background: rgba(13, 110, 253, 0.15);
-            transform: translateY(-1px);
           }
         }
       }

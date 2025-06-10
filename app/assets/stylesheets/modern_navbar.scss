@@ -49,11 +49,9 @@
     &:hover {
       color: white;
       background: rgba(255, 255, 255, 0.08);
-      transform: translateY(-2px);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       
       .nav-icon {
-        transform: scale(1.1);
         color: #79c0ff;
       }
     }
@@ -81,7 +79,6 @@
 
       .nav-icon {
         color: white;
-        transform: scale(1.05);
       }
 
       .nav-text {
@@ -133,11 +130,9 @@
       &:hover {
         background: rgba(255, 255, 255, 0.1);
         color: white;
-        transform: translateX(4px);
         
         i {
           color: #79c0ff;
-          transform: scale(1.1);
         }
       }
 

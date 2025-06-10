@@ -62,19 +62,45 @@
 
     <header class="blog-post-header mb-4">
       <h1 class="blog-post-title display-5 fw-bold"><%= @post.title %></h1>
-      <div class="blog-post-meta text-muted mb-4">
-        <time datetime="<%= @post.created_at.strftime('%Y-%m-%d') %>">
-          <%= @post.created_at.strftime("%d %b. %Y") %>
-        </time>
-        <span class="mx-1">&middot;</span>
-        <span>Lectura de <%= (@post.body.to_plain_text.split.size/200)+1 %> minutos</span>
+      <div class="blog-post-meta text-muted mb-4 d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+          <time datetime="<%= @post.created_at.strftime('%Y-%m-%d') %>">
+            <%= @post.created_at.strftime("%d %b. %Y") %>
+          </time>
+          <span class="mx-1">&middot;</span>
+          <span>Lectura de <%= (@post.body.to_plain_text.split.size/200)+1 %> minutos</span>
+          
+          <% if user_signed_in? %>
+            <span class="mx-1">&middot;</span>
+            <span class="badge bg-info">Unique: <%= @post.unique_visits %></span>
+            <span class="mx-1">&middot;</span>
+            <span class="badge bg-secondary">Total: <%= @post.total_visits %></span>
+          <% end %>
+        </div>
         
-        <% if user_signed_in? %>
-          <span class="mx-1">&middot;</span>
-          <span class="badge bg-info">Unique: <%= @post.unique_visits %></span>
-          <span class="mx-1">&middot;</span>
-          <span class="badge bg-secondary">Total: <%= @post.total_visits %></span>
-        <% end %>
+        <!-- Share Buttons -->
+        <div data-controller="share-buttons"
+             data-share-buttons-url-value="<%= request.original_url %>"
+             data-share-buttons-title-value="<%= @post.title %>"
+             data-share-buttons-description-value="<%= strip_tags(@post.body.to_plain_text).truncate(160) %>">
+          <div class="btn-group" role="group">
+            <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm" title="Compartir en Twitter">
+              <i class="fab fa-twitter"></i>
+            </button>
+            <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm" title="Compartir en LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </button>
+            <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm" title="Compartir en Facebook">
+              <i class="fab fa-facebook"></i>
+            </button>
+            <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm" title="Compartir en WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </button>
+            <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm" title="Copiar enlace">
+              <i class="fas fa-link"></i>
+            </button>
+          </div>
+        </div>
       </div>
       
       <!-- Tags -->
@@ -89,46 +115,6 @@
       <% end %>
     </header>
 
-
-    <!-- Bookmark and Share Actions -->
-    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded">
-      <!-- Bookmark Button -->
-      <div data-controller="bookmarks" 
-           data-bookmarks-post-id-value="<%= @post.id %>"
-           data-bookmarks-post-title-value="<%= @post.title %>"
-           data-bookmarks-post-slug-value="<%= @post.slug %>">
-        <button data-bookmarks-target="button" 
-                data-action="click->bookmarks#toggle"
-                class="btn btn-outline-secondary btn-sm">
-          <i data-bookmarks-target="icon" class="far fa-bookmark text-muted"></i>
-          <span data-bookmarks-target="text">Guardar</span>
-        </button>
-      </div>
-
-      <!-- Share Buttons -->
-      <div data-controller="share-buttons"
-           data-share-buttons-url-value="<%= request.original_url %>"
-           data-share-buttons-title-value="<%= @post.title %>"
-           data-share-buttons-description-value="<%= strip_tags(@post.body.to_plain_text).truncate(160) %>">
-        <div class="btn-group" role="group">
-          <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm">
-            <i class="fab fa-twitter"></i>
-          </button>
-          <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm">
-            <i class="fab fa-linkedin"></i>
-          </button>
-          <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm">
-            <i class="fab fa-facebook"></i>
-          </button>
-          <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm">
-            <i class="fab fa-whatsapp"></i>
-          </button>
-          <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-link"></i> Copiar
-          </button>
-        </div>
-      </div>
-    </div>
 
     <article class="mb-5">
       <%= @post.body %>

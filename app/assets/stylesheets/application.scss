@@ -251,10 +251,9 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
 
 // Search result highlighting
 .search-result-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
   
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
 }
@@ -266,7 +265,7 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
     transition: all 0.3s ease;
     
     &:hover {
-      transform: scale(1.05) translateY(-2px);
+      transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       background-color: var(--bs-primary-dark, #0d6efd) !important;
     }
@@ -925,7 +924,7 @@ button.trix-button--icon-attach::before { content: "\f0c6"; }
     transition: transform 0.2s ease;
     
     &:hover {
-      transform: scale(1.1);
+      opacity: 0.8;
     }
     
     &.active {
@@ -1245,13 +1244,12 @@ body.menu-open {
   transition: all 0.2s ease;
   
   &:hover {
-    transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
   .btn-close {
     &:hover {
-      transform: scale(1.1);
+      opacity: 0.8;
     }
   }
 }
@@ -1263,7 +1261,6 @@ body.menu-open {
     
     &:hover {
       background-color: var(--bg-secondary);
-      transform: translateY(-1px);
     }
   }
 }
@@ -1275,7 +1272,6 @@ body.menu-open {
   transition: all 0.2s ease;
   
   &:hover {
-    transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 }
@@ -1290,6 +1286,21 @@ body.menu-open {
   .bookmark-btn, .share-btn {
     min-width: 44px;
     min-height: 44px;
+  }
+  
+  // Share buttons in post metadata responsive
+  .blog-post-meta {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem;
+    
+    .btn-group {
+      .btn {
+        min-height: 36px;
+        min-width: 36px;
+        padding: 8px !important;
+      }
+    }
   }
   
   // Make cards more touch-friendly
