@@ -75,9 +75,9 @@
 			</div>
 		</div>
 	</div>
-	
-	<%= render 'partials/navigation' %>
-
+	<div class="bottom-border mb-2">
+		<%= render 'partials/navigation' %>
+	</div>
 	<!-- Integrated Content Container -->
 	<div class="site-container">
 		<!-- Flash Messages -->
@@ -112,8 +112,8 @@
 			</div>
 		<% end %>
 
-
-			<%= yield %>
+		
+		<div><%= yield %></div>
 
 	</div>
 
