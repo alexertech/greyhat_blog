@@ -9,9 +9,25 @@
           <div data-controller="dark-mode">
             <button data-dark-mode-target="toggle"
                     data-action="click->dark-mode#toggle"
-                    class="btn btn-link text-white p-0"
+                    class="btn btn-outline-light btn-sm theme-toggle"
+                    style="border-radius: 20px; padding: 6px 12px; position: relative; overflow: hidden; transition: all 0.3s ease; min-width: 50px; height: 32px;"
                     aria-label="Toggle dark mode">
-              <i data-dark-mode-target="icon" class="fas fa-moon"></i>
+              <div class="theme-toggle-slider" style="
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 24px;
+                height: 24px;
+                background: linear-gradient(45deg, #ffd700, #ffed4a);
+                border-radius: 50%;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <i data-dark-mode-target="icon" class="fas fa-sun" style="font-size: 10px; color: #333;"></i>
+              </div>
             </button>
           </div>
           
@@ -50,40 +66,47 @@
         <div class="mobile-nav-items">
           <a href="/index" 
              data-action="click->mobile-navigation#close"
-             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/index') ? 'active' : '' %>">
-            <i class="fas fa-home me-2"></i> Inicio
+             class="mobile-nav-item <%= current_page?('/index') ? 'active' : '' %>">
+            <i class="fas fa-home me-3"></i> 
+            <span>Inicio</span>
           </a>
           <a href="/acerca" 
              data-action="click->mobile-navigation#close"
-             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/acerca') ? 'active' : '' %>">
-            <i class="fas fa-user me-2"></i> Acerca de
+             class="mobile-nav-item <%= current_page?('/acerca') ? 'active' : '' %>">
+            <i class="fas fa-user me-3"></i> 
+            <span>Acerca de</span>
           </a>
           <a href="/articulos" 
              data-action="click->mobile-navigation#close"
-             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">
-            <i class="fas fa-newspaper me-2"></i> Artículos
+             class="mobile-nav-item <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">
+            <i class="fas fa-newspaper me-3"></i> 
+            <span>Artículos</span>
           </a>
           <a href="/newsletter" 
              data-action="click->mobile-navigation#close"
-             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/newsletter') ? 'active' : '' %>">
-            <i class="fas fa-envelope me-2"></i> Newsletter
+             class="mobile-nav-item <%= current_page?('/newsletter') ? 'active' : '' %>">
+            <i class="fas fa-envelope me-3"></i> 
+            <span>Newsletter</span>
           </a>
           <a href="/guardados" 
              data-navigation-bookmarks-target="bookmarksLink"
              data-action="click->mobile-navigation#close"
-             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-none <%= current_page?('/guardados') ? 'active' : '' %>">
-            <i class="fas fa-bookmark me-2"></i> Guardados
+             class="mobile-nav-item d-none <%= current_page?('/guardados') ? 'active' : '' %>">
+            <i class="fas fa-bookmark me-3"></i> 
+            <span>Guardados</span>
           </a>
           <a href="/servicios" 
              data-action="click->mobile-navigation#close"
-             class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block <%= current_page?('/servicios') ? 'active' : '' %>">
-            <i class="fas fa-cogs me-2"></i> Servicios
+             class="mobile-nav-item <%= current_page?('/servicios') ? 'active' : '' %>">
+            <i class="fas fa-cogs me-3"></i> 
+            <span>Servicios</span>
           </a>
           <% if user_signed_in? %>
             <a href="/dashboard" 
                data-action="click->mobile-navigation#close"
-               class="mobile-nav-item py-3 px-4 text-decoration-none text-white d-block">
-              <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+               class="mobile-nav-item">
+              <i class="fas fa-tachometer-alt me-3"></i> 
+              <span>Dashboard</span>
             </a>
           <% end %>
         </div>
@@ -91,20 +114,39 @@
     </div>
 
     <!-- Desktop Navigation -->
-    <div class="d-none d-md-block bg-dark rounded">
-      <div class="d-flex flex-row">
-        <a href="/index" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/index') ? 'active' : '' %>">Inicio</a>
-        <a href="/acerca" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/acerca') ? 'active' : '' %>">Acerca de</a>
-        <a href="/articulos" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">Artículos</a>
-        <a href="/newsletter" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/newsletter') ? 'active' : '' %>">Newsletter</a>
+    <div class="d-none d-md-block modern-navbar">
+      <div class="navbar-container">
+        <a href="/index" class="nav-item <%= current_page?('/index') ? 'active' : '' %>">
+          <i class="fas fa-home nav-icon"></i>
+          <span class="nav-text">Inicio</span>
+        </a>
+        <a href="/acerca" class="nav-item <%= current_page?('/acerca') ? 'active' : '' %>">
+          <i class="fas fa-user nav-icon"></i>
+          <span class="nav-text">Acerca de</span>
+        </a>
+        <a href="/articulos" class="nav-item <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">
+          <i class="fas fa-newspaper nav-icon"></i>
+          <span class="nav-text">Artículos</span>
+        </a>
+        <a href="/newsletter" class="nav-item <%= current_page?('/newsletter') ? 'active' : '' %>">
+          <i class="fas fa-envelope nav-icon"></i>
+          <span class="nav-text">Newsletter</span>
+        </a>
         <a href="/guardados" 
            data-navigation-bookmarks-target="bookmarksLink"
-           class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white d-none <%= current_page?('/guardados') ? 'active' : '' %>">
-          <i class="fas fa-bookmark"></i> Guardados
+           class="nav-item d-none <%= current_page?('/guardados') ? 'active' : '' %>">
+          <i class="fas fa-bookmark nav-icon"></i>
+          <span class="nav-text">Guardados</span>
         </a>
-        <a href="/servicios" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white <%= current_page?('/servicios') ? 'active' : '' %>">Servicios</a>
+        <a href="/servicios" class="nav-item <%= current_page?('/servicios') ? 'active' : '' %>">
+          <i class="fas fa-cogs nav-icon"></i>
+          <span class="nav-text">Servicios</span>
+        </a>
         <% if user_signed_in? %>
-          <a href="/dashboard" class="main-nav-item flex-fill py-3 text-center text-decoration-none text-white">Dashboard</a>
+          <a href="/dashboard" class="nav-item">
+            <i class="fas fa-tachometer-alt nav-icon"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
         <% end %>
       </div>
     </div>

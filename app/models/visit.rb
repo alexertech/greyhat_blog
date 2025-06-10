@@ -63,9 +63,20 @@ class Visit < ApplicationRecord
   def self.funnel_analysis(days = 7)
     base_scope = where('viewed_at >= ?', days.days.ago).humans
 
-    index_visits = base_scope.where(visitable_type: 'Page', visitable_id: 1).count
+    # Get index page visits (any page with name 'index')
+    index_visits = base_scope.joins("JOIN pages ON visits.visitable_id = pages.id")
+                             .where("visits.visitable_type = 'Page' AND pages.name = 'index'")
+                             .count
+    
+    # Get all article visits
     article_visits = base_scope.where(visitable_type: 'Post').count
-    newsletter_page_visits = base_scope.where(visitable_type: 'Page', visitable_id: 5).count
+    
+    # Get newsletter page visits (any page with name 'newsletter')
+    newsletter_page_visits = base_scope.joins("JOIN pages ON visits.visitable_id = pages.id")
+                                      .where("visits.visitable_type = 'Page' AND pages.name = 'newsletter'")
+                                      .count
+    
+    # Get newsletter clicks (action_type newsletter_click)
     newsletter_clicks = base_scope.where(action_type: 'newsletter_click').count
 
     {

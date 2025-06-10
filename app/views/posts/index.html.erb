@@ -1,86 +1,254 @@
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h2 mb-0">Artículos</h1>
-    <div>
-      <%= link_to dashboard_path, class: "btn btn-outline-secondary me-2" do %>
-        <i class="fa fa-dashboard"></i> Dashboard
-      <% end %>
-      <%= link_to new_post_path, class: "btn btn-success" do %>
-        <i class="fa fa-plus"></i> Nuevo artículo
-      <% end %>
+<div class="posts-listing-container">
+  <!-- Header Section -->
+  <div class="content-card p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <h1 class="h2 mb-1 fw-bold text-primary">
+          <i class="fas fa-newspaper me-3"></i>Artículos
+        </h1>
+        <p class="text-muted mb-0">Gestiona y visualiza todos tus artículos publicados</p>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <%= link_to dashboard_path, class: "btn btn-outline-primary" do %>
+          <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+        <% end %>
+        <%= link_to new_post_path, class: "btn btn-success" do %>
+          <i class="fas fa-plus me-2"></i>Nuevo Artículo
+        <% end %>
+      </div>
     </div>
   </div>
 
-  <% if notice %>
-    <div class="alert alert-success" id="notice"><%= notice %></div>
-  <% end %>
+  <!-- View Toggle -->
+  <div class="content-card p-3 mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="view-toggle btn-group" role="group">
+        <button type="button" class="btn btn-outline-primary active" data-view="grid">
+          <i class="fas fa-th-large me-2"></i>Tarjetas
+        </button>
+        <button type="button" class="btn btn-outline-primary" data-view="list">
+          <i class="fas fa-list me-2"></i>Lista
+        </button>
+      </div>
+      <div class="posts-count">
+        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
+          <i class="fas fa-newspaper me-2"></i>
+          <%= @posts.count %> artículos
+        </span>
+      </div>
+    </div>
+  </div>
 
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>Imagen</th>
-              <th>Título</th>
-              <th>Estado</th>
-              <th>Visitas</th>
-              <th width="200" class="text-center">Acciones</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% if @posts.any? %>
-              <% @posts.each do |post| %>
-                <tr>
-                  <td>
-                    <% if post.image.attached? %>
-                      <%= image_tag post.image.variant(:thumb), class: "img-thumbnail", style: "max-width: 100px", loading: "lazy" %>
-                    <% else %>
-                      <div class="bg-light p-3 text-center">
-                        <small>Sin imagen</small>
-                      </div>
-                    <% end %>
-                  </td>
-                  <td><%= post.title %></td>
-                  <td>
-                    <% if post.draft? %>
-                      <span class="badge bg-warning text-dark">Borrador</span>
-                    <% else %>
-                      <span class="badge bg-success">Publicado</span>
-                    <% end %>
-                  </td>
-                  <td>
-                    <span class="badge bg-primary"><%= post.unique_visits %></span>
-                    <span class="badge bg-secondary"><%= post.total_visits %></span>
-                  </td>
-                  <td class="text-center">
-                    <div class="btn-group btn-group-sm">
-                      <%= link_to post, class: "btn btn-outline-primary" do %>
-                        <i class="fa fa-eye"></i> Ver
-                      <% end %>
-                      <%= link_to edit_post_path(post), class: "btn btn-outline-secondary" do %>
-                        <i class="fa fa-edit"></i> Editar
-                      <% end %>
-                      <%= button_to post, method: :delete, form: { data: { turbo_confirm: '¿Está seguro de eliminar este artículo?' } }, class: "btn btn-outline-danger", form_class: "d-inline" do %>
-                        <i class="fa fa-trash"></i>
-                      <% end %>
-                    </div>
-                  </td>
-                </tr>
-              <% end %>
+  <!-- Posts Grid View -->
+  <div class="posts-view" data-view="grid">
+    <% if @posts.any? %>
+      <div class="posts-grid">
+        <% @posts.each do |post| %>
+          <div class="post-card">
+            <% if post.image.attached? %>
+              <%= image_tag post.image.variant(:thumb), class: "post-image", loading: "lazy", alt: post.title %>
             <% else %>
-              <tr>
-                <td colspan="5" class="text-center py-4">No hay artículos para mostrar</td>
-              </tr>
+              <div class="post-image-placeholder d-flex align-items-center justify-content-center bg-light">
+                <i class="fas fa-image fa-2x text-muted"></i>
+              </div>
             <% end %>
-          </tbody>
-        </table>
+            
+            <div class="post-content">
+              <h3 class="post-title">
+                <%= link_to post.title, post, class: "text-decoration-none" %>
+              </h3>
+              
+              <% if post.body.present? %>
+                <div class="post-excerpt">
+                  <%= truncate(strip_tags(post.body.to_s), length: 120) %>
+                </div>
+              <% end %>
+              
+              <div class="post-meta">
+                <div class="post-date">
+                  <i class="fas fa-calendar-alt"></i>
+                  <%= time_ago_in_words(post.created_at) %> ago
+                </div>
+                
+                <div class="post-stats">
+                  <div class="stat-item">
+                    <i class="fas fa-eye"></i>
+                    <%= post.total_visits %>
+                  </div>
+                  <div class="stat-item">
+                    <i class="fas fa-comments"></i>
+                    <%= post.comments.approved.count %>
+                  </div>
+                </div>
+                
+                <% if post.draft? %>
+                  <span class="badge bg-warning text-dark">Borrador</span>
+                <% else %>
+                  <span class="badge bg-success">Publicado</span>
+                <% end %>
+              </div>
+              
+              <% if post.tags.any? %>
+                <div class="post-tags">
+                  <% post.tags.limit(3).each do |tag| %>
+                    <span class="tag"><%= tag.name %></span>
+                  <% end %>
+                  <% if post.tags.count > 3 %>
+                    <span class="tag">+<%= post.tags.count - 3 %></span>
+                  <% end %>
+                </div>
+              <% end %>
+              
+              <div class="post-actions mt-3">
+                <div class="btn-group w-100" role="group">
+                  <%= link_to post, class: "btn btn-outline-primary btn-sm" do %>
+                    <i class="fas fa-eye me-1"></i>Ver
+                  <% end %>
+                  <%= link_to edit_post_path(post), class: "btn btn-outline-secondary btn-sm" do %>
+                    <i class="fas fa-edit me-1"></i>Editar
+                  <% end %>
+                  <%= button_to post, method: :delete, 
+                      form: { data: { turbo_confirm: '¿Está seguro de eliminar este artículo?' } }, 
+                      class: "btn btn-outline-danger btn-sm", 
+                      form_class: "d-inline flex-fill" do %>
+                    <i class="fas fa-trash me-1"></i>Eliminar
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
       </div>
-      
-      <div class="d-flex justify-content-center mt-4">
-        <%= will_paginate @posts, class: 'pagination' %>
+    <% else %>
+      <div class="content-card p-5 text-center">
+        <i class="fas fa-newspaper fa-4x text-muted mb-3"></i>
+        <h4 class="text-muted mb-3">No hay artículos para mostrar</h4>
+        <p class="text-muted mb-4">Comienza creando tu primer artículo para compartir tu conocimiento</p>
+        <%= link_to new_post_path, class: "btn btn-primary btn-lg" do %>
+          <i class="fas fa-plus me-2"></i>Crear Primer Artículo
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Posts List View -->
+  <div class="posts-view d-none" data-view="list">
+    <% if @posts.any? %>
+      <div class="posts-list">
+        <% @posts.each do |post| %>
+          <div class="post-item">
+            <div class="post-header">
+              <h4 class="post-title">
+                <%= link_to post.title, post, class: "text-decoration-none" %>
+              </h4>
+              <div class="post-date">
+                <%= time_ago_in_words(post.created_at) %> ago
+              </div>
+            </div>
+            
+            <% if post.body.present? %>
+              <div class="post-summary">
+                <%= truncate(strip_tags(post.body.to_s), length: 200) %>
+              </div>
+            <% end %>
+            
+            <div class="post-footer">
+              <div class="d-flex align-items-center gap-3">
+                <% if post.draft? %>
+                  <span class="badge bg-warning text-dark">Borrador</span>
+                <% else %>
+                  <span class="badge bg-success">Publicado</span>
+                <% end %>
+                
+                <div class="post-stats d-flex gap-3">
+                  <span class="text-muted small">
+                    <i class="fas fa-eye me-1"></i><%= post.total_visits %> visitas
+                  </span>
+                  <span class="text-muted small">
+                    <i class="fas fa-comments me-1"></i><%= post.comments.approved.count %> comentarios
+                  </span>
+                </div>
+                
+                <% if post.tags.any? %>
+                  <div class="post-tags">
+                    <% post.tags.limit(2).each do |tag| %>
+                      <span class="tag"><%= tag.name %></span>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              
+              <div class="post-actions">
+                <%= link_to post, class: "btn btn-outline-primary btn-sm" do %>
+                  <i class="fas fa-eye"></i>
+                <% end %>
+                <%= link_to edit_post_path(post), class: "btn btn-outline-secondary btn-sm" do %>
+                  <i class="fas fa-edit"></i>
+                <% end %>
+                <%= button_to post, method: :delete, 
+                    form: { data: { turbo_confirm: '¿Está seguro de eliminar este artículo?' } }, 
+                    class: "btn btn-outline-danger btn-sm", 
+                    form_class: "d-inline" do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Pagination -->
+  <% if @posts.any? %>
+    <div class="content-card p-3 mt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          Mostrando <%= @posts.count %> de <%= @posts.total_entries rescue @posts.count %> artículos
+        </div>
+        <div>
+          <%= will_paginate @posts, class: 'pagination pagination-sm mb-0' %>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
 </div>
+
+<!-- View Toggle JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const viewButtons = document.querySelectorAll('.view-toggle button');
+  const postsViews = document.querySelectorAll('.posts-view');
+  
+  viewButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const view = this.dataset.view;
+      
+      // Update button states
+      viewButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update view visibility
+      postsViews.forEach(viewEl => {
+        if (viewEl.dataset.view === view) {
+          viewEl.classList.remove('d-none');
+        } else {
+          viewEl.classList.add('d-none');
+        }
+      });
+      
+      // Save preference
+      localStorage.setItem('postsView', view);
+    });
+  });
+  
+  // Restore saved view preference
+  const savedView = localStorage.getItem('postsView');
+  if (savedView) {
+    const savedButton = document.querySelector(`[data-view="${savedView}"]`);
+    if (savedButton) {
+      savedButton.click();
+    }
+  }
+});
+</script>

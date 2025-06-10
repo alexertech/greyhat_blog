@@ -373,37 +373,7 @@
 
   <!-- Charts Row -->
   <div class="row mb-4">
-    <div class="col-lg-8 mb-4">
-      <div class="chart-card">
-        <div class="chart-header">
-          <h5 class="chart-title">
-            <i class="fas fa-chart-line me-2"></i>
-            Visitas Diarias (Últimos 30 días)
-          </h5>
-        </div>
-        <div class="chart-body">
-          <div class="chart-placeholder">
-            <div class="text-center">
-              <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
-              <p class="text-muted">Gráfico de visitas diarias (últimos 30 días)</p>
-              <p class="small text-muted">Total de visitas: <%= @daily_visits_chart.values.sum %></p>
-              
-              <!-- Simple Bar Chart -->
-              <div class="simple-chart mt-4">
-                <% @daily_visits_chart.to_a.last(7).each do |date, visits| %>
-                  <div class="chart-bar-item">
-                    <div class="chart-bar" style="height: <%= visits > 0 ? [20, (visits.to_f / @daily_visits_chart.values.max * 100).round].max : 10 %>px"></div>
-                    <small class="chart-label"><%= Date.parse(date.to_s).strftime("%d/%m") %></small>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 mb-4">
+    <div class="col-lg-12 mb-4">
       <div class="chart-card">
         <div class="chart-header">
           <h5 class="chart-title">
@@ -579,96 +549,20 @@
     </div>
   </div>
 
-  <!-- Most Visited Posts -->
+  <!-- Quick Actions -->
   <div class="row">
     <div class="col-12">
-      <div class="posts-card">
-        <div class="posts-header">
-          <h5 class="posts-title">
-            <i class="fas fa-fire me-2"></i>
-            Artículos Más Visitados
-          </h5>
-          <div class="d-flex gap-2">
-            <%= link_to new_post_path, class: "btn btn-sm btn-success" do %>
-              <i class="fas fa-plus me-1"></i>Nuevo Post
-            <% end %>
-            <%= link_to "Ver Todos", dashboards_posts_path, class: "btn btn-sm btn-outline-primary" %>
-          </div>
+      <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <div>
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>¿Necesitas ver todos los artículos?</strong> 
+          Visita las estadísticas detalladas para análisis completos.
         </div>
-        <div class="posts-body">
-          <% if @most_visited_posts.any? %>
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Artículo</th>
-                    <th>Visitas Totales</th>
-                    <th>Visitas Únicas</th>
-                    <th>Comentarios</th>
-                    <th>Publicado</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @most_visited_posts.each_with_index do |post, index| %>
-                    <tr>
-                      <td>
-                        <div class="post-info">
-                          <div class="post-rank">#<%= index + 1 %></div>
-                          <div class="post-details">
-                            <div class="post-title">
-                              <%= link_to post.title, post, class: "text-decoration-none" %>
-                            </div>
-                            <div class="post-tags">
-                              <% post.tags.limit(3).each do |tag| %>
-                                <span class="badge bg-light text-dark me-1"><%= tag.name %></span>
-                              <% end %>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <span class="metric-badge bg-primary"><%= post.total_visits %></span>
-                      </td>
-                      <td>
-                        <span class="metric-badge bg-success"><%= post.unique_visits rescue 0 %></span>
-                      </td>
-                      <td>
-                        <span class="metric-badge bg-info"><%= post.comments.approved.count %></span>
-                      </td>
-                      <td class="text-muted">
-                        <%= post.created_at.strftime("%d/%m/%Y") %>
-                      </td>
-                      <td>
-                        <div class="btn-group" role="group">
-                          <%= link_to post, class: "btn btn-sm btn-outline-primary" do %>
-                            <i class="fas fa-eye"></i>
-                          <% end %>
-                          <%= link_to edit_post_path(post), class: "btn btn-sm btn-outline-secondary" do %>
-                            <i class="fas fa-edit"></i>
-                          <% end %>
-                        </div>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            </div>
-          <% else %>
-            <div class="no-data text-center py-5">
-              <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
-              <h6 class="text-muted mb-2">No hay artículos publicados</h6>
-              <p class="text-muted mb-4">Comienza creando tu primer artículo para generar contenido y analíticas</p>
-              <div class="d-flex gap-2 justify-content-center">
-                <%= link_to new_post_path, class: "btn btn-primary" do %>
-                  <i class="fas fa-plus me-2"></i>Crear Primer Artículo
-                <% end %>
-                <%= link_to dashboards_posts_path, class: "btn btn-outline-secondary" do %>
-                  <i class="fas fa-list me-2"></i>Gestionar Posts
-                <% end %>
-              </div>
-            </div>
+        <div class="d-flex gap-2">
+          <%= link_to new_post_path, class: "btn btn-success btn-sm" do %>
+            <i class="fas fa-plus me-1"></i>Nuevo Post
           <% end %>
+          <%= link_to "Estadísticas Detalladas", dashboards_stats_path, class: "btn btn-primary btn-sm" %>
         </div>
       </div>
     </div>
