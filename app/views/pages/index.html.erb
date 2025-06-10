@@ -1,53 +1,95 @@
-<div>
-  <article>
-    <div class="mb-4">
-      <%= image_tag "hero_new_welcome.jpg", class: "img-fluid rounded w-100", loading: "lazy" %>
+<div class="home-page-container">
+  <!-- Hero Section -->
+  <div class="content-card mb-4 overflow-hidden p-0">
+    <div class="hero-image-container position-relative">
+      <%= image_tag "hero_new_welcome.jpg", class: "img-fluid w-100", loading: "lazy" %>
     </div>
+  </div>
 
-    <h2 class="mb-4">Últimos artículos</h2>
+  <!-- Latest Articles Section -->
+  <div class="p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="h3 mb-1 fw-bold text-primary">
+          <i class="fas fa-newspaper me-3"></i>Últimos Artículos
+        </h2>
+        <p class="text-muted mb-0">Descubre las últimas reflexiones y guías técnicas</p>
+      </div>
+      <a href="/articulos" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-right me-2"></i>Últimos Artículos
+      </a>
+    </div>
+  </div>
+  
 
-    <div class="row">
-      <% Post.published.includes(:image_attachment).order("created_at DESC").limit(6).each do |post| %>
-        <div class="col-md-12 mb-4">
-          <div class="card shadow-sm">
-            <div class="row g-0">
-              <div class="col-md-3 d-flex align-items-center">
-                <% if post.image.attached? %>
-                  <div class="p-2" style="height: 170px; width: 100%;">
-                    <%= image_tag post.image.variant(:thumb), class: "rounded-start", style: "object-fit: cover; height: 100%; width: 100%;", loading: "lazy" %>
-                  </div>
-                <% end %>
+  <!-- Posts Grid -->
+  <div class="posts-grid p-3">
+    <% Post.published.includes(:image_attachment, :tags, :comments).order("created_at DESC").limit(6).each do |post| %>
+      <div class="post-card">
+        <% if post.image.attached? %>
+          <%= image_tag post.image.variant(:thumb), class: "post-image", loading: "lazy", alt: post.title %>
+        <% else %>
+          <div class="post-image-placeholder d-flex align-items-center justify-content-center bg-light">
+            <i class="fas fa-image fa-2x text-muted"></i>
+          </div>
+        <% end %>
+        
+        <div class="post-content">
+          <h3 class="post-title">
+            <%= link_to post.title, post, class: "text-decoration-none" %>
+          </h3>
+          
+          <% if post.body.present? %>
+            <div class="post-excerpt">
+              <%= truncate(strip_tags(post.body.to_s), length: 120) %>
+            </div>
+          <% end %>
+          
+          <div class="post-meta">
+            <div class="post-date">
+              <i class="fas fa-calendar-alt"></i>
+              <%= time_ago_in_words(post.created_at) %> ago
+            </div>
+            
+            <div class="post-stats">
+              <div class="stat-item">
+                <i class="fas fa-eye"></i>
+                <%= post.total_visits rescue 0 %>
               </div>
-              <div class="col-md-9">
-                <div class="card-body">
-                  <h5 class="card-title"> <%= link_to post.title, post, class: "text-decoration-none" %>
-                  </h5>
-                  <p class="card-text small text-muted">
-                    <%= post.created_at.strftime("%d %b. %Y") %>
-                      <span class="text-muted">• <%= post.total_visits rescue 0 %> lecturas</span>
-                  </p>
-                  <% if post.body.present? %>
-                    <p class="card-text"> <%= post.body.to_plain_text.truncate(150) %>
-                    </p>
-                    <% if post.tags.any? %>
-                      <div class="mb-2">
-                        <% post.tags.limit(3).each do |tag| %>
-                          <%= link_to tag.name, search_path(tag: tag.name), class: "badge bg-light text-dark text-decoration-none me-1" %>
-                        <% end %>
-                      </div>
-                    <% end %>
-                    <%= link_to 'Leer artículo →', post, class: "btn btn-sm btn-outline-primary" %>
-                  <% end %>
-                </div>
+              <div class="stat-item">
+                <i class="fas fa-comments"></i>
+                <%= post.comments.approved.count %>
               </div>
             </div>
           </div>
+          
+          <% if post.tags.any? %>
+            <div class="post-tags">
+              <% post.tags.limit(3).each do |tag| %>
+                <%= link_to tag.name, search_path(tag: tag.name), class: "tag text-decoration-none" %>
+              <% end %>
+              <% if post.tags.count > 3 %>
+                <span class="tag">+<%= post.tags.count - 3 %></span>
+              <% end %>
+            </div>
+          <% end %>
+          
+          <div class="post-action mt-3">
+            <%= link_to post, class: "btn btn-outline-primary btn-sm w-100" do %>
+              <i class="fas fa-arrow-right me-2"></i>Leer Artículo
+            <% end %>
+          </div>
         </div>
-      <% end %>
-    </div>
-    <div class="text-center mt-3">
-      <a href="/articulos" class="btn btn-primary">Ver todos los artículos</a>
-    </div>
-    
-  </article>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="content-card p-5 mt-4 text-center">
+    <h3 class="mb-3">Explora Todos Nuestros Artículos</h3>
+    <p class="text-muted mb-4">Encuentra más reflexiones, guías técnicas y perspectivas sobre tecnología</p>
+    <a href="/articulos" class="btn btn-primary btn-lg">
+      <i class="fas fa-newspaper me-2"></i>Ver Todos los Artículos
+    </a>
+  </div>
 </div>

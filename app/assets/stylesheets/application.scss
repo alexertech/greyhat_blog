@@ -1,6 +1,9 @@
 // Bootstrap and its variables
 @import "bootstrap";
 @import "actiontext";
+@import "services_enhanced";
+@import "modern_navbar";
+@import "layout_integration";
 
 // Custom styles
 body {
@@ -35,23 +38,28 @@ div.logo img {
   margin: 30px;
 }
 
-// Navigation
+// Legacy Navigation (fallback)
 .main-nav-item {
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
   flex-basis: 0;
   flex-grow: 1;
-  color: #333; // Color de texto base para items de navegación (ajustar si es necesario)
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  margin: 0 2px;
 }
 
 .main-nav-item:hover {
-  background-color: #6c9bca; // Un gris claro para hover, o un azul muy claro si prefieres color
-  color: #0A58CA; // Texto azul oscuro en hover
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateY(-1px);
 }
 
 .main-nav-item.active {
-  background-color: #0D6EFD; // Azul primario para activo
+  background: linear-gradient(135deg, #0D6EFD 0%, #6f42c1 100%);
   color: white !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
 }
 
 .bg-dark {

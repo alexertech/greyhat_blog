@@ -1,34 +1,52 @@
 <div>
-  <div class="mb-4">
-    <%= image_tag "new_main_lamp.jpg", class: "img-fluid rounded w-100" %>
+  <div class="content-card mb-4 overflow-hidden p-0">
+    <div class="hero-image-container position-relative">
+      <%= image_tag "new_main_lamp.jpg", class: "img-fluid w-100", loading: "lazy" %>
+    </div>
   </div>
+
+
 
   <div class="row">
     <div class="col-lg-9 mx-auto"> 
       <section class="mb-5">
-        <h1 class="mb-3 h2">Acerca de Greyhat</h1> <p class="text-muted"><em>"Explorando la tecnología con pensamiento crítico y un enfoque humano."</em></p>
+        <h1 class="mb-3 h2">Acerca de Greyhat</h1>
+        <p class="text-muted"><em>"Tecnología, atención y la mente digital."</em></p>
 
-        <p class="mt-4">En Greyhat, vemos la tecnología no solo como un conjunto de herramientas, sino como una extensión de la capacidad humana y un reflejo de nuestra sociedad. Creemos firmemente en desarrollar y aplicar soluciones digitales de manera consciente, crítica y, sobre todo, centrada en las personas que las utilizarán.</p> <p>Buscamos el equilibrio entre la innovación digital y la vida cotidiana, aplicando este concepto en cada creación para ofrecer experiencias digitales intuitivas, atractivas y accesibles.</p> </section>
+        <p class="mt-4">Greyhat es un blog de pensamiento crítico sobre tecnología. Un espacio para detenerse, observar y volver a conectar con nuestra capacidad de pensar en voz alta sobre el mundo digital.</p>
 
+        <p>Desde el desarrollo de software hasta el impacto de la inteligencia artificial en la atención humana, aquí encontrarás ideas que invitan a cuestionar lo que damos por hecho, con una mirada reflexiva, técnica y honesta.</p>
+      </section>
       <section class="mb-5 p-4 bg-light rounded">
-        <h2 class="mb-4 text-primary"><i class="fas fa-bullseye me-2"></i>Nuestra Misión y Enfoque</h2> <p>Nuestra misión se desdobla en dos vertientes complementarias:</p> <ul> <li><strong>Como profesionales:</strong> Desarrollar aplicaciones, soluciones de seguridad y consultoría tecnológica (incluyendo la guía en IA Generativa) que pongan la interacción humana y la experiencia del usuario en primer plano. Buscamos entregar valor tangible y soluciones robustas.</li>
-          <li><strong>Como exploradores:</strong> Ofrecer a través de nuestros artículos una perspectiva analítica y reflexiva sobre el vasto universo de la tecnología digital. Desde el desarrollo de software hasta el impacto de la IA, buscamos fomentar una comprensión más profunda y un uso más consciente de las herramientas digitales.</li>
-        </ul>
-        <p>Nos inspira la idea de que el conocimiento es más valioso cuando se comparte. Greyhat es un espacio para la sabiduría compartida, con el objetivo de mejorar la forma en que entendemos y utilizamos la tecnología en nuestras vidas.</p> </section>
+        <h2 class="mb-4 text-primary"><i class="fas fa-bullseye me-2"></i>Nuestra Perspectiva</h2>
+        <p>Greyhat plantea preguntas. ¿Cómo nos afecta lo que construimos? ¿Qué perdemos cuando ganamos velocidad digital? ¿Qué significa escribir buen software más allá del código?</p>
 
+        <p>La misión de este espacio se resume en dos líneas:</p>
+        <ul>
+          <li><strong>Escribir con intención:</strong> Artículos que exploran las zonas grises de la tecnología, desde los sistemas que nos moldean hasta las decisiones invisibles que tomamos al desarrollar.</li>
+          <li><strong>Pensar desde la experiencia:</strong> Reflexiones nacidas de 20 años en tecnología, vividas desde la terminal, la pizarra… y la introspección.</li>
+        </ul>
+
+        <p>Greyhat no busca respuestas absolutas, sino conversación significativa. Si alguna vez te preguntaste si estamos construyendo el mundo que realmente queremos, este sitio es para ti.</p>
+      </section>
+      
       <section>
-        <h2 class="mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Conoce al Fundador</h2> <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-3 bg-white p-4 rounded shadow-sm">
+        <h2 class="mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Conoce al Fundador</h2>
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-3 bg-white p-4 rounded shadow-sm">
           <div class="mb-3 mb-md-0 me-md-4 text-center">
             <a href="https://www.alexertech.com/" target="_blank" rel="noopener noreferrer">
               <%= image_tag "0.jpg", class: "rounded-circle img-thumbnail" %>
             </a>
           </div>
-          <div> <p>Detrás de Greyhat está <strong>Alex Barrios</strong>, un profesional con más de 20 años de trayectoria en diversos campos de las Tecnologías de la Información. Con un sólido conocimiento en Desarrollo de Software y múltiples certificaciones que avalan su expertise en Seguridad Informática (OSCP, OSWP, OSWE).</p>
+          <div>
+            <p><strong>Alex Barrios</strong> es desarrollador, escritor y observador del caos digital. Con más de 20 años de experiencia en software y ciberseguridad, hoy se dedica a reflexionar y escribir sobre el impacto humano de la tecnología.</p>
 
-            <p>Alex es un apasionado de la tecnología, proactivo y comprometido con compartir sus conocimientos y experiencias. Busca constantemente intercambiar ideas y puntos de vista, fomentando un crecimiento personal y profesional en conjunto con la comunidad y sus clientes.</p>
+            <p>Certificado en seguridad ofensiva y senior software developer, su enfoque combina lo técnico con lo ético, lo operativo con lo mental. Su motivación: compartir ideas que inviten a pensar, desde el teclado hasta la conciencia.</p>
           </div>
         </div>
+      </section>
 
+      <section>
         <div class="text-center mt-4 mb-5">
           <p class="fw-bold mb-2">Certificaciones Destacadas:</p>
           <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="Offensive Security Certified Professional (OSCP)">

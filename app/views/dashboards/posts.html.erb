@@ -1,55 +1,233 @@
-<div>
+<div class="dashboard-container">
+  <!-- Posts Management Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Estadísticas de artículos</h2>
-    <div class="d-flex gap-2">
-      <%= link_to new_post_path, class: "btn btn-success btn-sm" do %>
-        <i class="fas fa-plus me-2"></i>Crear Post
+    <div>
+      <h1 class="dashboard-title mb-2">
+        <i class="fas fa-newspaper me-3 text-primary"></i>
+        Gestión de Artículos
+      </h1>
+      <p class="text-muted mb-0">Administra todos tus artículos: crear, editar, publicar y revisar</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <%= link_to new_post_path, class: "btn btn-primary" do %>
+        <i class="fas fa-plus me-2"></i>Nuevo Artículo
       <% end %>
-      <%= link_to "Dashboard", dashboard_path, class: "btn btn-outline-primary btn-sm" %>
-      <%= link_to "Estadísticas detalladas", dashboards_stats_path, class: "btn btn-outline-primary btn-sm" %>
+      <%= link_to "Dashboard Principal", dashboard_path, class: "btn btn-outline-secondary" %>
+      <%= link_to "Estadísticas Detalladas", dashboards_stats_path, class: "btn btn-outline-info" %>
     </div>
   </div>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">Artículos más visitados</h5>
+  <!-- Quick Stats Cards -->
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-success">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= @posts.select { |p| !p.draft? }.size %></div>
+            <div class="metric-label">Publicados</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="card-body">
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-warning">
+            <i class="fas fa-edit"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= @posts.select { |p| p.draft? }.size %></div>
+            <div class="metric-label">Borradores</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-info">
+            <i class="fas fa-eye"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">
+              <% 
+                total_visits = begin
+                  @posts.sum { |p| (p.try(:visits_count) || p.visits.size).to_i }
+                rescue => e
+                  Visit.joins(:visitable).where(visitable_type: 'Post').count
+                end
+              %>
+              <%= total_visits %>
+            </div>
+            <div class="metric-label">Total Visitas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="metric-card">
+        <div class="metric-card-body">
+          <div class="metric-icon bg-primary">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value"><%= Post.count %></div>
+            <div class="metric-label">Total Artículos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posts Management Table -->
+  <div class="analytics-card mb-4">
+    <div class="analytics-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="analytics-title mb-0">
+          <i class="fas fa-list me-2"></i>
+          Todos los Artículos
+        </h5>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#filterOptions">
+            <i class="fas fa-filter me-1"></i>Filtros
+          </button>
+        </div>
+      </div>
+      
+      <!-- Filter Options -->
+      <div class="collapse mt-3" id="filterOptions">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <select class="form-select form-select-sm" id="statusFilter">
+              <option value="all">Todos los estados</option>
+              <option value="published">Solo publicados</option>
+              <option value="draft">Solo borradores</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select form-select-sm" id="sortFilter">
+              <option value="newest">Más recientes</option>
+              <option value="oldest">Más antiguos</option>
+              <option value="most_visited">Más visitados</option>
+              <option value="least_visited">Menos visitados</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <input type="text" class="form-control form-control-sm" id="searchFilter" placeholder="Buscar por título...">
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-sm btn-outline-secondary" onclick="resetFilters()">
+              <i class="fas fa-times me-1"></i>Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="analytics-body">
       <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead class="table-dark">
+        <table class="table table-hover" id="postsTable">
+          <thead class="table-light">
             <tr>
-              <th>#</th>
-              <th>Título</th>
-              <th>Estado</th>
-              <th>Visitas Totales</th>
-              <th>Últimos 7 días</th>
-              <th>Últimos 30 días</th>
-              <th>Acciones</th>
+              <th width="5%">#</th>
+              <th width="35%">Título</th>
+              <th width="10%">Estado</th>
+              <th width="12%">Creado</th>
+              <th width="10%">Visitas Total</th>
+              <th width="8%">7 días</th>
+              <th width="20%">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <% @posts.each_with_index do |post, index| %>
-            <tr>
-              <td><%= index + 1 %></td>
-              <td><%= link_to post.title.truncate(50), post, class: "text-decoration-none" %></td>
+            <tr data-status="<%= post.draft? ? 'draft' : 'published' %>" data-title="<%= post.title.downcase %>" data-visits="<%= post.try(:visits_count) || post.visits.count %>" data-created="<%= post.created_at.to_i %>">
+              <td class="text-muted"><%= (@posts.offset_value || 0) + index + 1 %></td>
+              <td>
+                <div class="d-flex align-items-start">
+                  <div class="flex-grow-1">
+                    <div class="fw-bold text-truncate" style="max-width: 300px;">
+                      <%= link_to post.title, post, class: "text-decoration-none text-dark" %>
+                    </div>
+                    <small class="text-muted">
+                      <i class="fas fa-calendar me-1"></i>
+                      <%= time_ago_in_words(post.created_at) %> ago
+                      <% if post.tags.any? %>
+                        | <i class="fas fa-tags me-1"></i>
+                        <% post.tags.limit(2).each do |tag| %>
+                          <span class="badge bg-light text-dark me-1"><%= tag.name %></span>
+                        <% end %>
+                        <% if post.tags.count > 2 %>
+                          <span class="text-muted">+<%= post.tags.count - 2 %></span>
+                        <% end %>
+                      <% end %>
+                    </small>
+                  </div>
+                </div>
+              </td>
               <td>
                 <% if post.draft? %>
-                  <span class="badge bg-warning text-dark">Borrador</span>
+                  <span class="badge bg-warning text-dark">
+                    <i class="fas fa-edit me-1"></i>Borrador
+                  </span>
                 <% else %>
-                  <span class="badge bg-success">Publicado</span>
+                  <span class="badge bg-success">
+                    <i class="fas fa-check me-1"></i>Publicado
+                  </span>
                 <% end %>
               </td>
-              <td><span class="badge bg-primary"><%= post.try(:visits_count) || post.visits.count %></span></td>
-              <td><span class="badge bg-success"><%= post.recent_visits(7) %></span></td>
-              <td><span class="badge bg-info"><%= post.recent_visits(30) %></span></td>
               <td>
-                <%= link_to post, class: "btn btn-sm btn-outline-primary me-1" do %>
-                  <i class="fa fa-eye"></i>
-                <% end %>
-                <%= link_to edit_post_path(post), class: "btn btn-sm btn-outline-secondary" do %>
-                  <i class="fa fa-edit"></i>
-                <% end %>
+                <small class="text-muted">
+                  <%= post.created_at.strftime("%d/%m/%Y") %>
+                </small>
+              </td>
+              <td>
+                <span class="badge bg-primary">
+                  <i class="fas fa-eye me-1"></i>
+                  <%= post.try(:visits_count) || post.visits.count %>
+                </span>
+              </td>
+              <td>
+                <span class="badge bg-info">
+                  <%= post.recent_visits(7) rescue 0 %>
+                </span>
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <%= link_to post, class: "btn btn-sm btn-outline-primary", title: "Ver artículo" do %>
+                    <i class="fas fa-eye"></i>
+                  <% end %>
+                  <%= link_to edit_post_path(post), class: "btn btn-sm btn-outline-secondary", title: "Editar" do %>
+                    <i class="fas fa-edit"></i>
+                  <% end %>
+                  <% if post.draft? %>
+                    <%= link_to "#", class: "btn btn-sm btn-outline-success", title: "Publicar", 
+                        data: { bs_toggle: "modal", bs_target: "#publishModal#{post.id}" } do %>
+                      <i class="fas fa-paper-plane"></i>
+                    <% end %>
+                  <% end %>
+                  <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-info dropdown-toggle" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <%= link_to "#", class: "dropdown-item", 
+                            data: { bs_toggle: "modal", bs_target: "#duplicateModal#{post.id}" } do %>
+                          <i class="fas fa-copy me-2"></i>Duplicar
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to "#", class: "dropdown-item text-danger", 
+                            data: { bs_toggle: "modal", bs_target: "#deleteModal#{post.id}" } do %>
+                          <i class="fas fa-trash me-2"></i>Eliminar
+                        <% end %>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </td>
             </tr>
             <% end %>
@@ -58,9 +236,9 @@
               <td colspan="7" class="text-center py-5">
                 <div class="no-data">
                   <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
-                  <h6 class="text-muted mb-2">No hay artículos creados</h6>
-                  <p class="text-muted mb-3">Comienza creando tu primer artículo para ver estadísticas detalladas</p>
-                  <%= link_to new_post_path, class: "btn btn-primary" do %>
+                  <h5 class="text-muted mb-2">No hay artículos creados</h5>
+                  <p class="text-muted mb-3">Comienza creando tu primer artículo para comenzar a compartir tu conocimiento</p>
+                  <%= link_to new_post_path, class: "btn btn-primary btn-lg" do %>
                     <i class="fas fa-plus me-2"></i>Crear Primer Artículo
                   <% end %>
                 </div>
@@ -71,40 +249,169 @@
         </table>
       </div>
       
-      <div class="d-flex justify-content-center mt-4">
-        <%= will_paginate @posts, class: 'pagination' %>
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="text-muted">
+          <% 
+            current_count = @posts.respond_to?(:length) ? @posts.length : @posts.size
+            total_count = @posts.respond_to?(:total_entries) ? @posts.total_entries : Post.count
+            start_index = (@posts.respond_to?(:offset) && @posts.offset ? @posts.offset : 0) + 1
+            end_index = (@posts.respond_to?(:offset) && @posts.offset ? @posts.offset : 0) + current_count
+          %>
+          Mostrando <%= start_index %>-<%= end_index %> de <%= total_count %> artículos
+        </div>
+        <div>
+          <%= will_paginate @posts, class: 'pagination pagination-sm' %>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card shadow-sm">
-    <div class="card-header bg-success text-white">
-      <h5 class="mb-0">Estadísticas de artículos por día (últimos 30 días)</h5>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead class="table-dark">
-            <tr>
-              <th>Fecha</th>
-              <th>Visitas</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% Post.visits_by_day(30).each do |date, count| %>
-            <tr>
-              <td><%= date %></td>
-              <td><span class="badge bg-success"><%= count %></span></td>
-            </tr>
-            <% end %>
-            <% if Post.visits_by_day(30).empty? %>
-            <tr>
-              <td colspan="2" class="text-center">No hay datos disponibles</td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
+  <!-- Quick Actions Panel -->
+  <div class="row">
+    <div class="col-12">
+      <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <div>
+          <i class="fas fa-lightbulb me-2"></i>
+          <strong>Consejos de gestión:</strong> 
+          Mantén tus borradores organizados y publica contenido regularmente para mejorar el engagement.
+        </div>
+        <div class="d-flex gap-2">
+          <%= link_to new_post_path, class: "btn btn-success btn-sm" do %>
+            <i class="fas fa-plus me-1"></i>Nuevo Artículo
+          <% end %>
+          <%= link_to "Ver Estadísticas", dashboards_stats_path, class: "btn btn-primary btn-sm" %>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Post Action Modals -->
+  <% @posts.each do |post| %>
+    <!-- Publish Modal -->
+    <% if post.draft? %>
+      <div class="modal fade" id="publishModal<%= post.id %>" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Publicar Artículo</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <p>¿Estás seguro de que quieres publicar "<strong><%= post.title %></strong>"?</p>
+              <p class="text-muted">Una vez publicado, será visible para todos los visitantes.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <%= link_to "Publicar Ahora", "#", class: "btn btn-success" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+    <!-- Duplicate Modal -->
+    <div class="modal fade" id="duplicateModal<%= post.id %>" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Duplicar Artículo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Quieres crear una copia de "<strong><%= post.title %></strong>"?</p>
+            <p class="text-muted">Se creará un nuevo borrador con el mismo contenido.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <%= link_to "Duplicar", "#", class: "btn btn-info" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal<%= post.id %>" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger">Eliminar Artículo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que quieres eliminar "<strong><%= post.title %></strong>"?</p>
+            <p class="text-danger"><strong>Esta acción no se puede deshacer.</strong></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <%= link_to "Eliminar Permanentemente", "#", class: "btn btn-danger" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- JavaScript for table filtering -->
+  <script>
+    function resetFilters() {
+      document.getElementById('statusFilter').value = 'all';
+      document.getElementById('sortFilter').value = 'newest';
+      document.getElementById('searchFilter').value = '';
+      filterTable();
+    }
+    
+    function filterTable() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const sortFilter = document.getElementById('sortFilter').value;
+      const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+      const table = document.getElementById('postsTable');
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      
+      // Filter rows
+      rows.forEach(row => {
+        const status = row.dataset.status;
+        const title = row.dataset.title;
+        
+        let show = true;
+        
+        // Status filter
+        if (statusFilter !== 'all' && status !== statusFilter) {
+          show = false;
+        }
+        
+        // Search filter
+        if (searchFilter && !title.includes(searchFilter)) {
+          show = false;
+        }
+        
+        row.style.display = show ? '' : 'none';
+      });
+      
+      // Sort visible rows
+      const visibleRows = rows.filter(row => row.style.display !== 'none');
+      
+      visibleRows.sort((a, b) => {
+        switch(sortFilter) {
+          case 'oldest':
+            return parseInt(a.dataset.created) - parseInt(b.dataset.created);
+          case 'most_visited':
+            return parseInt(b.dataset.visits) - parseInt(a.dataset.visits);
+          case 'least_visited':
+            return parseInt(a.dataset.visits) - parseInt(b.dataset.visits);
+          default: // newest
+            return parseInt(b.dataset.created) - parseInt(a.dataset.created);
+        }
+      });
+      
+      // Reorder rows
+      const tbody = table.querySelector('tbody');
+      visibleRows.forEach(row => tbody.appendChild(row));
+    }
+    
+    // Add event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('statusFilter').addEventListener('change', filterTable);
+      document.getElementById('sortFilter').addEventListener('change', filterTable);
+      document.getElementById('searchFilter').addEventListener('input', filterTable);
+    });
+  </script>
 </div>

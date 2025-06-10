@@ -52,10 +52,25 @@
 			<div data-controller="dark-mode">
 				<button data-dark-mode-target="toggle"
 						data-action="click->dark-mode#toggle"
-						class="btn btn-outline-secondary btn-sm"
-						style="border-radius: 20px;"
+						class="btn btn-outline-secondary btn-sm theme-toggle"
+						style="border-radius: 25px; padding: 8px 16px; border: 2px solid #6c757d; position: relative; overflow: hidden; transition: all 0.3s ease; min-width: 60px; height: 36px;"
 						aria-label="Toggle dark mode">
-					<i data-dark-mode-target="icon" class="fas fa-moon"></i>
+					<div class="theme-toggle-slider" style="
+						position: absolute;
+						top: 2px;
+						left: 2px;
+						width: 28px;
+						height: 28px;
+						background: linear-gradient(45deg, #ffd700, #ffed4a);
+						border-radius: 50%;
+						transition: all 0.3s ease;
+						box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					">
+						<i data-dark-mode-target="icon" class="fas fa-sun" style="font-size: 12px; color: #333;"></i>
+					</div>
 				</button>
 			</div>
 		</div>
@@ -63,40 +78,43 @@
 	
 	<%= render 'partials/navigation' %>
 
-	<!-- Flash Messages -->
-	<% if notice %>
-		<div class="alert alert-success alert-dismissible fade show" role="alert">
-			<i class="fas fa-check-circle me-2"></i>
-			<%= notice %>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-	<% end %>
+	<!-- Integrated Content Container -->
+	<div class="site-container">
+		<!-- Flash Messages -->
+		<% if notice %>
+			<div class="alert alert-success alert-dismissible fade show" role="alert" style="margin: 1rem 1rem 0 1rem; border-radius: 12px;">
+				<i class="fas fa-check-circle me-2"></i>
+				<%= notice %>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		<% end %>
 
-	<% if alert %>
-		<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			<i class="fas fa-exclamation-triangle me-2"></i>
-			<%= alert %>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-	<% end %>
+		<% if alert %>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 1rem 1rem 0 1rem; border-radius: 12px;">
+				<i class="fas fa-exclamation-triangle me-2"></i>
+				<%= alert %>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		<% end %>
 
-	<% flash.each do |type, message| %>
-		<% next if ['notice', 'alert'].include?(type) %>
-		<% alert_class = case type
-			when 'success' then 'alert-success'
-			when 'error' then 'alert-danger'
-			when 'warning' then 'alert-warning'
-			when 'info' then 'alert-info'
-			else 'alert-secondary'
-		end %>
-		<div class="alert <%= alert_class %> alert-dismissible fade show" role="alert">
-			<%= message %>
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-	<% end %>
+		<% flash.each do |type, message| %>
+			<% next if ['notice', 'alert'].include?(type) %>
+			<% alert_class = case type
+				when 'success' then 'alert-success'
+				when 'error' then 'alert-danger'
+				when 'warning' then 'alert-warning'
+				when 'info' then 'alert-info'
+				else 'alert-secondary'
+			end %>
+			<div class="alert <%= alert_class %> alert-dismissible fade show" role="alert" style="margin: 1rem 1rem 0 1rem; border-radius: 12px;">
+				<%= message %>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		<% end %>
 
-	<div id="main">
-		<%= yield %>
+
+			<%= yield %>
+
 	</div>
 
 	<div id="footer">

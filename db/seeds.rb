@@ -22,13 +22,15 @@ end
 # Create essential pages
 puts "📄 Creating essential pages..."
 pages_data = [
-  { id: 1, name: 'index' },
-  { id: 2, name: 'about' },
-  { id: 3, name: 'services' }
+  { name: 'index' },
+  { name: 'about' },
+  { name: 'services' },
+  { name: 'newsletter' },
+  { name: 'contact' }
 ]
 
 pages_data.each do |page_data|
-  unless Page.exists?(id: page_data[:id])
+  unless Page.exists?(name: page_data[:name])
     Page.create!(page_data)
     puts "   ✅ Created page: #{page_data[:name]}"
   else
@@ -162,24 +164,61 @@ published_posts.each do |post|
 end
 
 # Create sample visits for analytics
-puts "📊 Creating sample analytics data..."
+puts "📊 Creating realistic analytics data..."
 posts_with_tags = Post.published
 
-posts_with_tags.each do |post|
-  # Create some sample visits over the last 30 days
+# Define realistic referrers and user agents
+referrers = [
+  'https://google.com/search?q=ruby+programming',
+  'https://google.com/search?q=rails+tutorial',
+  'https://linkedin.com/feed',
+  'https://twitter.com/greyhat_dev',
+  'https://substack.com/newsletter',
+  'https://dev.to/popular',
+  'https://github.com/explore',
+  nil, # Direct visits
+  ''   # Direct visits
+]
+
+user_agents = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+  'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15',
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+  'Mozilla/5.0 (Android 11; Mobile; rv:89.0) Gecko/89.0 Firefox/89.0',
+  'Googlebot/2.1 (+http://www.google.com/bot.html)',
+  'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+  'LinkedInBot/1.0 (compatible; Mozilla/5.0; +https://www.linkedin.com/)'
+]
+
+# Create varied visits for posts
+posts_with_tags.each_with_index do |post, index|
+  base_popularity = [50, 30, 20][index] || 10 # First post gets more visits
+  
   (1..30).each do |days_ago|
-    visit_count = rand(1..5) # Random visits per day
-    visit_count.times do |i|
+    # Weekend factor (more visits on weekends)
+    day_of_week = (Date.current - days_ago.days).wday
+    weekend_factor = [6, 0].include?(day_of_week) ? 1.5 : 1.0
+    
+    # Recent posts get more visits
+    recency_factor = days_ago <= 7 ? 1.5 : 1.0
+    
+    daily_visits = (rand(1..base_popularity) * weekend_factor * recency_factor).round
+    
+    daily_visits.times do |i|
+      # Vary the time throughout the day
+      hour_offset = rand(0..23)
+      minute_offset = rand(0..59)
+      
       Visit.create!(
         visitable: post,
-        ip_address: "192.168.1.#{rand(1..255)}",
-        user_agent: [
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
-        ].sample,
-        referer: ["https://google.com", "https://twitter.com", "direct", ""].sample,
-        viewed_at: days_ago.days.ago + (i * 2).hours
+        ip_address: "#{rand(1..255)}.#{rand(1..255)}.#{rand(1..255)}.#{rand(1..255)}",
+        user_agent: user_agents.sample,
+        referer: referrers.sample,
+        viewed_at: days_ago.days.ago + hour_offset.hours + minute_offset.minutes,
+        action_type: 'page_view'
       )
     end
   end
@@ -188,19 +227,73 @@ posts_with_tags.each do |post|
   post.update!(unique_visits: post.visits.select(:ip_address).distinct.count)
 end
 
-# Create visits for pages too
+# Create visits for pages with realistic patterns
+page_visit_patterns = {
+  'index' => 40,      # Homepage gets most visits
+  'about' => 15,      # About page moderate visits  
+  'newsletter' => 25, # Newsletter page good visits
+  'services' => 10,   # Services moderate visits
+  'contact' => 8      # Contact least visits
+}
+
 Page.all.each do |page|
+  base_visits = page_visit_patterns[page.name] || 5
+  
   (1..30).each do |days_ago|
-    visit_count = rand(1..3)
-    visit_count.times do |i|
+    daily_visits = rand(1..base_visits)
+    
+    daily_visits.times do |i|
+      hour_offset = rand(0..23)
+      minute_offset = rand(0..59)
+      
       Visit.create!(
         visitable: page,
-        ip_address: "192.168.1.#{rand(1..255)}",
-        user_agent: "Mozilla/5.0 (compatible; sample visit)",
-        viewed_at: days_ago.days.ago + (i * 3).hours
+        ip_address: "#{rand(1..255)}.#{rand(1..255)}.#{rand(1..255)}.#{rand(1..255)}",
+        user_agent: user_agents.sample,
+        referer: referrers.sample,
+        viewed_at: days_ago.days.ago + hour_offset.hours + minute_offset.minutes,
+        action_type: 'page_view'
       )
     end
   end
+end
+
+# Create newsletter clicks
+newsletter_page = Page.find_by(name: 'newsletter')
+if newsletter_page
+  puts "📧 Creating newsletter conversion data..."
+  
+  # Create newsletter clicks over the last 30 days
+  (1..30).each do |days_ago|
+    newsletter_clicks = rand(0..5) # 0-5 newsletter clicks per day
+    
+    newsletter_clicks.times do |i|
+      hour_offset = rand(0..23)
+      minute_offset = rand(0..59)
+      
+      Visit.create!(
+        visitable: newsletter_page,
+        ip_address: "#{rand(1..255)}.#{rand(1..255)}.#{rand(1..255)}.#{rand(1..255)}",
+        user_agent: user_agents.sample,
+        referer: ["https://greyhat.cl/articulos", "https://greyhat.cl/index"].sample,
+        viewed_at: days_ago.days.ago + hour_offset.hours + minute_offset.minutes,
+        action_type: 'newsletter_click'
+      )
+    end
+  end
+end
+
+# Create sample contacts
+puts "📞 Creating sample contacts..."
+(1..10).each do |i|
+  days_ago = rand(1..30)
+  
+  Contact.create!(
+    name: ["María García", "Carlos López", "Ana Rodríguez", "Luis Martín", "Elena Vega"].sample + " #{i}",
+    email: "usuario#{i}@example.com", 
+    message: "Hola, me interesa conocer más sobre sus servicios de desarrollo web.",
+    created_at: days_ago.days.ago
+  )
 end
 
 puts "📈 Sample analytics data created for the last 30 days"

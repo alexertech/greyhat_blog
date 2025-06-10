@@ -1,75 +1,121 @@
-<div>
-  <h2 class="mb-4">Artículos</h2>
+<div class="posts-public-listing">
+  <!-- Header Section -->
+  <div class=" p-5 mb-4 text-center">
+    <div class="section-icon mb-4">
+      <i class="fas fa-newspaper fa-4x text-primary"></i>
+    </div>
+    <h1 class="display-4 fw-bold mb-3">Artículos y Publicaciones</h1>
+    <p class="lead text-muted col-lg-8 mx-auto">
+      Aquí encontrarás reflexiones sobre cómo la tecnología afecta nuestro día a día, consejos para una vida digital equilibrada, y perspectivas únicas sobre las últimas tendencias.
+    </p>
+    
+    <div class="hero-benefits d-flex flex-wrap justify-content-center gap-3 mb-4">
+      <span class="hero-benefit-badge bg-primary text-white px-3 py-2 rounded-pill">
+      <i class="fas fa-newspaper me-2"></i><%= @posts.total_entries rescue @posts.count %> artículos
+      </span>
+      <span class="hero-benefit-badge bg-success text-white px-3 py-2 rounded-pill">
+      <i class="fas fa-eye me-2"></i><%= @posts.sum { |p| p.total_visits rescue 0 } %> lecturas
+      </span>
+    </div>
 
-  <p class="lead mb-5">
-    Aquí, encontrarás reflexiones sobre cómo la
-    tecnología afecta nuestro día a día, consejos para una vida digital equilibrada, y perspectivas
-    únicas sobre las últimas tendencias. Únete a nosotros en esta aventura para
-    descubrir cómo la tecnología puede enriquecer nuestras vidas sin dominarlas.
-  </p>
+  </div>
 
-  <div class="row">
-    <% @posts.each do |post| %>
-      <div class="col-md-12 mb-4">
-        <div class="card shadow-sm">
-          <div class="row g-0">
-            <div class="col-md-3 d-flex align-items-center">
-              <% if post.image.attached? %>
-                <div class="p-2" style="height: 170px; width: 100%;">
-                  <%= image_tag post.image.variant(:thumb), class: "rounded-start", style: "object-fit: cover; height: 100%; width: 100%;", loading: "lazy" %>
+  <!-- Posts List -->
+  <% if @posts.any? %>
+    <div class="posts-list p-3">
+      <% @posts.each do |post| %>
+        <div class="post-item">
+          <div class="row g-0 h-100">
+            <% if post.image.attached? %>
+              <div class="col-lg-4">
+                <div class="post-image-container h-100">
+                  <%= image_tag post.image.variant(:thumb), 
+                      class: "post-list-image", 
+                      loading: "lazy", 
+                      alt: post.title,
+                      style: "width: 100%; height: 250px; object-fit: cover; border-radius: 12px;" %>
                 </div>
-              <% end %>
-            </div>
-            <div class="col-md-9">
-              <div class="card-body">
-                <h4 class="card-title">
-                  <%= link_to post.title, post, class: "text-decoration-none" %>
-                </h4>
-                <div class="card-text text-muted small mb-2">
-                  <%= post.created_at.strftime("%d %b. %Y") %> · 
-                  Lectura de <%= (post.body.to_plain_text.split.size/200)+1 %> minutos
-                  
-                  <% if user_signed_in? %>
-                    · <span class="badge bg-info">Unique: <%= post.unique_visits %></span>
-                    · <span class="badge bg-secondary">Total: <%= post.total_visits %></span>
-                  <% end %>
+              </div>
+              <div class="col-lg-8">
+            <% else %>
+              <div class="col-12">
+            <% end %>
+              <div class="post-item-content h-100 p-3">
+                <div class=" mb-3">
+                  <h3 class="post-title mb-2">
+                    <%= link_to post.title, post, class: "text-decoration-none" %>
+                  </h3>
                 </div>
-                <p class="card-text">
-                  <%= post.body.to_plain_text.truncate(200) %>
-                </p>
-                
-                <!-- Tags -->
-                <% if post.tags.any? %>
-                  <div class="mb-2">
-                    <% post.tags.limit(3).each do |tag| %>
-                      <%= link_to search_path(tag: tag.name), class: "badge bg-outline-secondary text-decoration-none me-1 mb-1", style: "border: 1px solid #6c757d; color: #6c757d; font-size: 0.75rem;" do %>
-                        <i class="fas fa-tag me-1"></i><%= tag.name %>
-                      <% end %>
+               <div class="post-meta-info d-flex flex-wrap align-items-center gap-3 text-muted small">
+                    <span>
+                      <i class="fas fa-calendar me-1"></i>
+                      <%= post.created_at.strftime("%d %b. %Y") %>
+                    </span>
+                    <span>
+                      <i class="fas fa-clock me-1"></i>
+                      <%= (post.body.to_plain_text.split.size/200.0).ceil %> min lectura
+                    </span>
+                    <span>
+                      <i class="fas fa-eye me-1"></i>
+                      <%= post.total_visits rescue 0 %> lecturas
+                    </span>
+                    <% if user_signed_in? %>
+                      <span class="badge bg-info">U: <%= post.unique_visits %></span>
                     <% end %>
-                    <% if post.tags.count > 3 %>
-                      <span class="text-muted small">+<%= post.tags.count - 3 %> más</span>
+                  </div> 
+                <div class="post-summary mb-3">
+                  <%= post.body.to_plain_text.truncate(200) %>
+                </div>
+                
+                <div class="post-footer d-flex justify-content-between align-items-center flex-wrap gap-3">
+                  <div class="post-tags-wrapper">
+                    <% if post.tags.any? %>
+                      <div class="post-tags d-flex flex-wrap gap-2">
+                        <% post.tags.limit(3).each do |tag| %>
+                          <%= link_to search_path(tag: tag.name), class: "tag text-decoration-none" do %>
+                            <i class="fas fa-tag me-1"></i><%= tag.name %>
+                          <% end %>
+                        <% end %>
+                        <% if post.tags.count > 4 %>
+                          <span class="text-muted small">+<%= post.tags.count - 3 %></span>
+                        <% end %>
+                      </div>
                     <% end %>
                   </div>
-                <% end %>
-                
-                <%= link_to 'Leer artículo completo →', post, class: "btn btn-sm btn-outline-primary" %>
+                  
+                  <div class="post-actions">
+                    <%= link_to post, class: "btn btn-outline-primary btn-sm" do %>
+                      <i class="fas fa-arrow-right me-2"></i>Leer Artículo
+                    <% end %>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    <% end %>
-    
-    <% if @posts.empty? %>
-      <div class="col-12 text-center py-5">
-        <p class="text-muted">No hay artículos publicados actualmente.</p>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="content-card p-5 text-center">
+      <i class="fas fa-newspaper fa-4x text-muted mb-3"></i>
+      <h4 class="text-muted mb-3">No hay artículos publicados</h4>
+      <p class="text-muted">Vuelve pronto para descubrir nuevo contenido</p>
+    </div>
+  <% end %>
   
-  <div class="d-flex justify-content-center my-4">
-    <%= will_paginate @posts, class: 'pagination' %>
-  </div>
+  <!-- Pagination -->
+  <% if @posts.any? && @posts.respond_to?(:total_pages) && @posts.total_pages > 1 %>
+    <div class="content-card p-3 mt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          Página <%= @posts.current_page %> de <%= @posts.total_pages %>
+        </div>
+        <div>
+          <%= will_paginate @posts, class: 'pagination pagination-sm mb-0' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
   
   <!-- Newsletter Subscription -->
   <% # render 'partials/substack_subscription' %>

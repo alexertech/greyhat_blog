@@ -32,7 +32,7 @@
     <div class="col-md-12">
       <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Visitas diarias</h5>
+          <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Gráfico de Visitas Diarias</h5>
           <div class="btn-group" role="group">
             <%= link_to "Hoy", dashboards_stats_path(period: 1), class: "btn btn-sm #{@period == 1 ? 'btn-light' : 'btn-outline-light'}" %>
             <%= link_to "7 días", dashboards_stats_path(period: 7), class: "btn btn-sm #{@period == 7 ? 'btn-light' : 'btn-outline-light'}" %>
@@ -41,24 +41,87 @@
           </div>
         </div>
         <div class="card-body">
+          <% 
+            max_visits = @daily_visits.values.max || 1
+            total_period_visits = @daily_visits.values.sum
+            avg_daily_visits = @daily_visits.any? ? (total_period_visits.to_f / @daily_visits.size).round(1) : 0
+          %>
+          
+          <!-- Summary Stats -->
+          <div class="row mb-4">
+            <div class="col-md-4 text-center">
+              <h3 class="text-primary"><%= number_with_delimiter(total_period_visits) %></h3>
+              <small class="text-muted">Total de Visitas</small>
+            </div>
+            <div class="col-md-4 text-center">
+              <h3 class="text-success"><%= avg_daily_visits %></h3>
+              <small class="text-muted">Promedio Diario</small>
+            </div>
+            <div class="col-md-4 text-center">
+              <h3 class="text-info"><%= max_visits %></h3>
+              <small class="text-muted">Máximo en un Día</small>
+            </div>
+          </div>
+
+          <!-- Visual Chart -->
+          <% if @daily_visits.any? %>
+            <div class="chart-container mb-4" style="overflow-x: auto;">
+              <div class="d-flex align-items-end justify-content-between" style="min-width: <%= [@daily_visits.size * 60, 600].max %>px; height: 200px; padding: 10px; border-bottom: 2px solid #dee2e6;">
+                <% @daily_visits.each do |date, count| %>
+                  <div class="chart-bar-container text-center" style="flex: 1; margin: 0 2px;">
+                    <div class="chart-bar bg-primary" 
+                         style="height: <%= count > 0 ? [15, (count.to_f / max_visits * 150).round].max : 5 %>px; 
+                                margin-bottom: 5px; 
+                                border-radius: 3px 3px 0 0;
+                                position: relative;"
+                         title="<%= Date.parse(date.to_s).strftime('%d/%m/%Y') %>: <%= count %> visitas">
+                      <% if count > 0 %>
+                        <span class="chart-value" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: bold; color: #333;"><%= count %></span>
+                      <% end %>
+                    </div>
+                    <small class="chart-label text-muted" style="font-size: 10px;">
+                      <%= Date.parse(date.to_s).strftime("%d/%m") %>
+                    </small>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Detailed Table -->
           <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-sm">
               <thead class="table-dark">
                 <tr>
                   <th>Fecha</th>
                   <th>Visitas</th>
+                  <th>% del Máximo</th>
+                  <th>Diferencia del Promedio</th>
                 </tr>
               </thead>
               <tbody>
                 <% @daily_visits.each do |date, count| %>
+                  <% percentage_of_max = max_visits > 0 ? (count.to_f / max_visits * 100).round(1) : 0 %>
+                  <% diff_from_avg = count - avg_daily_visits %>
                 <tr>
-                  <td><%= date %></td>
+                  <td><%= Date.parse(date.to_s).strftime("%d/%m/%Y") %></td>
                   <td><span class="badge bg-primary"><%= count %></span></td>
+                  <td>
+                    <div class="progress" style="height: 8px; width: 60px;">
+                      <div class="progress-bar bg-info" style="width: <%= percentage_of_max %>%"></div>
+                    </div>
+                    <small class="text-muted"><%= percentage_of_max %>%</small>
+                  </td>
+                  <td>
+                    <span class="badge bg-<%= diff_from_avg >= 0 ? 'success' : 'warning' %>">
+                      <%= diff_from_avg >= 0 ? '+' : '' %><%= diff_from_avg.round(1) %>
+                    </span>
+                  </td>
                 </tr>
                 <% end %>
                 <% if @daily_visits.empty? %>
                 <tr>
-                  <td colspan="2" class="text-center">No hay datos disponibles</td>
+                  <td colspan="4" class="text-center">No hay datos disponibles</td>
                 </tr>
                 <% end %>
               </tbody>
@@ -71,13 +134,13 @@
 
   <!-- Live Activity and Performance Analytics Row -->
   <div class="row mb-4">
-    <div class="col-md-4">
-      <div class="card shadow-sm">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
         <div class="card-header bg-success text-white">
           <h5 class="mb-0"><i class="fas fa-pulse me-2"></i>Actividad Reciente</h5>
         </div>
         <div class="card-body">
-          <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+          <div class="list-group list-group-flush" style="max-height: 400px; overflow-y: auto;">
             <% @recent_visits.each do |visit| %>
               <div class="list-group-item d-flex justify-content-between align-items-start">
                 <div class="ms-2 me-auto">
@@ -106,99 +169,73 @@
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="card shadow-sm">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
         <div class="card-header bg-info text-white">
           <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Métricas de Rendimiento</h5>
         </div>
         <div class="card-body">
-          <div class="row text-center">
-            <div class="col-12 mb-3">
+          <div class="row text-center mb-4">
+            <div class="col-6">
               <h6 class="text-muted mb-1">Tasa de Rebote</h6>
               <h3 class="text-<%= @bounce_rate > 70 ? 'danger' : @bounce_rate > 50 ? 'warning' : 'success' %>">
                 <%= @bounce_rate %>%
               </h3>
+              <small class="text-muted">
+                <%= @bounce_rate > 70 ? '🔴 Alta' : @bounce_rate > 50 ? '🟡 Media' : '🟢 Baja' %>
+              </small>
             </div>
-            <div class="col-12 mb-3">
+            <div class="col-6">
               <h6 class="text-muted mb-1">Duración Promedio</h6>
               <h3 class="text-primary">
                 <%= @avg_session_duration > 60 ? "#{(@avg_session_duration / 60).round(1)}m" : "#{@avg_session_duration}s" %>
               </h3>
+              <small class="text-muted">Tiempo en sitio</small>
             </div>
           </div>
           
-          <h6 class="text-muted mb-2">Embudo de Conversión</h6>
+          <h6 class="text-muted mb-3">Embudo de Conversión</h6>
           <% @conversion_funnel.each do |stage, value| %>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <small><%= stage %></small>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small"><%= stage %></span>
               <span class="badge bg-secondary"><%= value %></span>
             </div>
           <% end %>
         </div>
       </div>
     </div>
-
-    <div class="col-md-4">
-      <div class="card shadow-sm">
-        <div class="card-header bg-danger text-white">
-          <h5 class="mb-0">Visitas por hora (últimas 24 horas)</h5>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-dark">
-                <tr>
-                  <th>Hora</th>
-                  <th>Visitas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @hourly_visits.each do |hour, count| %>
-                <tr>
-                  <td><%= hour.to_i %>:00 - <%= hour.to_i + 1 %>:00</td>
-                  <td><span class="badge bg-success"><%= count %></span></td>
-                </tr>
-                <% end %>
-                <% if @hourly_visits.empty? %>
-                <tr>
-                  <td colspan="2" class="text-center">No hay datos disponibles</td>
-                </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- Top Exit Pages Section -->
   <div class="row mb-4">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <div class="card shadow-sm">
         <div class="card-header bg-warning text-dark">
           <h5 class="mb-0"><i class="fas fa-sign-out-alt me-2"></i>Páginas de Salida</h5>
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table table-striped table-hover table-sm">
+            <table class="table table-striped table-hover">
               <thead class="table-dark">
                 <tr>
-                  <th>Página</th>
-                  <th>Salidas</th>
+                  <th width="70%">Página</th>
+                  <th width="20%">Salidas</th>
+                  <th width="10%">% del Total</th>
                 </tr>
               </thead>
               <tbody>
+                <% total_exits = @top_exit_pages.values.sum %>
                 <% @top_exit_pages.each do |page, count| %>
+                  <% percentage = total_exits > 0 ? (count.to_f / total_exits * 100).round(1) : 0 %>
                 <tr>
-                  <td><%= page.truncate(40) %></td>
+                  <td><%= page %></td>
                   <td><span class="badge bg-warning text-dark"><%= count %></span></td>
+                  <td><span class="badge bg-secondary"><%= percentage %>%</span></td>
                 </tr>
                 <% end %>
                 <% if @top_exit_pages.empty? %>
                 <tr>
-                  <td colspan="2" class="text-center">No hay datos suficientes</td>
+                  <td colspan="3" class="text-center">No hay datos suficientes</td>
                 </tr>
                 <% end %>
               </tbody>
@@ -207,99 +244,65 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-md-6">
+
+  <div class="row mb-4">
+    <div class="col-md-12">
       <div class="card shadow-sm">
-        <div class="card-header bg-info text-white">
-          <h5 class="mb-0">Principales referidos</h5>
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="fas fa-users me-2"></i>Visitas: Humanos vs Bots</h5>
         </div>
         <div class="card-body">
-          <!-- Traffic Source Summary -->
-          <div class="row mb-3">
-            <div class="col-6">
-              <div class="text-center">
-                <h6 class="text-muted mb-1">Redes Sociales</h6>
-                <span class="badge bg-primary fs-6"><%= @social_media_visits %></span>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="text-center">
-                <h6 class="text-muted mb-1">Buscadores</h6>
-                <span class="badge bg-success fs-6"><%= @search_engine_visits %></span>
-              </div>
-            </div>
-          </div>
+          <%
+            total_visits = Visit.count
+            human_visits = Visit.humans.count
+            bot_visits = Visit.bots.count
+            human_percentage = total_visits > 0 ? (human_visits.to_f / total_visits * 100).round(1) : 0
+            bot_percentage = total_visits > 0 ? (bot_visits.to_f / total_visits * 100).round(1) : 0
+          %>
           
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-dark">
-                <tr>
-                  <th>Origen</th>
-                  <th>Tipo</th>
-                  <th>Visitas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @top_referrers.each do |referrer| %>
-                <tr>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <% case referrer[:source_type] %>
-                      <% when :social %>
-                        <i class="fab fa-<%= referrer[:domain].include?('linkedin') ? 'linkedin' : referrer[:domain].include?('twitter') || referrer[:domain].include?('x.com') ? 'twitter' : referrer[:domain].include?('facebook') ? 'facebook' : 'share-alt' %> me-2 text-primary"></i>
-                      <% when :newsletter %>
-                        <i class="fas fa-newspaper me-2 text-warning"></i>
-                      <% when :search %>
-                        <i class="fas fa-search me-2 text-success"></i>
-                      <% when :tech_community %>
-                        <i class="fas fa-code me-2 text-info"></i>
-                      <% when :blog_platform %>
-                        <i class="fas fa-blog me-2 text-secondary"></i>
-                      <% else %>
-                        <i class="fas fa-globe me-2 text-muted"></i>
-                      <% end %>
-                      <small><%= referrer[:display_name] %></small>
-                    </div>
-                  </td>
-                  <td>
-                    <% case referrer[:source_type] %>
-                    <% when :social %>
-                      <span class="badge bg-primary">Social</span>
-                    <% when :newsletter %>
-                      <span class="badge bg-warning">Newsletter</span>
-                    <% when :search %>
-                      <span class="badge bg-success">Búsqueda</span>
-                    <% when :tech_community %>
-                      <span class="badge bg-info">Tech</span>
-                    <% when :blog_platform %>
-                      <span class="badge bg-secondary">Blog</span>
-                    <% else %>
-                      <span class="badge bg-light text-dark">Otro</span>
-                    <% end %>
-                  </td>
-                  <td><span class="badge bg-info"><%= referrer[:count] %></span></td>
-                </tr>
-                <% end %>
-                <% if @top_referrers.empty? %>
-                <tr>
-                  <td colspan="3" class="text-center">No hay datos disponibles</td>
-                </tr>
-                <% end %>
-              </tbody>
-            </table>
+          <!-- Visual Representation -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="text-center">
+                <h2 class="text-success mb-1"><%= human_percentage %>%</h2>
+                <h5 class="text-muted mb-3">Visitas Humanas</h5>
+                <div class="progress mb-2" style="height: 30px;">
+                  <div class="progress-bar bg-success" style="width: <%= human_percentage %>%">
+                    <%= number_with_delimiter(human_visits) %> visitas
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-center">
+                <h2 class="text-warning mb-1"><%= bot_percentage %>%</h2>
+                <h5 class="text-muted mb-3">Visitas de Bots</h5>
+                <div class="progress mb-2" style="height: 30px;">
+                  <div class="progress-bar bg-warning" style="width: <%= bot_percentage %>%">
+                    <%= number_with_delimiter(bot_visits) %> visitas
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mb-4">
-    <div class="col-md-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
-          <h5 class="mb-0">Visitas por tipo de contenido</h5>
-        </div>
-        <div class="card-body">
+          <!-- Quality Score -->
+          <div class="alert <%= human_percentage >= 70 ? 'alert-success' : human_percentage >= 50 ? 'alert-warning' : 'alert-danger' %> text-center">
+            <strong>Calidad del Tráfico:</strong>
+            <% if human_percentage >= 80 %>
+              🟢 Excelente - Alto porcentaje de tráfico humano
+            <% elsif human_percentage >= 60 %>
+              🟡 Bueno - Tráfico mayormente humano
+            <% elsif human_percentage >= 40 %>
+              🟠 Regular - Equilibrio entre humanos y bots
+            <% else %>
+              🔴 Atención - Alto porcentaje de tráfico de bots
+            <% end %>
+          </div>
+
+          <!-- Detailed Table -->
           <div class="table-responsive">
             <table class="table table-striped table-hover">
               <thead class="table-dark">
@@ -309,81 +312,154 @@
                   <th>Último día</th>
                   <th>Última semana</th>
                   <th>Último mes</th>
+                  <th>% del Total</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Páginas</td>
-                  <td><span class="badge bg-primary"><%= Visit.where(visitable_type: 'Page').count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Page').where('viewed_at >= ?', 1.day.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Page').where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Page').where('viewed_at >= ?', 1.month.ago).count %></span></td>
-                </tr>
-                <tr>
-                  <td>Artículos</td>
-                  <td><span class="badge bg-primary"><%= Visit.where(visitable_type: 'Post').count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Post').where('viewed_at >= ?', 1.day.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Post').where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where(visitable_type: 'Post').where('viewed_at >= ?', 1.month.ago).count %></span></td>
-                </tr>
-                <tr>
-                  <td><strong>Total</strong></td>
-                  <td><span class="badge bg-success"><%= Visit.count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.day.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.month.ago).count %></span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4">
-    <div class="col-md-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
-          <h5 class="mb-0">Visitas por tipo de visitante</h5>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-dark">
-                <tr>
-                  <th>Tipo</th>
-                  <th>Total</th>
-                  <th>Último día</th>
-                  <th>Última semana</th>
-                  <th>Último mes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Humanos</td>
-                  <td><span class="badge bg-primary"><%= Visit.humans.count %></span></td>
+                  <td><i class="fas fa-user text-success me-2"></i><strong>Humanos</strong></td>
+                  <td><span class="badge bg-success fs-6"><%= number_with_delimiter(human_visits) %></span></td>
                   <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.day.ago).count %></span></td>
                   <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.week.ago).count %></span></td>
                   <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.month.ago).count %></span></td>
+                  <td><span class="badge bg-success"><%= human_percentage %>%</span></td>
                 </tr>
                 <tr>
-                  <td>Bots</td>
-                  <td><span class="badge bg-warning"><%= Visit.bots.count %></span></td>
+                  <td><i class="fas fa-robot text-warning me-2"></i><strong>Bots</strong></td>
+                  <td><span class="badge bg-warning fs-6"><%= number_with_delimiter(bot_visits) %></span></td>
                   <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.day.ago).count %></span></td>
                   <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.week.ago).count %></span></td>
                   <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.month.ago).count %></span></td>
+                  <td><span class="badge bg-warning"><%= bot_percentage %>%</span></td>
                 </tr>
-                <tr>
-                  <td><strong>Porcentaje Bots</strong></td>
-                  <td><span class="badge bg-danger"><%= Visit.count > 0 ? "#{(Visit.bots.count.to_f / Visit.count * 100).round(1)}%" : "0%" %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.day.ago).count > 0 ? "#{(Visit.bots.where('viewed_at >= ?', 1.day.ago).count.to_f / Visit.where('viewed_at >= ?', 1.day.ago).count * 100).round(1)}%" : "0%" %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.week.ago).count > 0 ? "#{(Visit.bots.where('viewed_at >= ?', 1.week.ago).count.to_f / Visit.where('viewed_at >= ?', 1.week.ago).count * 100).round(1)}%" : "0%" %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.month.ago).count > 0 ? "#{(Visit.bots.where('viewed_at >= ?', 1.month.ago).count.to_f / Visit.where('viewed_at >= ?', 1.month.ago).count * 100).round(1)}%" : "0%" %></span></td>
+                <tr class="table-active">
+                  <td><i class="fas fa-chart-bar me-2"></i><strong>Total</strong></td>
+                  <td><span class="badge bg-primary fs-6"><%= number_with_delimiter(total_visits) %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.day.ago).count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.week.ago).count %></span></td>
+                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.month.ago).count %></span></td>
+                  <td><span class="badge bg-primary">100%</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Most Visited Posts Section -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-fire me-2"></i>
+            Artículos Más Visitados
+          </h5>
+        </div>
+        <div class="card-body">
+          <% 
+            # Get most visited posts for detailed stats view
+            most_visited_posts = Post.most_visited(15)
+          %>
+          <% if most_visited_posts.any? %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th width="5%">#</th>
+                    <th width="50%">Artículo</th>
+                    <th width="12%">Visitas Totales</th>
+                    <th width="12%">Visitas Únicas</th>
+                    <th width="10%">Comentarios</th>
+                    <th width="11%">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% most_visited_posts.each_with_index do |post, index| %>
+                    <tr>
+                      <td class="text-center">
+                        <% if index < 3 %>
+                          <span class="badge bg-<%= index == 0 ? 'warning' : index == 1 ? 'secondary' : 'warning' %> fs-6">
+                            <%= index == 0 ? '🥇' : index == 1 ? '🥈' : '🥉' %>
+                          </span>
+                        <% else %>
+                          <span class="text-muted"><%= index + 1 %></span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <div class="post-details">
+                          <div class="post-title mb-1">
+                            <%= link_to post.title, post, class: "text-decoration-none fw-bold" %>
+                          </div>
+                          <div class="post-meta small text-muted">
+                            Publicado: <%= post.created_at.strftime("%d/%m/%Y") %>
+                            <% if post.tags.any? %>
+                              | Tags: 
+                              <% post.tags.limit(3).each do |tag| %>
+                                <span class="badge bg-light text-dark me-1"><%= tag.name %></span>
+                              <% end %>
+                            <% end %>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-primary fs-6"><%= post.total_visits %></span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-success fs-6"><%= post.unique_visits rescue 0 %></span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-info fs-6"><%= post.comments.approved.count %></span>
+                      </td>
+                      <td class="text-center">
+                        <div class="btn-group" role="group">
+                          <%= link_to post, class: "btn btn-sm btn-outline-primary", title: "Ver artículo" do %>
+                            <i class="fas fa-eye"></i>
+                          <% end %>
+                          <%= link_to edit_post_path(post), class: "btn btn-sm btn-outline-secondary", title: "Editar" do %>
+                            <i class="fas fa-edit"></i>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Summary Stats -->
+            <div class="mt-4">
+              <div class="row">
+                <div class="col-md-3 text-center">
+                  <h6 class="text-muted">Total de Visitas</h6>
+                  <h4 class="text-primary"><%= most_visited_posts.sum(&:total_visits) %></h4>
+                </div>
+                <div class="col-md-3 text-center">
+                  <h6 class="text-muted">Promedio por Artículo</h6>
+                  <h4 class="text-success"><%= (most_visited_posts.sum(&:total_visits).to_f / most_visited_posts.size).round(1) %></h4>
+                </div>
+                <div class="col-md-3 text-center">
+                  <h6 class="text-muted">Artículo Más Popular</h6>
+                  <h4 class="text-warning"><%= most_visited_posts.first&.total_visits || 0 %></h4>
+                </div>
+                <div class="col-md-3 text-center">
+                  <h6 class="text-muted">Total Comentarios</h6>
+                  <h4 class="text-info"><%= most_visited_posts.sum { |p| p.comments.approved.count } %></h4>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="text-center py-5">
+              <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+              <h6 class="text-muted mb-2">No hay artículos publicados</h6>
+              <p class="text-muted mb-4">Comienza creando tu primer artículo para generar analíticas</p>
+              <%= link_to new_post_path, class: "btn btn-primary" do %>
+                <i class="fas fa-plus me-2"></i>Crear Primer Artículo
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

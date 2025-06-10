@@ -92,6 +92,7 @@ class Post < ApplicationRecord
     joins("LEFT JOIN (SELECT visitable_id, COUNT(*) as visit_count FROM visits
            WHERE visitable_type = 'Post' GROUP BY visitable_id) AS visit_counts
            ON posts.id = visit_counts.visitable_id")
+      .includes(:comments, :tags)
       .order('visit_counts.visit_count DESC NULLS LAST')
       .limit(limit)
   end
