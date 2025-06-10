@@ -406,6 +406,57 @@
       color: #6c757d;
     }
   }
+  
+  // Specific rules for posts-public-listing dark mode
+  .posts-public-listing {
+    .posts-list {
+      .post-item {
+        background: rgba(30, 30, 30, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+        
+        &:hover {
+          background: rgba(30, 30, 30, 0.95);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .post-title {
+          color: #f8f9fa;
+          
+          a {
+            color: #f8f9fa;
+            
+            &:hover {
+              color: #79c0ff;
+            }
+          }
+        }
+        
+        .post-meta-info {
+          color: #adb5bd;
+          
+          i {
+            color: #6c757d;
+          }
+        }
+        
+        .post-summary {
+          color: #adb5bd;
+        }
+        
+        .post-tags {
+          .tag {
+            background: rgba(66, 133, 244, 0.15);
+            color: #79c0ff;
+            border-color: rgba(66, 133, 244, 0.3);
+            
+            &:hover {
+              background: rgba(66, 133, 244, 0.25);
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .home-page-container {
