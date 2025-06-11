@@ -1,41 +1,73 @@
-<div>
-  <%= form_with(model: post, local: true, class: "needs-validation") do |form| %>
+<div class="post-form-container">
+  <%= form_with(model: post, local: true, class: "needs-validation post-form") do |form| %>
     <% if post.errors.any? %>
-      <div class="alert alert-danger" id="error_explanation">
-        <h4><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h4>
-        <ul class="mb-0">
-          <% post.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+      <div class="alert alert-danger alert-dismissible fade show" id="error_explanation" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          <div>
+            <h6 class="alert-title mb-1"><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h6>
+            <ul class="mb-0 small">
+              <% post.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     <% end %>
 
-    <div class="mb-3">
-      <%= form.label :title, class: "form-label" %>
-      <%= form.text_field :title, class: "form-control", placeholder: "Título del artículo" %>
+    <div class="mb-4">
+      <%= form.label :title, class: "form-label fw-semibold" do %>
+        <i class="fas fa-heading me-2 text-primary"></i>Título del artículo
+      <% end %>
+      <%= form.text_field :title, class: "form-control form-control-lg", placeholder: "Escribe un título atractivo para tu artículo" %>
     </div>
 
-    <div class="mb-3">
-      <%= form.label :body, class: "form-label" %>
+    <div class="mb-4">
+      <%= form.label :body, class: "form-label fw-semibold" do %>
+        <i class="fas fa-edit me-2 text-primary"></i>Contenido del artículo
+      <% end %>
 
-      <%= form.rich_text_area :body, class: "form-control editor trix", id: 'trix-content ',
-          data: { controller: "trix-paste", trix_paste_target: "editor" },
-          style: "min-height: 15rem; border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.5rem;" %>
+      <div class="trix-editor-container">
+        <%= form.rich_text_area :body, class: "form-control editor trix", id: 'trix-content',
+            data: { controller: "trix-paste", trix_paste_target: "editor" },
+            style: "min-height: 20rem; border: 1px solid #ced4da; border-radius: 0.5rem; padding: 1rem;" %>
+      </div>
    
-      <div class="form-text">Puedes pegar imágenes directamente en el editor.</div>
+      <div class="form-text mt-2">
+        <i class="fas fa-info-circle me-1 text-info"></i>
+        Puedes pegar imágenes directamente en el editor o usar el formato Markdown.
+      </div>
     </div>
 
-    <div class="mb-3">
-      <%= form.label :image, "Imagen principal", class: "form-label" %>
-      <%= form.file_field :image, class: "form-control" %>
-      <div class="form-text">Selecciona una imagen destacada para tu artículo.</div>
+    <div class="mb-4">
+      <%= form.label :image, class: "form-label fw-semibold" do %>
+        <i class="fas fa-image me-2 text-primary"></i>Imagen principal
+      <% end %>
+      <div class="image-upload-container">
+        <%= form.file_field :image, class: "form-control", accept: "image/*" %>
+        <% if post.image.attached? %>
+          <div class="current-image mt-3">
+            <small class="text-muted">Imagen actual:</small>
+            <div class="image-preview mt-1">
+              <%= image_tag post.image, class: "img-thumbnail", style: "max-width: 200px; max-height: 150px;" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="form-text mt-2">
+        <i class="fas fa-info-circle me-1 text-info"></i>
+        Selecciona una imagen destacada para tu artículo. Formatos aceptados: JPG, PNG, GIF.
+      </div>
     </div>
     
-    <div class="mb-3" 
+    <div class="mb-4" 
          data-controller="tag-manager" 
          data-tag-manager-current-tags-value="<%= post.tags.pluck(:name).to_json %>">
-      <%= form.label :tag_names, "Etiquetas", class: "form-label" %>
+      <%= form.label :tag_names, class: "form-label fw-semibold" do %>
+        <i class="fas fa-tags me-2 text-primary"></i>Etiquetas
+      <% end %>
       
       <!-- Tag Display Area -->
       <div data-tag-manager-target="tagContainer" class="mb-2"></div>
@@ -66,21 +98,32 @@
       <!-- Tag Suggestions -->
       <div data-tag-manager-target="suggestions" class="mt-2"></div>
       
-      <div class="form-text">
-        <i class="fas fa-info-circle me-1"></i>
+      <div class="form-text mt-2">
+        <i class="fas fa-info-circle me-1 text-info"></i>
         Separa las etiquetas con comas o presiona Enter. Haz clic en "Analizar contenido" para obtener sugerencias inteligentes basadas en el texto.
       </div>
     </div>
     
-    <div class="mb-3 form-check">
-      <%= form.check_box :draft, class: "form-check-input" %>
-      <%= form.label :draft, "Guardar como borrador", class: "form-check-label" %>
-      <div class="form-text">Los borradores no son visibles para usuarios que no han iniciado sesión.</div>
+    <div class="mb-4">
+      <div class="form-check form-switch">
+        <%= form.check_box :draft, class: "form-check-input", role: "switch" %>
+        <%= form.label :draft, class: "form-check-label fw-semibold" do %>
+          <i class="fas fa-eye-slash me-2 text-warning"></i>Guardar como borrador
+        <% end %>
+        <div class="form-text mt-1">
+          <i class="fas fa-info-circle me-1 text-info"></i>
+          Los borradores no son visibles para usuarios que no han iniciado sesión.
+        </div>
+      </div>
     </div>
 
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <%= link_to 'Cancelar', posts_path, class: "btn btn-secondary me-md-2" %>
-      <%= form.submit "Guardar artículo", class: "btn btn-primary" %>
+    <div class="form-actions">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <%= link_to posts_path, class: "btn btn-outline-secondary me-md-2" do %>
+          <i class="fas fa-times me-2"></i>Cancelar
+        <% end %>
+        <%= form.submit "Guardar artículo", class: "btn btn-primary btn-lg" %>
+      </div>
     </div>
   <% end %>
 </div>
