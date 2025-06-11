@@ -32,85 +32,128 @@
   
   <!-- LinkedIn -->
   <meta property="og:locale" content="es_ES" />
-  <meta property="article:author" content="Greyhat" />
+  <meta property="article:author" content="<%= @post.user.display_name %>" />
   <meta property="article:published_time" content="<%= @post.created_at.iso8601 %>" />
 <% end %>
 
 <% if notice %>
-<div class="alert alert-success" id="notice"><%= notice %></div>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 <% end %>
 
 <div class="container py-4">
   <article class="blog-post">
     <% if user_signed_in? && @post.draft? %>
       <div class="alert alert-warning mb-4">
-        <i class="fa fa-exclamation-triangle me-2"></i> Este artículo está en modo borrador y no es visible para el público.
+        <i class="fas fa-exclamation-triangle me-2"></i> 
+        Este artículo está en modo borrador y no es visible para el público.
       </div>
     <% end %>
 
+    <!-- Admin Stats -->
     <% if user_signed_in? %>
-      <div class="badge bg-info text-white mb-3">
-        Unique visitors: <%= @post.unique_visits %> | Total visits: <%= @post.total_visits %> | Human visits: <%= @post.human_visits %>
-      </div>
-    <% end %>
-
-    <% if @post.image.attached? %>
-      <div id="image_post" class="mb-4">
-        <%= image_tag @post.image.variant(:medium), class: "img-fluid rounded", loading: "lazy" %>
-      </div>
-    <% end %>
-
-    <header class="blog-post-header mb-4">
-      <h1 class="blog-post-title display-5 fw-bold"><%= @post.title %></h1>
-      <div class="blog-post-meta text-muted mb-4 d-flex justify-content-between align-items-center flex-wrap">
-        <div>
-          <time datetime="<%= @post.created_at.strftime('%Y-%m-%d') %>">
-            <%= @post.created_at.strftime("%d %b. %Y") %>
-          </time>
-          <span class="mx-1">&middot;</span>
-          <span>Lectura de <%= (@post.body.to_plain_text.split.size/200)+1 %> minutos</span>
-          
-          <% if user_signed_in? %>
-            <span class="mx-1">&middot;</span>
-            <span class="badge bg-info">Unique: <%= @post.unique_visits %></span>
-            <span class="mx-1">&middot;</span>
-            <span class="badge bg-secondary">Total: <%= @post.total_visits %></span>
-          <% end %>
+      <div class="analytics-card mb-4">
+        <div class="analytics-body">
+          <div class="d-flex gap-4 flex-wrap">
+            <div class="d-flex align-items-center gap-2">
+              <div class="metric-icon bg-primary">
+                <i class="fas fa-eye"></i>
+              </div>
+              <div>
+                <div class="fw-bold"><%= @post.unique_visits %></div>
+                <small class="text-muted">Únicos</small>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="metric-icon bg-success">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div>
+                <div class="fw-bold"><%= @post.total_visits %></div>
+                <small class="text-muted">Total</small>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="metric-icon bg-info">
+                <i class="fas fa-users"></i>
+              </div>
+              <div>
+                <div class="fw-bold"><%= @post.human_visits %></div>
+                <small class="text-muted">Humanos</small>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <!-- Share Buttons -->
-        <div data-controller="share-buttons"
-             data-share-buttons-url-value="<%= request.original_url %>"
-             data-share-buttons-title-value="<%= @post.title %>"
-             data-share-buttons-description-value="<%= strip_tags(@post.body.to_plain_text).truncate(160) %>">
-          <div class="btn-group" role="group">
-            <button data-action="click->share-buttons#shareMastodon" class="btn btn-outline-primary btn-sm" title="Compartir en Mastodon">
-              <i class="fab fa-mastodon"></i>
-            </button>
-            <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm" title="Compartir en LinkedIn">
-              <i class="fab fa-linkedin"></i>
-            </button>
-            <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm" title="Compartir en WhatsApp">
-              <i class="fab fa-whatsapp"></i>
-            </button>
-            <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm" title="Compartir en Twitter">
-              <i class="fab fa-twitter"></i>
-            </button>
-            <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm" title="Compartir en Facebook">
-              <i class="fab fa-facebook"></i>
-            </button>
-            <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm" title="Copiar enlace">
-              <i class="fas fa-link"></i>
-            </button>
+      </div>
+    <% end %>
+
+    <!-- Featured Image -->
+    <% if @post.image.attached? %>
+      <div class="featured-image mb-4">
+        <%= image_tag @post.image.variant(:banner), class: "img-fluid rounded", loading: "lazy", alt: @post.title %>
+      </div>
+    <% end %>
+
+    <!-- Post Header -->
+    <header class="blog-post-header mb-5">
+      <h1 class="blog-post-title display-4 fw-bold mb-4"><%= @post.title %></h1>
+      
+      <!-- Post Meta Info -->
+      <div class="post-meta-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div class="post-metadata">
+            <div class="d-flex align-items-center gap-3 text-muted">
+              <span>
+                <i class="fas fa-calendar-alt me-1"></i>
+                <time datetime="<%= @post.created_at.strftime('%Y-%m-%d') %>">
+                  <%= @post.created_at.strftime("%d %b. %Y") %>
+                </time>
+              </span>
+              <span>
+                <i class="fas fa-clock me-1"></i>
+                <%= (@post.body.to_plain_text.split.size/200)+1 %> min de lectura
+              </span>
+            </div>
+          </div>
+          
+          <!-- Share Buttons -->
+          <div class="share-buttons-wrapper"
+               data-controller="share-buttons"
+               data-share-buttons-url-value="<%= request.original_url %>"
+               data-share-buttons-title-value="<%= @post.title %>"
+               data-share-buttons-description-value="<%= strip_tags(@post.body.to_plain_text).truncate(160) %>">
+            <div class="btn-group" role="group">
+              <button data-action="click->share-buttons#shareMastodon" class="btn btn-outline-primary btn-sm" title="Compartir en Mastodon">
+                <i class="fab fa-mastodon"></i>
+              </button>
+              <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm" title="Compartir en LinkedIn">
+                <i class="fab fa-linkedin"></i>
+              </button>
+              <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm" title="Compartir en WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+              </button>
+              <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm" title="Compartir en Twitter">
+                <i class="fab fa-twitter"></i>
+              </button>
+              <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm" title="Compartir en Facebook">
+                <i class="fab fa-facebook"></i>
+              </button>
+              <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm" title="Copiar enlace">
+                <i class="fas fa-link"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
       
       <!-- Tags -->
       <% if @post.tags.any? %>
-        <div class="mb-4">
+        <div class="tags-section mt-4">
           <% @post.tags.each do |tag| %>
-            <%= link_to search_path(tag: tag.name), class: "badge bg-primary text-decoration-none me-1 mb-1 px-2 py-1", style: "font-size: 0.75rem;" do %>
+            <%= link_to search_path(tag: tag.name), class: "badge bg-primary text-decoration-none me-2 mb-2 px-3 py-2", style: "font-size: 0.8rem;" do %>
               <i class="fas fa-tag me-1"></i><%= tag.name %>
             <% end %>
           <% end %>
@@ -118,97 +161,118 @@
       <% end %>
     </header>
 
+    <!-- Article Content -->
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <article class="post-content mb-5">
+          <%= @post.body %>
+        </article>
+      </div>
+    </div>
 
-    <article class="mb-5">
-      <%= @post.body %>
-    </article>
-    
-    <!-- Newsletter Subscription -->
-    <% # render 'partials/substack_subscription' %>
-    
-    <hr>
-
-    <!-- Comments Section -->
-    <section class="mt-5 mb-5">
-      <div class="comments-container">
-        <h3 class="mb-4 pb-2 border-bottom">
-          <i class="fa-solid fa-comments"></i> 
-          <span id="comment_count"><%= pluralize(@post.comments.approved.count, "comentario") %></span>
+    <!-- Author Bio -->
+    <div class="analytics-card mb-5">
+      <div class="analytics-header">
+        <h3 class="analytics-title">
+          <i class="fas fa-user-circle me-2"></i>Acerca del Autor
         </h3>
-        
-        <% if @post.comments.approved.any? %>
-          <div id="comments" class="mb-5">
-            <% @post.comments.approved.order(created_at: :desc).each do |comment| %>
-              <%= render "comments/comment", comment: comment %>
+      </div>
+      <div class="analytics-body">
+        <div class="d-flex align-items-start gap-4">
+          <% if @post.user.avatar.attached? %>
+            <%= image_tag @post.user.avatar.variant(:medium), class: "rounded", style: "width: 100px; height: 100px; object-fit: cover;" %>
+          <% else %>
+            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="width: 100px; height: 100px;">
+              <i class="fas fa-user fa-2x"></i>
+            </div>
+          <% end %>
+          <div>
+            <h4 class="fw-bold mb-2"><%= @post.user.display_name %></h4>
+            <% if @post.user.description.present? %>
+              <p class="mb-0 text-muted">
+                <%= simple_format(@post.user.description) %>
+              </p>
+            <% else %>
+              <p class="mb-0 text-muted">
+                Autor en Greyhat, compartiendo reflexiones sobre tecnología y vida digital.
+              </p>
             <% end %>
           </div>
-        <% else %>
-          <div class="alert alert-light text-center mb-5">
-            <p class="mb-0">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
-          </div>
-        <% end %>
-        
-        <%= render "comments/form", post: @post, comment: Comment.new %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <section class="comments-section">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h3 class="analytics-title">
+            <i class="fas fa-comments me-2"></i>
+            <span id="comment_count"><%= pluralize(@post.comments.approved.count, "comentario") %></span>
+          </h3>
+        </div>
+        <div class="analytics-body">
+          <% if @post.comments.approved.any? %>
+            <div id="comments" class="mb-4">
+              <% @post.comments.approved.order(created_at: :desc).each do |comment| %>
+                <%= render "comments/comment", comment: comment %>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="text-center py-4 mb-4">
+              <i class="fas fa-comment-dots fa-3x text-muted mb-3"></i>
+              <p class="text-muted mb-0">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
+            </div>
+          <% end %>
+          
+          <%= render "comments/form", post: @post, comment: Comment.new %>
+        </div>
       </div>
     </section>
 
-    <hr>
-
-    <div class="row py-4">
-      <div class="col-12">
-        <h3 class="mb-3">Acerca del Autor</h3>
-        <div class="d-flex align-items-start">
-          <%= image_tag "0.jpg", class: "rounded me-3", style: "width:120px;" %>
-          <div>
-            <strong>
-              <a href="https://www.alexertech.com/" target="_blank" class="text-decoration-none">
-                Alex Barrios
-              </a>
-            </strong>
-            <p class="small mt-2">
-              Senior Software Engineer, consultor en ciberseguridad y escritor técnico.
-              Con más de 20 años en tecnología, reflexiona sobre el impacto humano del software, la inteligencia artificial y la atención digital.
-              Es fundador de Greyhat y comparte sus pensamientos desde la experiencia, la terminal y la introspección.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <hr>
-
-    <h2 class="mb-4">También te puede interesar</h2>
-
-    <div class="row">
-      <% @related_posts.each do |post| %>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <% if post.image.attached? %>
-              <%= image_tag post.image.variant(:thumb), class: "card-img-top", loading: "lazy" %>
-            <% end %>
-            <div class="card-body">
-              <h5 class="card-title">
-                <%= link_to post.title, post, class: "text-decoration-none" %>
-              </h5>
-              
-              <!-- Tags -->
-              <% if post.tags.any? %>
-                <div class="mb-2">
-                  <% post.tags.limit(2).each do |tag| %>
-                    <%= link_to search_path(tag: tag.name), class: "badge bg-outline-secondary text-decoration-none me-1 mb-1", style: "border: 1px solid #6c757d; color: #6c757d; font-size: 0.7rem;" do %>
-                      <i class="fas fa-tag me-1"></i><%= tag.name %>
-                    <% end %>
-                  <% end %>
+    <!-- Related Posts -->
+    <section class="related-posts mt-5">
+      <h2 class="mb-4 fw-bold">
+        <i class="fas fa-newspaper me-2"></i>También te puede interesar
+      </h2>
+      
+      <div class="row">
+        <% @related_posts.each do |post| %>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <% if post.image.attached? %>
+                <%= image_tag post.image.variant(:thumb), class: "card-img-top", loading: "lazy", style: "height: 200px; object-fit: cover;" %>
+              <% else %>
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 200px;">
+                  <i class="fas fa-file-alt fa-3x"></i>
                 </div>
               <% end %>
-              
-              <p class="card-text small text-muted">
-                <%= post.created_at.strftime("%d %b. %Y") %>
-              </p>
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= link_to post.title, post, class: "text-decoration-none" %>
+                </h5>
+                
+                <!-- Tags -->
+                <% if post.tags.any? %>
+                  <div class="mb-3">
+                    <% post.tags.limit(2).each do |tag| %>
+                      <%= link_to search_path(tag: tag.name), class: "badge bg-light text-muted text-decoration-none me-1 mb-1", style: "font-size: 0.7rem;" do %>
+                        <i class="fas fa-tag me-1"></i><%= tag.name %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% end %>
+                
+                <p class="card-text">
+                  <small class="text-muted">
+                    <%= post.created_at.strftime("%d %b. %Y") %>
+                  </small>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
+    </section>
   </article>
 </div>

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'dashboards/posts' => 'dashboards#posts'
   get 'dashboards/comments' => 'dashboards#comments'
   devise_for :users
+  resources :users
 
   resources :contacts
   resources :posts do
