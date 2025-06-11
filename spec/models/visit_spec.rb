@@ -24,7 +24,7 @@ RSpec.describe Visit, type: :model do
     it 'requires a visitable' do
       visit = Visit.new(ip_address: '127.0.0.1')
       expect(visit).not_to be_valid
-      expect(visit.errors[:visitable]).to include('must exist')
+      expect(visit.errors[:visitable]).to include("can't be blank")
     end
 
     it 'requires an ip_address' do

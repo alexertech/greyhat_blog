@@ -91,6 +91,22 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_09_190315) do
     t.index ["tag_id"], name: "index_post_tags_on_tag_id"
   end
 
+  create_table "post_translations", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.string "locale", limit: 5, null: false
+    t.string "title", null: false
+    t.text "body"
+    t.string "slug", null: false
+    t.boolean "published", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["locale"], name: "index_post_translations_on_locale"
+    t.index ["post_id", "locale"], name: "index_post_translations_on_post_id_and_locale", unique: true
+    t.index ["post_id"], name: "index_post_translations_on_post_id"
+    t.index ["published"], name: "index_post_translations_on_published"
+    t.index ["slug"], name: "index_post_translations_on_slug", unique: true
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -168,4 +184,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_09_190315) do
   add_foreign_key "comments", "posts"
   add_foreign_key "post_tags", "posts"
   add_foreign_key "post_tags", "tags"
+  add_foreign_key "post_translations", "posts"
 end
