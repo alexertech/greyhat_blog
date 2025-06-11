@@ -16,7 +16,7 @@
       <i class="fas fa-newspaper me-2"></i><%= @posts.total_entries rescue @posts.count %> artículos
       </span>
       <span class="hero-benefit-badge bg-success text-white px-3 py-2 rounded-pill">
-      <i class="fas fa-eye me-2"></i><%= @posts.sum { |p| p.total_visits rescue 0 } %> lecturas
+      <i class="fas fa-eye me-2"></i><%= number_with_delimiter(@total_published_visits || 0) %> lecturas
       </span>
     </div>
 

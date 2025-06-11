@@ -1,25 +1,37 @@
-<div>
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Estadísticas detalladas</h2>
-    <div>
-      <%= link_to "Dashboard", dashboard_path, class: "btn btn-outline-primary btn-sm" %>
+<div class="dashboard-container">
+  <!-- Stats Header -->
+  <div class="row align-items-center mb-4">
+    <div class="col-lg-6">
+      <h1 class="dashboard-title mb-2">
+        <i class="fas fa-chart-line me-3 text-primary"></i>
+        Estadísticas
+      </h1>
+    </div>
+    <div class="col-lg-6">
+      <div class="d-flex gap-2 flex-wrap justify-content-lg-end">
+        <%= link_to dashboard_path, class: "btn btn-outline-primary" do %>
+          <i class="fas fa-tachometer-alt me-2"></i>Dashboard Principal
+        <% end %>
+      </div>
     </div>
   </div>
 
   <!-- Performance Insights Section -->
   <div class="row mb-4">
-    <div class="col-md-12">
-      <div class="card shadow-sm performance-insights-card">
-        <div class="card-header bg-warning text-dark">
-          <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Insights de Rendimiento</h5>
+    <div class="col-12">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            <i class="fas fa-lightbulb me-2"></i>
+            Insights de Rendimiento
+          </h5>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <% @insights.each_with_index do |insight, index| %>
-              <div class="col-md-<%= @insights.size == 1 ? '12' : @insights.size == 2 ? '6' : '4' %>">
-                <div class="alert alert-info mb-2">
-                  <i class="fas fa-info-circle me-2"></i><%= insight %>
-                </div>
+        <div class="analytics-body">
+          <div class="insights-container">
+            <% (@insights || []).each do |insight| %>
+              <div class="insight-item">
+                <i class="fas fa-lightbulb text-warning me-2"></i>
+                <%= insight %>
               </div>
             <% end %>
           </div>
@@ -28,19 +40,23 @@
     </div>
   </div>
 
+  <!-- Daily Visits Chart -->
   <div class="row mb-4">
-    <div class="col-md-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Gráfico de Visitas Diarias</h5>
+    <div class="col-12">
+      <div class="analytics-card">
+        <div class="analytics-header d-flex justify-content-between align-items-center">
+          <h5 class="analytics-title">
+            <i class="fas fa-chart-line me-2"></i>
+            Gráfico de Visitas Diarias
+          </h5>
           <div class="btn-group" role="group">
-            <%= link_to "Hoy", dashboards_stats_path(period: 1), class: "btn btn-sm #{@period == 1 ? 'btn-light' : 'btn-outline-light'}" %>
-            <%= link_to "7 días", dashboards_stats_path(period: 7), class: "btn btn-sm #{@period == 7 ? 'btn-light' : 'btn-outline-light'}" %>
-            <%= link_to "30 días", dashboards_stats_path(period: 30), class: "btn btn-sm #{@period == 30 ? 'btn-light' : 'btn-outline-light'}" %>
-            <%= link_to "90 días", dashboards_stats_path(period: 90), class: "btn btn-sm #{@period == 90 ? 'btn-light' : 'btn-outline-light'}" %>
+            <%= link_to "Hoy", dashboards_stats_path(period: 1), class: "btn btn-sm #{@period == 1 ? 'btn-primary' : 'btn-outline-primary'}" %>
+            <%= link_to "7 días", dashboards_stats_path(period: 7), class: "btn btn-sm #{@period == 7 ? 'btn-primary' : 'btn-outline-primary'}" %>
+            <%= link_to "30 días", dashboards_stats_path(period: 30), class: "btn btn-sm #{@period == 30 ? 'btn-primary' : 'btn-outline-primary'}" %>
+            <%= link_to "90 días", dashboards_stats_path(period: 90), class: "btn btn-sm #{@period == 90 ? 'btn-primary' : 'btn-outline-primary'}" %>
           </div>
         </div>
-        <div class="card-body">
+        <div class="analytics-body">
           <% 
             max_visits = @daily_visits.values.max || 1
             total_period_visits = @daily_visits.values.sum

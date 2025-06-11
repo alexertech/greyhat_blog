@@ -6,8 +6,8 @@ class Post < ApplicationRecord
 
   after_create :update_slug
   before_update :assign_slug
-  after_commit :generate_image_variants, on: %i[create update]
   after_save :assign_tags
+  after_save :generate_variants_if_image_changed
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_fill: [480, 148], format: :webp
     attachable.variant :medium, resize_to_fill: [768, 237], format: :webp
@@ -74,14 +74,20 @@ class Post < ApplicationRecord
          .count
   end
 
-  def performance_trend(days = 7)
-    current_period = recent_visits(days)
+  def performance_trend(days = 3)
+    # Compare last 3 days vs previous 3 days for more relevant trends
+    current_period = visits.where('viewed_at >= ?', days.days.ago).count
     previous_period = visits.where('viewed_at >= ? AND viewed_at < ?', 
                                    (days * 2).days.ago, days.days.ago).count
     
-    return 0 if previous_period.zero?
+    # If no previous data, show trend based on post age
+    if previous_period.zero?
+      return current_period > 0 ? 100 : 0
+    end
     
-    ((current_period - previous_period) / previous_period.to_f * 100).round(1)
+    # Cap extreme values for better UX
+    trend = ((current_period - previous_period) / previous_period.to_f * 100).round(1)
+    [[-95, trend].max, 500].min  # Cap between -95% and +500%
   end
 
   def self.total_visit_count
@@ -137,10 +143,14 @@ class Post < ApplicationRecord
     update_column(:slug, title.parameterize.to_s)
   end
 
-  def generate_image_variants
+  def generate_variants_if_image_changed
     return unless image.attached?
+    
+    # Only generate variants if image was actually changed/attached
+    return unless image.attachment.created_at >= 1.minute.ago || 
+                  (saved_changes.key?('updated_at') && image.attachment.created_at >= updated_at - 1.minute)
 
-    # Generate variants synchronously
+    # Generate variants only when image is new or changed
     begin
       image.variant(:thumb).processed
       image.variant(:medium).processed
