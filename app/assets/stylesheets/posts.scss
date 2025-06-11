@@ -1,3 +1,138 @@
 // Place all the styles related to the Posts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+// Post Form Styling
+.post-form-container {
+  .post-form {
+    .form-label {
+      color: var(--text-heading);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      
+      i {
+        opacity: 0.8;
+      }
+    }
+    
+    .form-control:focus {
+      border-color: #0D6EFD;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+    
+    .form-control-lg {
+      padding: 0.75rem 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .trix-editor-container {
+      position: relative;
+      
+      trix-editor {
+        border-radius: 0.5rem !important;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        
+        &:focus {
+          border-color: #0D6EFD;
+          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+      }
+    }
+    
+    .image-upload-container {
+      .form-control {
+        padding: 0.75rem;
+        border: 2px dashed #dee2e6;
+        border-radius: 0.5rem;
+        background-color: #f8f9fa;
+        transition: all 0.15s ease-in-out;
+        
+        &:hover {
+          border-color: #0D6EFD;
+          background-color: rgba(13, 110, 253, 0.05);
+        }
+        
+        &:focus {
+          border-color: #0D6EFD;
+          border-style: solid;
+          background-color: white;
+        }
+      }
+      
+      .current-image {
+        .image-preview {
+          border: 1px solid #dee2e6;
+          border-radius: 0.375rem;
+          padding: 0.5rem;
+          background-color: white;
+          display: inline-block;
+        }
+      }
+    }
+    
+    .form-check-input[type="checkbox"] {
+      width: 3rem;
+      height: 1.5rem;
+      border-radius: 1rem;
+      
+      &:checked {
+        background-color: #0D6EFD;
+        border-color: #0D6EFD;
+      }
+      
+      &:focus {
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      }
+    }
+    
+    .form-actions {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #dee2e6;
+      
+      .btn {
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.15s ease-in-out;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support for post forms
+[data-theme="dark"] {
+  .post-form-container {
+    .post-form {
+      .image-upload-container .form-control {
+        background-color: var(--bg-secondary);
+        border-color: var(--border-color);
+        color: var(--text-primary);
+        
+        &:hover {
+          border-color: var(--link-color);
+          background-color: rgba(121, 192, 255, 0.1);
+        }
+        
+        &:focus {
+          background-color: var(--input-bg);
+          border-color: var(--link-color);
+        }
+      }
+      
+      .current-image .image-preview {
+        background-color: var(--card-bg);
+        border-color: var(--border-color);
+      }
+      
+      .form-actions {
+        border-top-color: var(--border-color);
+      }
+    }
+  }
+}
