@@ -7,6 +7,12 @@ export default class extends Controller {
     description: String 
   }
 
+  shareMastodon() {
+    const text = `${this.titleValue} - ${this.descriptionValue}`
+    const url = `https://mastodon.social/share?text=${encodeURIComponent(text)}&url=${encodeURIComponent(this.urlValue)}`
+    this.openPopup(url)
+  }
+
   shareTwitter() {
     const text = `${this.titleValue} - ${this.descriptionValue}`
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(this.urlValue)}`
