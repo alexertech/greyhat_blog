@@ -3,6 +3,7 @@
 class Post < ApplicationRecord
   validates :title, presence: true, length: { minimum: 1 }
   validates :body, presence: true
+  validates :user_id, presence: true
 
   after_create :update_slug
   before_update :assign_slug
@@ -14,6 +15,7 @@ class Post < ApplicationRecord
     attachable.variant :banner, resize_to_fill: [1536, 474], format: :webp
   end
   has_rich_text :body
+  belongs_to :user
   has_many :visits, as: :visitable, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :post_tags, dependent: :destroy
@@ -144,7 +146,7 @@ class Post < ApplicationRecord
   end
 
   def generate_variants_if_image_changed
-    return unless image.attached?
+    return unless image.attached? && image.attachment&.created_at
     
     # Only generate variants if image was actually changed/attached
     return unless image.attachment.created_at >= 1.minute.ago || 

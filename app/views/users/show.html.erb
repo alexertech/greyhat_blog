@@ -1,0 +1,137 @@
+<div class="dashboard-container">
+  <div class="row align-items-center mb-4">
+    <div class="col-lg-8">
+      <h1 class="dashboard-title mb-2">
+        <i class="fas fa-user me-3 text-primary"></i>
+        <%= @user.display_name %>
+      </h1>
+    </div>
+    <div class="col-lg-4">
+      <div class="d-flex gap-2 justify-content-lg-end">
+        <%= link_to "Editar", edit_user_path(@user), class: "btn btn-primary" %>
+        <%= link_to "Volver a Usuarios", users_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">Información del Usuario</h5>
+        </div>
+        <div class="analytics-body">
+          <div class="text-center mb-4">
+            <% if @user.avatar.attached? %>
+              <%= image_tag @user.avatar.variant(:medium), class: "rounded-circle", style: "width: 120px; height: 120px; object-fit: cover;" %>
+            <% else %>
+              <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-muted mx-auto" style="width: 120px; height: 120px;">
+                <i class="fas fa-user fa-3x"></i>
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="user-details">
+            <div class="mb-3">
+              <strong>Email:</strong><br>
+              <%= @user.email %>
+            </div>
+            
+            <div class="mb-3">
+              <strong>Nombre Público:</strong><br>
+              <%= @user.public_name || "No configurado" %>
+            </div>
+            
+            <% if @user.description.present? %>
+              <div class="mb-3">
+                <strong>Descripción:</strong><br>
+                <%= simple_format(@user.description) %>
+              </div>
+            <% end %>
+            
+            <div class="mb-3">
+              <strong>Último Acceso:</strong><br>
+              <% if @user.last_sign_in_at %>
+                <%= @user.last_sign_in_at.strftime("%d/%m/%Y a las %H:%M") %>
+              <% else %>
+                <span class="text-muted">Nunca ha accedido</span>
+              <% end %>
+            </div>
+            
+            <div class="mb-3">
+              <strong>Miembro desde:</strong><br>
+              <%= @user.created_at.strftime("%d/%m/%Y") %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h5 class="analytics-title">
+            Posts del Autor
+            <span class="badge bg-primary ms-2"><%= @user.posts.count %></span>
+          </h5>
+        </div>
+        <div class="analytics-body">
+          <% if @user.posts.any? %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Título</th>
+                    <th>Estado</th>
+                    <th>Visitas</th>
+                    <th>Comentarios</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @user.posts.order(created_at: :desc).each do |post| %>
+                    <tr>
+                      <td>
+                        <strong><%= link_to post.title, post, class: "text-decoration-none" %></strong>
+                      </td>
+                      <td>
+                        <% if post.draft? %>
+                          <span class="badge bg-warning">Borrador</span>
+                        <% else %>
+                          <span class="badge bg-success">Publicado</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <span class="badge bg-primary"><%= post.total_visits %></span>
+                      </td>
+                      <td>
+                        <span class="badge bg-info"><%= post.comments.approved.count %></span>
+                      </td>
+                      <td>
+                        <%= post.created_at.strftime("%d/%m/%Y") %>
+                      </td>
+                      <td>
+                        <div class="d-flex gap-1">
+                          <%= link_to "Ver", post, class: "btn btn-sm btn-outline-primary" %>
+                          <%= link_to "Editar", edit_post_path(post), class: "btn btn-sm btn-outline-secondary" %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <div class="text-center py-4">
+              <i class="fas fa-pencil-alt fa-2x text-muted mb-3"></i>
+              <h6 class="text-muted">Sin posts publicados</h6>
+              <p class="text-muted">Este usuario aún no ha creado ningún post.</p>
+              <%= link_to "Crear Post", new_post_path, class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

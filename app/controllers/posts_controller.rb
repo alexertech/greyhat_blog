@@ -32,7 +32,7 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Post.new(draft: true)
+    @post = Post.new(draft: true, user: current_user)
   end
 
   # GET /posts/1/edit
@@ -41,6 +41,7 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @post = Post.new(post_params)
+    @post.user = current_user unless @post.user_id.present?
 
     respond_to do |format|
       if @post.save
@@ -87,15 +88,18 @@ class PostsController < ApplicationController
 
   def set_post
     # Optimize includes - only load what's needed for the specific action
-    @post = Post.includes(:image_attachment, :tags, comments: [:post]).find_by_slug(params[:id])
+    @post = Post.includes(:image_attachment, :tags, :user, comments: [:post]).find_by_slug(params[:id])
+    redirect_to root_path, alert: 'Post no encontrado.' unless @post
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
-    params.require(:post).permit(:title, :body, :image, :draft, :tag_names)
+    params.require(:post).permit(:title, :body, :image, :draft, :tag_names, :user_id)
   end
 
   def track_visit
+    return unless @post # Safety check
+    
     # Use single atomic operation to avoid race conditions
     Visit.transaction do
       # Check for existing visit in last 24 hours
@@ -118,11 +122,11 @@ class PostsController < ApplicationController
       )
     end
   rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.warn "Failed to track visit for post #{@post.id}: #{e.message}"
+    Rails.logger.warn "Failed to track visit for post #{@post&.id}: #{e.message}"
   end
 
   def ensure_published_or_admin
-    return unless @post.draft? && !user_signed_in?
+    return unless @post && @post.draft? && !user_signed_in?
 
     redirect_to root_path, alert: 'That post is not available.'
   end

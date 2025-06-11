@@ -3,21 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
+  let(:user) { User.create(email: 'test@example.com', password: 'password123456', public_name: 'Test User') }
+  
   let(:valid_attributes) {
     {
       title: 'Test Post',
-      body: 'This is a test post body'
+      body: 'This is a test post body',
+      user_id: user.id
     }
   }
 
   let(:invalid_attributes) {
     {
       title: '',
-      body: ''
+      body: '',
+      user_id: nil
     }
   }
-
-  let(:user) { User.create(email: 'test@example.com', password: 'password123456') }
 
   describe 'GET #index' do
     context 'when user is authenticated' do

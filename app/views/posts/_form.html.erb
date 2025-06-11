@@ -18,6 +18,19 @@
     <% end %>
 
     <div class="mb-4">
+      <%= form.label :user_id, class: "form-label fw-semibold" do %>
+        <i class="fas fa-user me-2 text-primary"></i>Autor del artículo
+      <% end %>
+      <%= form.collection_select :user_id, User.order(:public_name, :email), :id, :display_name, 
+          { prompt: "Selecciona un autor..." }, 
+          { class: "form-select" } %>
+      <div class="form-text mt-2">
+        <i class="fas fa-info-circle me-1 text-info"></i>
+        El autor seleccionado aparecerá como escritor del artículo.
+      </div>
+    </div>
+
+    <div class="mb-4">
       <%= form.label :title, class: "form-label fw-semibold" do %>
         <i class="fas fa-heading me-2 text-primary"></i>Título del artículo
       <% end %>

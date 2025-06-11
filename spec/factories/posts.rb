@@ -6,6 +6,7 @@ FactoryBot.define do
     body { ActionText::Content.new("This is the body content for the post.") }
     draft { false }
     sequence(:slug) { |n| "test-post-#{n}" }
+    association :user
     
     trait :draft do
       draft { true }
