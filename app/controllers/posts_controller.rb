@@ -17,6 +17,11 @@ class PostsController < ApplicationController
     @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags).order(created_at: :desc).paginate(
       page: params[:page], per_page: 20
     )
+    
+    # Calculate total visits across all published posts for counter
+    @total_published_visits = Visit.joins("JOIN posts ON visits.visitable_id = posts.id")
+                                   .where("visits.visitable_type = 'Post' AND posts.draft = false")
+                                   .count
   end
 
   # GET /posts/1

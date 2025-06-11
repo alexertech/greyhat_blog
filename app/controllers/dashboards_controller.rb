@@ -132,6 +132,16 @@ class DashboardsController < ApplicationController
     # Device/Browser analytics
     @user_agents_summary = analyze_user_agents
 
+    # Content Strategy Insights
+    begin
+      @content_insights = generate_content_insights
+      @tag_performance = analyze_tag_performance
+    rescue => e
+      Rails.logger.error "Error generating content insights: #{e.message}"
+      @content_insights = ['Error generando insights - revisa los logs']
+      @tag_performance = {}
+    end
+
     # Top referrers for quick view - exclude self-referrers
     @top_referrers_preview = analyze_referrers(
       Visit.where.not(referer: [nil, ''])
