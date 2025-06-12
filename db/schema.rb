@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_11_203230) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_12_140851) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
   enable_extension "vector"
 
@@ -80,6 +81,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_11_203230) do
     t.integer "unique_visits", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "visits_count", default: 0, null: false
+    t.index ["name"], name: "idx_pages_name"
+    t.index ["visits_count"], name: "index_pages_on_visits_count"
   end
 
   create_table "post_tags", force: :cascade do |t|
@@ -88,6 +92,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_11_203230) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_post_tags_on_post_id"
+    t.index ["tag_id", "post_id"], name: "idx_post_tags_lookup"
     t.index ["tag_id"], name: "index_post_tags_on_tag_id"
   end
 
@@ -116,9 +121,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_11_203230) do
     t.integer "unique_visits", default: 0
     t.boolean "draft", default: false, null: false
     t.bigint "user_id", null: false
+    t.integer "visits_count", default: 0, null: false
     t.index ["draft", "created_at"], name: "index_posts_on_draft_and_created_at", where: "(draft = false)"
     t.index ["slug"], name: "index_posts_on_slug"
     t.index ["user_id"], name: "index_posts_on_user_id"
+    t.index ["visits_count"], name: "index_posts_on_visits_count"
   end
 
   create_table "site_healths", force: :cascade do |t|
@@ -174,13 +181,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_11_203230) do
     t.datetime "updated_at", null: false
     t.integer "action_type", default: 0
     t.string "session_id"
+    t.index "EXTRACT(hour FROM viewed_at), viewed_at", name: "idx_visits_hour_extract"
+    t.index ["action_type", "visitable_type", "visitable_id", "ip_address", "viewed_at"], name: "idx_visits_newsletter_conversion", where: "(action_type = 1)"
     t.index ["action_type"], name: "index_visits_on_action_type"
     t.index ["ip_address", "viewed_at"], name: "index_visits_on_ip_address_and_viewed_at"
     t.index ["ip_address"], name: "index_visits_on_ip_address"
+    t.index ["user_agent"], name: "idx_visits_user_agent_gin", opclass: :gin_trgm_ops, using: :gin
     t.index ["user_agent"], name: "index_visits_on_user_agent"
     t.index ["viewed_at"], name: "index_visits_on_viewed_at"
     t.index ["visitable_id", "visitable_type"], name: "index_visits_on_visitable_id_and_visitable_type"
+    t.index ["visitable_type", "visitable_id", "ip_address", "viewed_at"], name: "idx_visits_post_conversion", where: "((visitable_type)::text = 'Post'::text)"
     t.index ["visitable_type", "visitable_id", "ip_address", "viewed_at"], name: "index_visits_on_unique_check"
+    t.index ["visitable_type", "visitable_id"], name: "idx_visits_post_count", where: "((visitable_type)::text = 'Post'::text)"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

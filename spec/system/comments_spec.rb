@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe "Comments", type: :system do
-  let!(:blog_post) { Post.create!(title: 'Test Blog Post', body: 'This is a test blog post for comments testing.') }
+  let!(:user) { create(:user) }
+  let!(:blog_post) { create(:post, user: user, title: 'Test Blog Post', body: 'This is a test blog post for comments testing.') }
   
   before do
     # Set locale to Spanish
@@ -85,11 +86,11 @@ RSpec.describe "Comments", type: :system do
   end
   
   describe "Managing comments as admin" do
-    let!(:user) { User.create!(email: 'admin@example.com', password: 'password123456') }
+    let!(:admin_user) { create(:user) }
     let!(:comment) { blog_post.comments.create!(username: 'Test Commenter', email: 'commenter@example.com', body: 'This is a test comment.') }
     
     before do
-      login_as(user, scope: :user)
+      login_as(admin_user, scope: :user)
     end
     
     it "shows comments in the dashboard" do

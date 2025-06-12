@@ -377,84 +377,37 @@ class DashboardsController < ApplicationController
   end
 
   def analyze_user_agents
-    # Use database aggregation instead of loading all user agents into memory
-    browsers = {
-      'Chrome' => Visit.where("user_agent ILIKE '%chrome%' AND user_agent NOT ILIKE '%edge%'").count,
-      'Firefox' => Visit.where("user_agent ILIKE '%firefox%'").count,
-      'Safari' => Visit.where("user_agent ILIKE '%safari%' AND user_agent NOT ILIKE '%chrome%'").count,
-      'Edge' => Visit.where("user_agent ILIKE '%edge%'").count
-    }
-    browsers['Other'] = Visit.where.not(user_agent: [nil, '']).count - browsers.values.sum
+    # Use optimized queries with the GIN index for better performance
+    browsers = {}
+    devices = {}
+    os_systems = {}
     
-    devices = {
-      'Mobile' => Visit.where("user_agent ILIKE ANY (ARRAY['%mobile%', '%android%', '%iphone%'])").count,
-      'Tablet' => Visit.where("user_agent ILIKE ANY (ARRAY['%tablet%', '%ipad%'])").count
-    }
-    devices['Desktop'] = Visit.where.not(user_agent: [nil, '']).count - devices.values.sum
+    # Browser analysis
+    browsers['Chrome'] = Visit.where("user_agent ILIKE '%chrome%' AND user_agent NOT ILIKE '%edge%'").count
+    browsers['Firefox'] = Visit.where("user_agent ILIKE '%firefox%'").count
+    browsers['Safari'] = Visit.where("user_agent ILIKE '%safari%' AND user_agent NOT ILIKE '%chrome%'").count
+    browsers['Edge'] = Visit.where("user_agent ILIKE '%edge%'").count
     
-    os_systems = {
-      'Windows' => Visit.where("user_agent ILIKE '%windows%'").count,
-      'macOS' => Visit.where("user_agent ILIKE ANY (ARRAY['%mac os%', '%macintosh%'])").count,
-      'Linux' => Visit.where("user_agent ILIKE '%linux%'").count,
-      'Android' => Visit.where("user_agent ILIKE '%android%'").count,
-      'iOS' => Visit.where("user_agent ILIKE ANY (ARRAY['%ios%', '%iphone%', '%ipad%'])").count
-    }
-    os_systems['Other'] = Visit.where.not(user_agent: [nil, '']).count - os_systems.values.sum
+    total_with_agents = Visit.where.not(user_agent: [nil, '']).count
+    browsers['Other'] = [total_with_agents - browsers.values.sum, 0].max
+    
+    # Device analysis
+    devices['Mobile'] = Visit.where("user_agent ILIKE ANY (ARRAY['%mobile%', '%android%', '%iphone%'])").count
+    devices['Tablet'] = Visit.where("user_agent ILIKE ANY (ARRAY['%tablet%', '%ipad%'])").count
+    devices['Desktop'] = [total_with_agents - devices.values.sum, 0].max
+    
+    # OS analysis
+    os_systems['Windows'] = Visit.where("user_agent ILIKE '%windows%'").count
+    os_systems['macOS'] = Visit.where("user_agent ILIKE ANY (ARRAY['%mac os%', '%macintosh%'])").count
+    os_systems['Linux'] = Visit.where("user_agent ILIKE '%linux%'").count
+    os_systems['Android'] = Visit.where("user_agent ILIKE '%android%'").count
+    os_systems['iOS'] = Visit.where("user_agent ILIKE ANY (ARRAY['%ios%', '%iphone%', '%ipad%'])").count
+    os_systems['Other'] = [total_with_agents - os_systems.values.sum, 0].max
 
-    return {
+    {
       browsers: browsers.select { |_, count| count > 0 }.sort_by { |_, count| -count }.first(5).to_h,
       devices: devices.select { |_, count| count > 0 }.sort_by { |_, count| -count }.to_h,
       operating_systems: os_systems.select { |_, count| count > 0 }.sort_by { |_, count| -count }.first(5).to_h
-    }
-    
-    # Legacy code removed - no longer needed
-    user_agents = {}
-    user_agents.each do |ua, count|
-      # Simple browser detection
-      case ua.downcase
-      when /chrome/
-        browsers['Chrome'] = (browsers['Chrome'] || 0) + count
-      when /firefox/
-        browsers['Firefox'] = (browsers['Firefox'] || 0) + count
-      when /safari/
-        browsers['Safari'] = (browsers['Safari'] || 0) + count
-      when /edge/
-        browsers['Edge'] = (browsers['Edge'] || 0) + count
-      else
-        browsers['Other'] = (browsers['Other'] || 0) + count
-      end
-
-      # Device detection
-      case ua.downcase
-      when /mobile|android|iphone/
-        devices['Mobile'] = (devices['Mobile'] || 0) + count
-      when /tablet|ipad/
-        devices['Tablet'] = (devices['Tablet'] || 0) + count
-      else
-        devices['Desktop'] = (devices['Desktop'] || 0) + count
-      end
-
-      # OS detection
-      case ua.downcase
-      when /windows/
-        os_systems['Windows'] = (os_systems['Windows'] || 0) + count
-      when /mac os|macintosh/
-        os_systems['macOS'] = (os_systems['macOS'] || 0) + count
-      when /linux/
-        os_systems['Linux'] = (os_systems['Linux'] || 0) + count
-      when /android/
-        os_systems['Android'] = (os_systems['Android'] || 0) + count
-      when /ios|iphone|ipad/
-        os_systems['iOS'] = (os_systems['iOS'] || 0) + count
-      else
-        os_systems['Other'] = (os_systems['Other'] || 0) + count
-      end
-    end
-
-    {
-      browsers: browsers.sort_by { |_, count| -count }.first(5).to_h,
-      devices: devices.sort_by { |_, count| -count }.to_h,
-      operating_systems: os_systems.sort_by { |_, count| -count }.first(5).to_h
     }
   end
 

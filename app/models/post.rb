@@ -35,8 +35,8 @@ class Post < ApplicationRecord
   end
 
   def total_visits
-    # Use the counter cache if available, otherwise query
-    self[:unique_visits] || visits.count
+    # Use the counter cache for better performance
+    visits_count || 0
   end
 
   def human_visits
@@ -97,11 +97,10 @@ class Post < ApplicationRecord
   end
 
   def self.most_visited(limit = 5)
-    joins("LEFT JOIN (SELECT visitable_id, COUNT(*) as visit_count FROM visits
-           WHERE visitable_type = 'Post' GROUP BY visitable_id) AS visit_counts
-           ON posts.id = visit_counts.visitable_id")
+    # Use counter cache for much better performance
+    published
       .includes(:comments, :tags)
-      .order('visit_counts.visit_count DESC NULLS LAST')
+      .order(visits_count: :desc)
       .limit(limit)
   end
 

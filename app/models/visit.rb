@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Visit < ApplicationRecord
-  belongs_to :visitable, polymorphic: true
+  belongs_to :visitable, polymorphic: true, counter_cache: :visits_count
 
   validates :visitable, presence: true
   validates :ip_address, presence: true

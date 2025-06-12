@@ -1,39 +1,71 @@
 <% content_for :head do %>
-  <title><%= @post.title %> - Greyhat</title>
-  <meta name="description" content="<%= strip_tags(@post.body.to_plain_text).truncate(160) %>" />
+  <title><%= page_title(@post.title) %></title>
+  <meta name="description" content="<%= meta_description(strip_tags(@post.body.to_plain_text).truncate(160)) %>" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="<%= canonical_url(post_url(@post)) %>" />
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article" />
   <meta property="og:title" content="<%= @post.title %>" />
   <meta property="og:description" content="<%= strip_tags(@post.body.to_plain_text).truncate(200) %>" />
-  <meta property="og:url" content="<%= request.original_url %>" />
+  <meta property="og:url" content="<%= post_url(@post) %>" />
   <meta property="og:site_name" content="Greyhat" />
   <% if @post.image.attached? %>
-    <meta property="og:image" content="<%= request.base_url %><%= url_for(@post.image.variant(:banner)) %>" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="<%= url_for(@post.image.variant(:banner)) %>" />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="474" />
     <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:alt" content="<%= @post.title %>" />
   <% else %>
-    <meta property="og:image" content="<%= request.base_url %><%= asset_path('logo.png') %>" />
+    <meta property="og:image" content="<%= asset_url('logo.png') %>" />
     <meta property="og:image:width" content="500" />
     <meta property="og:image:height" content="500" />
     <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Greyhat Logo" />
   <% end %>
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="<%= @post.title %>" />
   <meta name="twitter:description" content="<%= strip_tags(@post.body.to_plain_text).truncate(200) %>" />
+  <meta name="twitter:site" content="@greyhatcl" />
+  <meta name="twitter:creator" content="@greyhatcl" />
   <% if @post.image.attached? %>
-    <meta name="twitter:image" content="<%= request.base_url %><%= url_for(@post.image.variant(:banner)) %>" />
+    <meta name="twitter:image" content="<%= url_for(@post.image.variant(:banner)) %>" />
+    <meta name="twitter:image:alt" content="<%= @post.title %>" />
   <% else %>
-    <meta name="twitter:image" content="<%= request.base_url %><%= asset_path('logo.png') %>" />
+    <meta name="twitter:image" content="<%= asset_url('logo.png') %>" />
+    <meta name="twitter:image:alt" content="Greyhat Logo" />
   <% end %>
   
-  <!-- LinkedIn -->
+  <!-- Article-specific meta -->
   <meta property="og:locale" content="es_ES" />
-  <meta property="article:author" content="<%= @post.user.display_name %>" />
+  <meta property="article:author" content="<%= @post.user.display_name || @post.user.email.split('@').first %>" />
   <meta property="article:published_time" content="<%= @post.created_at.iso8601 %>" />
+  <meta property="article:modified_time" content="<%= @post.updated_at.iso8601 %>" />
+  <meta property="article:section" content="Technology" />
+  <% if @post.tags.any? %>
+    <% @post.tags.each do |tag| %>
+      <meta property="article:tag" content="<%= tag.name %>" />
+    <% end %>
+  <% end %>
+  
+  <!-- SEO enhancements -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="language" content="Spanish" />
+  <meta name="revisit-after" content="7 days" />
+  
+  <!-- Structured Data -->
+  <%= structured_data_for_post(@post) %>
+  
+  <!-- Breadcrumb Structured Data -->
+  <%= breadcrumb_structured_data([
+    { name: "Inicio", url: root_url },
+    { name: "Artículos", url: posts_url },
+    { name: @post.title, url: post_url(@post) }
+  ]) %>
 <% end %>
 
 <% if notice %>

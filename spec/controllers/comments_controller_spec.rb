@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-  let(:user) { User.create!(email: 'admin@example.com', password: 'password123456') }
-  let(:post_obj) { Post.create!(title: 'Test Post', body: 'Test content') }
+  let(:user) { create(:user) }
+  let(:post_obj) { create(:post, user: user) }
   let!(:comment) { post_obj.comments.create!(username: 'Commenter', email: 'commenter@example.com', body: 'A test comment') }
 
   before do
