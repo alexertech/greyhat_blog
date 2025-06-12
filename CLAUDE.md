@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Database setup: `bundle exec rails db:prepare`
 - Run all tests: `bundle exec rspec`
 - Run single test: `bundle exec rspec spec/path/to_spec.rb:LINE_NUMBER`
-- Deploy: `bundle exec cap production deploy` (automatically runs migrations)
+- Deploy: `bundle exec cap production deploy`
 - Run migrations locally: `bundle exec rails db:migrate`
 
 ## Deployment
@@ -104,8 +104,6 @@ Greyhat.cl is a technology reflection blog focused on the balance between techno
 - **Automated Reporting**: Weekly/monthly analytics emails
 
 ### User Experience Enhancements
-- **Reading Progress Indicators**: Visual reading progress
-- **Content Bookmarking Enhancement**: Improved save/organize functionality
 - **Dark Mode Auto-detection**: System preference integration
 - **Mobile Reading Optimization**: Enhanced mobile experience
 - **Search Enhancement**: Full-text search with filters
