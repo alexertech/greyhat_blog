@@ -70,6 +70,7 @@ A modern, feature-rich blog engine built with Ruby on Rails 7.2 and PostgreSQL. 
 - PostgreSQL 14+
 - Node.js 18+ (for asset compilation)
 - ImageMagick (for image processing)
+- LibVips (for image processing)
 
 ### Installation
 
@@ -100,7 +101,7 @@ A modern, feature-rich blog engine built with Ruby on Rails 7.2 and PostgreSQL. 
    - **Public site**: http://localhost:3000
    - **Admin login**: http://localhost:3000/users/sign_in
      - Email: `admin@example.com`
-     - Password: `password123`
+     - Password: `password12356`
 
 ## ⚙️ Configuration
 
@@ -287,7 +288,6 @@ https://github.com/yourusername/greyhat-blog
 - **Author**: Alex Barrios
 - **Website**: [alexertech.com](https://www.alexertech.com)
 - **LinkedIn**: [linkedin.com/in/alexertech](https://linkedin.com/in/alexertech)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/greyhat-blog/issues)
 
 ## 🏆 Credits
 
