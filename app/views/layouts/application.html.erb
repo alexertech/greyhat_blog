@@ -5,23 +5,60 @@
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida">
+	<meta name="description" content="<%= meta_description %>">
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	
+	<!-- SEO Meta Tags -->
+	<meta name="robots" content="index, follow">
+	<meta name="language" content="Spanish">
+	<meta name="author" content="Greyhat">
+	<link rel="canonical" href="<%= canonical_url %>">
 
 	<%= csrf_meta_tags %>
 	<%= csp_meta_tag %>
 	<% if content_for?(:head) %>
 		<%= yield(:head) %>
 	<% else %>
-		<title>Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida</title>
+		<title><%= page_title %></title>
+		
+		<!-- Default Open Graph -->
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida">
+		<meta property="og:description" content="<%= meta_description %>">
+		<meta property="og:url" content="<%= canonical_url %>">
+		<meta property="og:site_name" content="Greyhat">
+		<meta property="og:image" content="<%= asset_url('logo.png') %>">
+		<meta property="og:locale" content="es_ES">
+		
+		<!-- Default Twitter Card -->
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:site" content="@greyhatcl">
+		<meta name="twitter:title" content="Greyhat">
+		<meta name="twitter:description" content="<%= meta_description %>">
+		<meta name="twitter:image" content="<%= asset_url('logo.png') %>">
+		
+		<!-- Structured Data -->
+		<%= structured_data_for_website %>
+		<%= structured_data_for_organization %>
 	<% end %>
+	<!-- DNS Prefetch for performance -->
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+	
 	<!-- Preconnect to Google Fonts to improve loading performance -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 	
-	<%= stylesheet_link_tag 'application', media: 'all' %>
+	<!-- Font Awesome with performance optimization -->
+	<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+	<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></noscript>
+	
+	<!-- Preload critical resources -->
+	<%= preload_link_tag asset_path('logo.png'), as: :image %>
+	
+	<%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
 	<%= javascript_importmap_tags %>
 </head>
 

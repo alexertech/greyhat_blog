@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  let(:post_obj) { Post.create(title: 'Test Post', body: 'Test body content') }
+  let(:user) { create(:user) }
+  let(:post_obj) { create(:post, user: user) }
   
   # Helper method to build a valid comment
   def build_valid_comment(overrides = {})
@@ -127,7 +128,7 @@ RSpec.describe Comment, type: :model do
     end
     
     it 'is destroyed when the associated post is destroyed' do
-      post_with_comment = Post.create!(title: 'Post with comment', body: 'Test content')
+      post_with_comment = create(:post, user: user)
       comment = post_with_comment.comments.create!(
         username: 'María García',
         email: 'user@example.com',

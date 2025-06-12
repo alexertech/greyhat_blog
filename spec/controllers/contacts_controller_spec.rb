@@ -28,7 +28,7 @@ RSpec.describe ContactsController, type: :controller do
     }
   }
 
-  let(:user) { User.create(email: 'admin@example.com', password: 'password123456') }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     context 'when user is authenticated' do
@@ -40,7 +40,7 @@ RSpec.describe ContactsController, type: :controller do
       end
 
       it 'assigns all contacts as @contacts' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         get :index
         expect(assigns(:contacts)).to eq([contact])
       end
@@ -59,13 +59,13 @@ RSpec.describe ContactsController, type: :controller do
       before { login_user(user) }
 
       it 'returns a successful response' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         get :show, params: { id: contact.to_param }
         expect(response).to be_successful
       end
 
       it 'assigns the requested contact as @contact' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         get :show, params: { id: contact.to_param }
         expect(assigns(:contact)).to eq(contact)
       end
@@ -73,7 +73,7 @@ RSpec.describe ContactsController, type: :controller do
 
     context 'when user is not authenticated' do
       it 'redirects to the login page' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         get :show, params: { id: contact.to_param }
         expect(response).to redirect_to(new_user_session_path)
       end
@@ -149,14 +149,14 @@ RSpec.describe ContactsController, type: :controller do
       before { login_user(user) }
 
       it 'destroys the requested contact' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         expect {
           delete :destroy, params: { id: contact.to_param }
         }.to change(Contact, :count).by(-1)
       end
 
       it 'redirects to the contacts list' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         delete :destroy, params: { id: contact.to_param }
         expect(response).to redirect_to(contacts_url)
       end
@@ -164,7 +164,7 @@ RSpec.describe ContactsController, type: :controller do
 
     context 'when user is not authenticated' do
       it 'redirects to the login page' do
-        contact = Contact.create(valid_attributes)
+        contact = create(:contact)
         delete :destroy, params: { id: contact.to_param }
         expect(response).to redirect_to(new_user_session_path)
       end
@@ -176,8 +176,8 @@ RSpec.describe ContactsController, type: :controller do
       before { login_user(user) }
 
       it 'destroys all contacts' do
-        Contact.create(valid_attributes)
-        Contact.create(valid_attributes.merge(name: 'Another User'))
+        create(:contact)
+        create(:contact, name: 'Another User')
         
         expect {
           delete :clean

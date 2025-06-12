@@ -37,4 +37,8 @@ Rails.application.routes.draw do
   get '/articulos' => 'posts#list'
   get '/tags' => 'tags#index'
   post '/tags/suggest' => 'tags#suggest'
+  
+  # SEO and Site Management
+  get '/sitemap.xml' => 'sitemaps#index', as: 'sitemap', defaults: { format: 'xml' }
+  get '/robots.txt' => 'robots#index', as: 'robots', defaults: { format: 'text' }
 end
