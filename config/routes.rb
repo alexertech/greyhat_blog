@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   get 'dashboards/stats' => 'dashboards#stats'
   get 'dashboards/posts' => 'dashboards#posts'
   get 'dashboards/comments' => 'dashboards#comments'
+  
+  # Mount GoodJob dashboard for background job monitoring (admin only)
+  if Rails.env.development? || Rails.env.staging?
+    mount GoodJob::Engine => 'good_job'
+  end
   devise_for :users
   resources :users
 

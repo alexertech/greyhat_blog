@@ -14,14 +14,23 @@ class PostsController < ApplicationController
 
   # Get /blog
   def list
-    @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags).order(created_at: :desc).paginate(
+    @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags, :user).order(created_at: :desc).paginate(
       page: params[:page], per_page: 20
     )
     
-    # Calculate total visits across all published posts for counter
-    @total_published_visits = Visit.joins("JOIN posts ON visits.visitable_id = posts.id")
-                                   .where("visits.visitable_type = 'Post' AND posts.draft = false")
-                                   .count
+    # Use cached counter or calculate efficiently
+    @total_published_visits = Rails.cache.fetch('total_published_visits', expires_in: 1.hour) do
+      Post.published.sum(:visits_count) || 0
+    end
+    
+    # Pre-compute excerpts to avoid N+1 queries in the view
+    @excerpts = {}
+    @reading_times = {}
+    @posts.each do |post|
+      plain_text = post.rich_text_body&.to_plain_text || ""
+      @excerpts[post.id] = plain_text.truncate(200)
+      @reading_times[post.id] = (plain_text.split.size/200.0).ceil
+    end
   end
 
   # GET /posts/1

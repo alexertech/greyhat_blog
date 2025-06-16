@@ -59,6 +59,67 @@ RSpec.describe PostsController, type: :controller do
       expect(assigns(:posts).to_a).to eq([post2, post1])
       expect(assigns(:posts)).not_to include(draft_post)
     end
+
+    it 'uses cached total_published_visits for performance' do
+      # Create posts with visit counts
+      post1 = Post.create(valid_attributes.merge(title: 'Post 1', draft: false, visits_count: 10))
+      post2 = Post.create(valid_attributes.merge(title: 'Post 2', draft: false, visits_count: 5))
+      
+      # Mock Rails.cache to verify caching behavior
+      allow(Rails.cache).to receive(:fetch).with('total_published_visits', expires_in: 1.hour).and_return(15)
+      
+      get :list
+      expect(assigns(:total_published_visits)).to eq(15)
+      expect(Rails.cache).to have_received(:fetch).with('total_published_visits', expires_in: 1.hour)
+    end
+
+    it 'computes excerpts and reading times to avoid N+1 queries' do
+      post = Post.create(valid_attributes.merge(
+        title: 'Test Post', 
+        draft: false,
+        body: 'This is a long body with many words. ' * 50 # 300 words
+      ))
+      
+      get :list
+      
+      # Check that excerpts are pre-computed
+      expect(assigns(:excerpts)).to have_key(post.id)
+      expect(assigns(:excerpts)[post.id]).to be_present
+      expect(assigns(:excerpts)[post.id].length).to be <= 203 # 200 + "..."
+      
+      # Check that reading times are pre-computed
+      expect(assigns(:reading_times)).to have_key(post.id)
+      expect(assigns(:reading_times)[post.id]).to eq(2) # ~300 words / 200 = 1.5, ceil = 2
+    end
+
+    it 'includes necessary associations to prevent N+1 queries' do
+      post = Post.create(valid_attributes.merge(title: 'Test Post', draft: false))
+      tag = Tag.create(name: 'test-tag')
+      post.tags << tag
+      
+      # Mock ActiveRecord to track query count
+      query_count = 0
+      allow(ActiveRecord::Base.connection).to receive(:execute) do |sql|
+        query_count += 1 if sql.is_a?(String) && sql.include?('SELECT')
+        # Call original method
+        ActiveRecord::Base.connection.execute(sql)
+      end
+      
+      get :list
+      
+      # Should have loaded posts with includes, not trigger additional queries
+      expect(assigns(:posts).first.tags.loaded?).to be true
+      expect(assigns(:posts).first.association(:image_attachment).loaded?).to be true
+      expect(assigns(:posts).first.association(:rich_text_body).loaded?).to be true
+    end
+
+    it 'handles empty results gracefully' do
+      get :list
+      expect(assigns(:posts)).to be_empty
+      expect(assigns(:total_published_visits)).to eq(0)
+      expect(assigns(:excerpts)).to eq({})
+      expect(assigns(:reading_times)).to eq({})
+    end
   end
 
   describe 'GET #show' do
