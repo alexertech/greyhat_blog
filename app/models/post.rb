@@ -44,8 +44,8 @@ class Post < ApplicationRecord
   end
 
   def unique_visits
-    # Use database COUNT DISTINCT instead of loading data into memory
-    visits.distinct.count(:ip_address)
+    # Use the unique_visits counter cache field if it exists
+    read_attribute(:unique_visits) || visits.distinct.count(:ip_address)
   end
 
   def self.total_unique_visits
@@ -151,16 +151,9 @@ class Post < ApplicationRecord
     return unless image.attachment.created_at >= 1.minute.ago || 
                   (saved_changes.key?('updated_at') && image.attachment.created_at >= updated_at - 1.minute)
 
-    # Generate variants only when image is new or changed
-    begin
-      image.variant(:thumb).processed
-      image.variant(:medium).processed
-      image.variant(:banner).processed
-
-      Rails.logger.info "Generated image variants for post #{id}"
-    rescue StandardError => e
-      Rails.logger.error "Failed to generate variants for post #{id}: #{e.message}"
-    end
+    # Generate variants in background to avoid blocking the request
+    ImageVariantJob.perform_later(id)
+    Rails.logger.info "Queued image variant generation for post #{id}"
   end
 
   def assign_tags

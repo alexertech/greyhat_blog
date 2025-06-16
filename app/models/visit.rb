@@ -71,9 +71,9 @@ class Visit < ApplicationRecord
     # Get all article visits
     article_visits = base_scope.where(visitable_type: 'Post').count
     
-    # Get newsletter page visits (any page with name 'newsletter')
+    # Get newsletter page visits (any page with name 'newsletter' that are page views, not clicks)
     newsletter_page_visits = base_scope.joins("JOIN pages ON visits.visitable_id = pages.id")
-                                      .where("visits.visitable_type = 'Page' AND pages.name = 'newsletter'")
+                                      .where("visits.visitable_type = 'Page' AND pages.name = 'newsletter' AND visits.action_type = ?", action_types[:page_view])
                                       .count
     
     # Get newsletter clicks (action_type newsletter_click)

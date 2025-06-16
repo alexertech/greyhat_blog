@@ -55,7 +55,7 @@
                     </span>
                     <span>
                       <i class="fas fa-clock me-1"></i>
-                      <%= (post.body.to_plain_text.split.size/200.0).ceil %> min lectura
+                      <%= @reading_times[post.id] || 1 %> min lectura
                     </span>
                     <span>
                       <i class="fas fa-eye me-1"></i>
@@ -66,7 +66,7 @@
                     <% end %>
                   </div> 
                 <div class="post-summary mb-3">
-                  <%= post.body.to_plain_text.truncate(200) %>
+                  <%= @excerpts[post.id] || "Sin contenido disponible." %>
                 </div>
                 
                 <div class="post-footer d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -78,8 +78,8 @@
                             <i class="fas fa-tag me-1"></i><%= tag.name %>
                           <% end %>
                         <% end %>
-                        <% if post.tags.count > 4 %>
-                          <span class="text-muted small">+<%= post.tags.count - 3 %></span>
+                        <% if post.tags.size > 3 %>
+                          <span class="text-muted small">+<%= post.tags.size - 3 %></span>
                         <% end %>
                       </div>
                     <% end %>

@@ -216,4 +216,205 @@ RSpec.describe Visit, type: :model do
       end
     end
   end
+  
+  describe 'counter cache functionality' do
+    let(:user) { create(:user) }
+    let(:post) { Post.create(title: 'Test Post', body: 'Test Body', user: user) }
+    let(:page) { Page.create(name: 'test_page') }
+    
+    it 'increments counter cache when visit is created for post' do
+      initial_count = post.visits_count
+      
+      expect {
+        Visit.create(visitable: post, ip_address: '1.1.1.1', user_agent: 'test', action_type: 'page_view')
+      }.to change { post.reload.visits_count }.from(initial_count).to(initial_count + 1)
+    end
+    
+    it 'increments counter cache when visit is created for page' do
+      initial_count = page.visits_count
+      
+      expect {
+        Visit.create(visitable: page, ip_address: '1.1.1.1', user_agent: 'test', action_type: 'page_view')
+      }.to change { page.reload.visits_count }.from(initial_count).to(initial_count + 1)
+    end
+    
+    it 'decrements counter cache when visit is destroyed' do
+      visit = Visit.create(visitable: post, ip_address: '1.1.1.1', user_agent: 'test', action_type: 'page_view')
+      current_count = post.reload.visits_count
+      
+      expect {
+        visit.destroy
+      }.to change { post.reload.visits_count }.from(current_count).to(current_count - 1)
+    end
+    
+    it 'handles counter cache correctly for different action types' do
+      newsletter_visit = Visit.create(
+        visitable: page, 
+        ip_address: '1.1.1.1', 
+        user_agent: 'test', 
+        action_type: 'newsletter_click'
+      )
+      
+      external_visit = Visit.create(
+        visitable: page, 
+        ip_address: '2.2.2.2', 
+        user_agent: 'test', 
+        action_type: 'external_link'
+      )
+      
+      expect(page.reload.visits_count).to eq(2)
+    end
+  end
+  
+  describe 'action_type enum' do
+    let(:page) { Page.create(name: 'test') }
+    
+    it 'defaults to page_view' do
+      visit = Visit.create(visitable: page, ip_address: '1.1.1.1', user_agent: 'test')
+      expect(visit.action_type).to eq('page_view')
+      expect(visit.page_view?).to be true
+    end
+    
+    it 'can be set to newsletter_click' do
+      visit = Visit.create(
+        visitable: page, 
+        ip_address: '1.1.1.1', 
+        user_agent: 'test', 
+        action_type: 'newsletter_click'
+      )
+      expect(visit.newsletter_click?).to be true
+    end
+    
+    it 'can be set to external_link' do
+      visit = Visit.create(
+        visitable: page, 
+        ip_address: '1.1.1.1', 
+        user_agent: 'test', 
+        action_type: 'external_link'
+      )
+      expect(visit.external_link?).to be true
+    end
+  end
+  
+  describe 'analytics methods' do
+    let(:user) { create(:user) }
+    let(:post1) { Post.create(title: 'Post 1', body: 'Content', user: user, draft: false) }
+    let(:post2) { Post.create(title: 'Post 2', body: 'Content', user: user, draft: false) }
+    let(:newsletter_page) { Page.create(name: 'newsletter') }
+    let(:index_page) { Page.create(name: 'index') }
+    
+    describe '.newsletter_conversion_rate' do
+      before do
+        # Create article visits
+        3.times do |i|
+          Visit.create(
+            visitable: post1, 
+            ip_address: "1.1.1.#{i}", 
+            user_agent: 'human browser',
+            action_type: 'page_view',
+            viewed_at: 1.day.ago
+          )
+        end
+        
+        # Create newsletter clicks
+        Visit.create(
+          visitable: newsletter_page, 
+          ip_address: '2.2.2.2', 
+          user_agent: 'human browser',
+          action_type: 'newsletter_click',
+          viewed_at: 1.day.ago
+        )
+        
+        # Create bot visit (should be excluded)
+        Visit.create(
+          visitable: post2, 
+          ip_address: '3.3.3.3', 
+          user_agent: 'Googlebot',
+          action_type: 'page_view',
+          viewed_at: 1.day.ago
+        )
+      end
+      
+      it 'calculates conversion rate correctly' do
+        rate = Visit.newsletter_conversion_rate(7)
+        # 1 newsletter click / 3 human article visits * 100 = 33.33%
+        expect(rate).to be_within(0.1).of(33.33)
+      end
+      
+      it 'returns 0 when no article visits' do
+        Visit.where(visitable_type: 'Post').destroy_all
+        rate = Visit.newsletter_conversion_rate(7)
+        expect(rate).to eq(0)
+      end
+    end
+    
+    describe '.funnel_analysis' do
+      before do
+        # Clean up any existing visits from other tests
+        Visit.destroy_all
+        # Index visits
+        2.times do |i|
+          Visit.create(
+            visitable: index_page, 
+            ip_address: "1.1.1.#{i}", 
+            user_agent: 'human browser',
+            viewed_at: 1.day.ago
+          )
+        end
+        
+        # Article visits
+        4.times do |i|
+          Visit.create(
+            visitable: post1, 
+            ip_address: "2.2.2.#{i}", 
+            user_agent: 'human browser',
+            viewed_at: 1.day.ago
+          )
+        end
+        
+        # Newsletter page visits
+        3.times do |i|
+          Visit.create(
+            visitable: newsletter_page, 
+            ip_address: "3.3.3.#{i}", 
+            user_agent: 'human browser',
+            action_type: 'page_view',
+            viewed_at: 1.day.ago
+          )
+        end
+        
+        # Newsletter clicks
+        Visit.create(
+          visitable: newsletter_page, 
+          ip_address: '4.4.4.4', 
+          user_agent: 'human browser',
+          action_type: 'newsletter_click',
+          viewed_at: 1.day.ago
+        )
+      end
+      
+      it 'returns complete funnel analysis' do
+        analysis = Visit.funnel_analysis(7)
+        
+        expect(analysis[:index_visits]).to eq(2)
+        expect(analysis[:article_visits]).to eq(4)
+        expect(analysis[:newsletter_page_visits]).to eq(3)
+        expect(analysis[:newsletter_clicks]).to eq(1)
+        
+        # Conversion rates
+        expect(analysis[:index_to_articles]).to eq(200.0) # 4/2 * 100
+        expect(analysis[:articles_to_newsletter]).to eq(75.0) # 3/4 * 100
+        expect(analysis[:newsletter_conversion]).to be_within(0.1).of(33.3) # 1/3 * 100
+      end
+      
+      it 'handles zero division gracefully' do
+        Visit.destroy_all
+        analysis = Visit.funnel_analysis(7)
+        
+        expect(analysis[:index_to_articles]).to eq(0)
+        expect(analysis[:articles_to_newsletter]).to eq(0)
+        expect(analysis[:newsletter_conversion]).to eq(0)
+      end
+    end
+  end
 end

@@ -40,6 +40,9 @@ gem 'prettier', '~> 3.2'
 # Read .env files
 gem 'dotenv-rails'
 
+# Background jobs
+gem 'good_job', '~> 4.1'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
@@ -62,6 +65,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.4'
   gem 'capybara', '~> 3.39'
   gem 'webdrivers', '~> 5.3'
+  gem 'bullet'
 end
 
 
