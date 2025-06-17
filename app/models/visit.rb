@@ -11,7 +11,8 @@ class Visit < ApplicationRecord
   enum :action_type, {
     page_view: 0,
     newsletter_click: 1,
-    external_link: 2
+    external_link: 2,
+    like: 3
   }, default: :page_view
 
   scope :last_week, -> { where('viewed_at >= ?', 1.week.ago) }

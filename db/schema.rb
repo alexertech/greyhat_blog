@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_16_213542) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -212,6 +212,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_16_213542) do
     t.boolean "draft", default: false, null: false
     t.bigint "user_id", null: false
     t.integer "visits_count", default: 0, null: false
+    t.integer "likes_count", default: 0, null: false
     t.index ["draft", "created_at"], name: "index_posts_on_draft_and_created_at", where: "(draft = false)"
     t.index ["slug"], name: "index_posts_on_slug"
     t.index ["user_id"], name: "index_posts_on_user_id"

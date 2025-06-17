@@ -151,33 +151,12 @@
             </div>
           </div>
           
-          <!-- Share Buttons -->
-          <div class="share-buttons-wrapper"
-               data-controller="share-buttons"
-               data-share-buttons-url-value="<%= request.original_url %>"
-               data-share-buttons-title-value="<%= @post.title %>"
-               data-share-buttons-description-value="<%= strip_tags(@post.body.to_plain_text).truncate(160) %>">
-            <div class="btn-group" role="group">
-              <button data-action="click->share-buttons#shareMastodon" class="btn btn-outline-primary btn-sm" title="Compartir en Mastodon">
-                <i class="fab fa-mastodon"></i>
-              </button>
-              <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm" title="Compartir en LinkedIn">
-                <i class="fab fa-linkedin"></i>
-              </button>
-              <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm" title="Compartir en WhatsApp">
-                <i class="fab fa-whatsapp"></i>
-              </button>
-              <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm" title="Compartir en Twitter">
-                <i class="fab fa-twitter"></i>
-              </button>
-              <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm" title="Compartir en Facebook">
-                <i class="fab fa-facebook"></i>
-              </button>
-              <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm" title="Copiar enlace">
-                <i class="fas fa-link"></i>
-              </button>
-            </div>
-          </div>
+          <!-- Share and Like Buttons -->
+          <%= render 'shared/share_buttons', 
+                     post: @post,
+                     url: request.original_url, 
+                     title: @post.title, 
+                     description: strip_tags(@post.body.to_plain_text).truncate(160) %>
         </div>
       </div>
       
@@ -202,38 +181,6 @@
       </div>
     </div>
 
-    <!-- Author Bio -->
-    <div class="analytics-card mb-5">
-      <div class="analytics-header">
-        <h3 class="analytics-title">
-          <i class="fas fa-user-circle me-2"></i>Acerca del Autor
-        </h3>
-      </div>
-      <div class="analytics-body">
-        <div class="d-flex align-items-start gap-4">
-          <% if @post.user.avatar.attached? %>
-            <%= image_tag @post.user.avatar.variant(:medium), class: "rounded", style: "width: 100px; height: 100px; object-fit: cover;" %>
-          <% else %>
-            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="width: 100px; height: 100px;">
-              <i class="fas fa-user fa-2x"></i>
-            </div>
-          <% end %>
-          <div>
-            <h4 class="fw-bold mb-2"><%= @post.user.display_name %></h4>
-            <% if @post.user.description.present? %>
-              <p class="mb-0 text-muted">
-                <%= simple_format(@post.user.description) %>
-              </p>
-            <% else %>
-              <p class="mb-0 text-muted">
-                Autor en Greyhat, compartiendo reflexiones sobre tecnología y vida digital.
-              </p>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Comments Section -->
     <section class="comments-section">
       <div class="analytics-card">
@@ -242,6 +189,16 @@
             <i class="fas fa-comments me-2"></i>
             <span id="comment_count"><%= pluralize(@post.comments.approved.count, "comentario") %></span>
           </h3>
+
+        
+        <!-- Share and Like Buttons at End of Content -->
+        <div class="d-flex justify-content-center">
+          <%= render 'shared/share_buttons', 
+                     post: @post,
+                     url: request.original_url, 
+                     title: @post.title, 
+                     description: strip_tags(@post.body.to_plain_text).truncate(160) %>
+        </div>
         </div>
         <div class="analytics-body">
           <% if @post.comments.approved.any? %>
@@ -306,5 +263,39 @@
         <% end %>
       </div>
     </section>
+
+    <!-- Author Bio -->
+    <div class="analytics-card mb-5">
+      <div class="analytics-header">
+        <h3 class="analytics-title">
+          <i class="fas fa-user-circle me-2"></i>Acerca del Autor
+        </h3>
+      </div>
+      <div class="analytics-body">
+        <div class="d-flex align-items-start gap-4">
+          <% if @post.user.avatar.attached? %>
+            <%= image_tag @post.user.avatar.variant(:medium), class: "rounded", style: "width: 100px; height: 100px; object-fit: cover;" %>
+          <% else %>
+            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="width: 100px; height: 100px;">
+              <i class="fas fa-user fa-2x"></i>
+            </div>
+          <% end %>
+          <div>
+            <h4 class="fw-bold mb-2"><%= @post.user.display_name %></h4>
+            <% if @post.user.description.present? %>
+              <p class="mb-0 text-muted">
+                <%= simple_format(@post.user.description) %>
+              </p>
+            <% else %>
+              <p class="mb-0 text-muted">
+                Autor en Greyhat, compartiendo reflexiones sobre tecnología y vida digital.
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
   </article>
 </div>
