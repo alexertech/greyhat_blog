@@ -76,6 +76,29 @@ class Post < ApplicationRecord
          .count
   end
 
+  def liked_by?(ip_address)
+    visits.where(ip_address: ip_address, action_type: 'like').exists?
+  end
+
+  def like_by!(ip_address)
+    return if liked_by?(ip_address)
+    
+    visits.create!(
+      ip_address: ip_address,
+      action_type: 'like',
+      viewed_at: Time.current
+    )
+    increment!(:likes_count)
+  end
+
+  def unlike_by!(ip_address)
+    like_visit = visits.where(ip_address: ip_address, action_type: 'like').first
+    return unless like_visit
+    
+    like_visit.destroy!
+    decrement!(:likes_count)
+  end
+
   def performance_trend(days = 3)
     # Compare last 3 days vs previous 3 days for more relevant trends
     current_period = visits.where('viewed_at >= ?', days.days.ago).count

@@ -1,0 +1,46 @@
+<div class="d-flex align-items-center gap-3">
+  <!-- Like Button -->
+  <% if defined?(post) && post %>
+    <div class="like-section"
+         data-controller="like"
+         data-like-post-id-value="<%= post.id %>"
+         data-like-liked-value="<%= post.liked_by?(request.remote_ip) %>">
+      <button data-action="click->like#toggle" 
+              data-like-target="button"
+              class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2" 
+              title="Me gusta">
+        <i data-like-target="icon" class="far fa-heart"></i>
+        <span data-like-target="count"><%= post.likes_count || 0 %></span>
+        <span class="d-none d-md-inline">Me gusta</span>
+      </button>
+    </div>
+  <% end %>
+
+  <!-- Share Buttons -->
+  <div class="share-buttons-wrapper"
+       data-controller="share-buttons"
+       data-share-buttons-url-value="<%= url %>"
+       data-share-buttons-title-value="<%= title %>"
+       data-share-buttons-description-value="<%= description %>">
+    <div class="btn-group" role="group">
+      <button data-action="click->share-buttons#shareMastodon" class="btn btn-outline-primary btn-sm" title="Compartir en Mastodon">
+        <i class="fab fa-mastodon"></i>
+      </button>
+      <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm" title="Compartir en LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </button>
+      <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm" title="Compartir en WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </button>
+      <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm" title="Compartir en Twitter">
+        <i class="fab fa-twitter"></i>
+      </button>
+      <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm" title="Compartir en Facebook">
+        <i class="fab fa-facebook"></i>
+      </button>
+      <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm" title="Copiar enlace">
+        <i class="fas fa-link"></i>
+      </button>
+    </div>
+  </div>
+</div>

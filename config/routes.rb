@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:create]
     member do
       get 'track_visit'
+      post 'like', to: 'likes#toggle'
     end
   end
   resources :comments, only: [:destroy] do
