@@ -20,7 +20,42 @@
       </span>
     </div>
 
+    <!-- Sort Buttons -->
+    <div class="sort-buttons-container d-flex justify-content-center">
+      <div class="btn-group" role="group" aria-label="Ordenar artículos">
+        <%= link_to articulos_path(sort: 'recent'), 
+                    class: "btn #{'btn-primary' if @current_sort == 'recent'} #{'btn-outline-primary' if @current_sort != 'recent'}",
+                    title: "Ordenar por más reciente" do %>
+          <i class="fas fa-clock me-2"></i>Más reciente
+        <% end %>
+        
+        <%= link_to articulos_path(sort: 'most_read'), 
+                    class: "btn #{'btn-primary' if @current_sort == 'most_read'} #{'btn-outline-primary' if @current_sort != 'most_read'}",
+                    title: "Ordenar por más leído" do %>
+          <i class="fas fa-eye me-2"></i>Más leído
+        <% end %>
+        
+        <!-- For future use when we have more likes in production
+        <%= link_to articulos_path(sort: 'most_liked'), 
+                    class: "btn #{'btn-primary' if @current_sort == 'most_liked'} #{'btn-outline-primary' if @current_sort != 'most_liked'}",
+                    title: "Ordenar por más gustado" do %>
+          <i class="fas fa-heart me-2"></i>Más gustado
+        <% end %>
+        -->
+      </div>
+    </div>
+
   </div>
+
+  <!-- Sort Results Info -->
+  <% if @current_sort != 'recent' %>
+    <div class="sort-results-info mb-3 text-center">
+      <div class="alert alert-info d-inline-block">
+        <i class="fas fa-sort me-2"></i>
+        Ordenado por: <strong><%= @current_sort == 'most_read' ? 'Más leído' : 'Más reciente' %></strong>
+      </div>
+    </div>
+  <% end %>
 
   <!-- Posts List -->
   <% if @posts.any? %>
@@ -60,6 +95,10 @@
                     <span>
                       <i class="fas fa-eye me-1"></i>
                       <%= post.total_visits rescue 0 %> lecturas
+                    </span>
+                    <span>
+                      <i class="fas fa-heart me-1 text-danger"></i>
+                      <%= post.likes_count || 0 %> me gusta
                     </span>
                     <% if user_signed_in? %>
                       <span class="badge bg-info">U: <%= post.unique_visits %></span>

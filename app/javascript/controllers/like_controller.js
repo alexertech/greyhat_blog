@@ -9,6 +9,10 @@ export default class extends Controller {
   }
 
   toggle() {
+    // Prevent double-clicking
+    if (this.buttonTarget.disabled) return
+    
+    this.buttonTarget.disabled = true
     const url = `/posts/${this.postIdValue}/like`
     
     fetch(url, {
@@ -19,14 +23,47 @@ export default class extends Controller {
         'Accept': 'application/json'
       }
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(err => Promise.reject(err))
+      }
+      return response.json()
+    })
     .then(data => {
       // Update all like buttons for this post on the page
       this.updateAllLikeButtons(data.liked, data.likes_count)
     })
     .catch(error => {
-      console.error('Error:', error)
+      console.error('Like error:', error)
+      this.showError(error.error || 'Error al procesar like')
     })
+    .finally(() => {
+      // Re-enable button after a short delay
+      setTimeout(() => {
+        this.buttonTarget.disabled = false
+      }, 1000)
+    })
+  }
+
+  showError(message) {
+    // Create a temporary error message
+    const errorDiv = document.createElement('div')
+    errorDiv.className = 'alert alert-warning alert-dismissible fade show position-fixed'
+    errorDiv.style.cssText = 'top: 20px; right: 20px; z-index: 1050; max-width: 300px;'
+    errorDiv.innerHTML = `
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `
+    
+    document.body.appendChild(errorDiv)
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      if (errorDiv.parentNode) {
+        errorDiv.remove()
+      }
+    }, 5000)
   }
 
   updateAllLikeButtons(liked, likesCount) {

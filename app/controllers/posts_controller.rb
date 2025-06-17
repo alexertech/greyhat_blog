@@ -14,9 +14,20 @@ class PostsController < ApplicationController
 
   # Get /blog
   def list
-    @posts = Post.published.includes(:image_attachment, :rich_text_body, :tags, :user).order(created_at: :desc).paginate(
-      page: params[:page], per_page: 20
-    )
+    # Base query
+    posts_query = Post.published.includes(:image_attachment, :rich_text_body, :tags, :user)
+    
+    # Handle sorting
+    case params[:sort]
+    when 'most_read'
+      @posts = posts_query.order(visits_count: :desc, created_at: :desc)
+    when 'most_liked'
+      @posts = posts_query.order(likes_count: :desc, created_at: :desc)
+    else # 'recent' or default
+      @posts = posts_query.order(created_at: :desc)
+    end
+    
+    @posts = @posts.paginate(page: params[:page], per_page: 20)
     
     # Use cached counter or calculate efficiently
     @total_published_visits = Rails.cache.fetch('total_published_visits', expires_in: 1.hour) do
@@ -31,6 +42,9 @@ class PostsController < ApplicationController
       @excerpts[post.id] = plain_text.truncate(200)
       @reading_times[post.id] = (plain_text.split.size/200.0).ceil
     end
+    
+    # Store current sorting for UI
+    @current_sort = params[:sort] || 'recent'
   end
 
   # GET /posts/1
