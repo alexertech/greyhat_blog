@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   get '/newsletter' => 'pages#newsletter'
   post '/newsletter/track-click' => 'pages#track_newsletter_click'
   get '/servicios' => 'pages#services'
+  
   get '/contacto' => 'contacts#new'
   get '/contacto_clean' => 'contacts#clean', :as => 'contacts_clean'
 

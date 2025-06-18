@@ -12,6 +12,12 @@ class PostsController < ApplicationController
     @posts = Post.includes(:image_attachment).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
+  # GET /posts/tailwind_preview
+  def tailwind_preview
+    @posts = Post.includes(:image_attachment, :tags, :comments).order(created_at: :desc).paginate(page: params[:page], per_page: 10)
+    render 'index_tailwind'
+  end
+
   # Get /blog
   def list
     # Base query

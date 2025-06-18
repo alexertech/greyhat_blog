@@ -47,6 +47,28 @@ class PagesController < ApplicationController
     @page = Page.find(4)
   end
 
+  # Tailwind preview methods
+  def tailwind_index
+    @page = Page.find(1)
+    render 'index_tailwind'
+  end
+
+  def tailwind_about
+    @page = Page.find(2)
+    render 'about_tailwind'
+  end
+
+  def tailwind_newsletter
+    @page = Page.find(5)
+    @sample_post = Post.published.order(created_at: :desc).limit(5).sample
+    render 'newsletter_tailwind'
+  end
+
+  def tailwind_services
+    @page = Page.find(3)
+    render 'services_tailwind'
+  end
+
   private
 
   def track_visit

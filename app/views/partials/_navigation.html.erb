@@ -1,141 +1,131 @@
-<div class="row g-0" data-controller="mobile-navigation">
-  <div class="col">
-    <!-- Mobile Navigation -->
-    <div class="d-md-none">
-      <div class="mobile-nav-header bg-dark rounded-top p-3 d-flex justify-content-between align-items-center">
-        <span class="text-white fw-bold">Greyhat</span>
-        <div class="d-flex align-items-center gap-2">
-          <!-- Dark Mode Toggle for Mobile -->
-          <div data-controller="dark-mode">
-            <button data-dark-mode-target="toggle"
-                    data-action="click->dark-mode#toggle"
-                    class="btn btn-outline-light btn-sm theme-toggle"
-                    style="border-radius: 20px; padding: 6px 12px; position: relative; overflow: hidden; transition: all 0.3s ease; min-width: 50px; height: 32px;"
-                    aria-label="Toggle dark mode">
-              <div class="theme-toggle-slider" style="
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 24px;
-                height: 24px;
-                background: linear-gradient(45deg, #ffd700, #ffed4a);
-                border-radius: 50%;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              ">
-                <i data-dark-mode-target="icon" class="fas fa-sun" style="font-size: 10px; color: #333;"></i>
-              </div>
-            </button>
-          </div>
-          
-          <button data-mobile-navigation-target="toggle" 
-                  data-action="click->mobile-navigation#toggle"
-                  class="mobile-nav-toggle btn btn-link text-white p-0"
-                  aria-label="Toggle navigation"
-                  aria-expanded="false">
-            <span class="navbar-toggler-icon">
-              <i class="fas fa-bars"></i>
-            </span>
+<nav class="relative" data-controller="mobile-navigation">
+  <!-- Mobile Navigation -->
+  <div class="md:hidden">
+    <!-- Mobile Header -->
+    <div class="bg-gray-800 rounded-t-lg px-4 py-3 flex justify-between items-center">
+      <span class="text-white font-bold">Greyhat</span>
+      <div class="flex items-center gap-2">
+        <!-- Dark Mode Toggle for Mobile -->
+        <div data-controller="dark-mode">
+          <button data-dark-mode-target="toggle"
+                  data-action="click->dark-mode#toggle"
+                  class="relative inline-flex items-center justify-center w-10 h-5 bg-gray-600 rounded-full transition-colors duration-200 focus:outline-none hover:bg-gray-500"
+                  aria-label="Toggle dark mode">
+            <div class="absolute left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 flex items-center justify-center">
+              <i data-dark-mode-target="icon" class="fas fa-sun text-xs text-yellow-600"></i>
+            </div>
           </button>
         </div>
-      </div>
-      
-      <!-- Mobile Menu Overlay -->
-      <div data-mobile-navigation-target="overlay" class="mobile-nav-overlay"></div>
-      
-      <!-- Mobile Menu -->
-      <div data-mobile-navigation-target="menu" class="mobile-nav-menu bg-dark">
-        <!-- Mobile Search -->
-        <div class="mobile-search p-3 border-bottom border-secondary">
-          <%= form_with url: search_path, method: :get, local: true do |form| %>
-            <div class="input-group">
-              <%= form.text_field :q, 
-                  placeholder: "Buscar artículos...", 
-                  class: "form-control mobile-search-input",
-                  value: params[:q] %>
-              <button class="btn btn-outline-light mobile-search-button" type="submit">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          <% end %>
-        </div>
         
-        <div class="mobile-nav-items">
-          <a href="/index" 
-             data-action="click->mobile-navigation#close"
-             class="mobile-nav-item <%= current_page?('/index') ? 'active' : '' %>">
-            <i class="fas fa-home me-3"></i> 
-            <span>Inicio</span>
-          </a>
-          <a href="/acerca" 
-             data-action="click->mobile-navigation#close"
-             class="mobile-nav-item <%= current_page?('/acerca') ? 'active' : '' %>">
-            <i class="fas fa-user me-3"></i> 
-            <span>Acerca de</span>
-          </a>
-          <a href="/articulos" 
-             data-action="click->mobile-navigation#close"
-             class="mobile-nav-item <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">
-            <i class="fas fa-newspaper me-3"></i> 
-            <span>Artículos</span>
-          </a>
-          <a href="/newsletter" 
-             data-action="click->mobile-navigation#close"
-             class="mobile-nav-item <%= current_page?('/newsletter') ? 'active' : '' %>">
-            <i class="fas fa-envelope me-3"></i> 
-            <span>Newsletter</span>
-          </a>
-          <a href="/servicios" 
-             data-action="click->mobile-navigation#close"
-             class="mobile-nav-item <%= current_page?('/servicios') ? 'active' : '' %>">
-            <i class="fas fa-cogs me-3"></i> 
-            <span>Servicios</span>
-          </a>
-          <% if user_signed_in? %>
-            <a href="/dashboard" 
-               data-action="click->mobile-navigation#close"
-               class="mobile-nav-item">
-              <i class="fas fa-tachometer-alt me-3"></i> 
-              <span>Dashboard</span>
-            </a>
-          <% end %>
-        </div>
+        <button data-mobile-navigation-target="toggle" 
+                data-action="click->mobile-navigation#toggle"
+                class="text-white p-2"
+                aria-label="Toggle navigation"
+                aria-expanded="false">
+          <i class="fas fa-bars text-lg"></i>
+        </button>
       </div>
     </div>
-
-    <!-- Desktop Navigation -->
-    <div class="d-none d-md-block modern-navbar">
-      <div class="navbar-container">
-        <a href="/index" class="nav-item <%= current_page?('/index') ? 'active' : '' %>">
-          <i class="fas fa-home nav-icon"></i>
-          <span class="nav-text">Inicio</span>
+    
+    <!-- Mobile Menu Overlay -->
+    <div data-mobile-navigation-target="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    
+    <!-- Mobile Menu -->
+    <div data-mobile-navigation-target="menu" class="fixed top-0 right-0 h-full w-64 bg-gray-800 transform translate-x-full transition-transform duration-300 z-50">
+      <!-- Mobile Search -->
+      <div class="p-4 border-b border-gray-700">
+        <%= form_with url: search_path, method: :get, local: true, class: "relative" do |form| %>
+          <div class="relative">
+            <%= form.text_field :q, 
+                placeholder: "Buscar artículos...", 
+                class: "w-full px-4 py-2 pr-10 text-sm bg-gray-700 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500",
+                value: params[:q] %>
+            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        <% end %>
+      </div>
+      
+      <!-- Mobile Navigation Items -->
+      <div class="py-2">
+        <a href="/index" 
+           data-action="click->mobile-navigation#close"
+           class="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition-colors duration-200 <%= current_page?('/index') ? 'bg-gray-700 border-r-2 border-primary-500' : '' %>">
+          <i class="fas fa-home mr-3"></i> 
+          <span>Inicio</span>
         </a>
-        <a href="/acerca" class="nav-item <%= current_page?('/acerca') ? 'active' : '' %>">
-          <i class="fas fa-user nav-icon"></i>
-          <span class="nav-text">Acerca de</span>
+        <a href="/acerca" 
+           data-action="click->mobile-navigation#close"
+           class="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition-colors duration-200 <%= current_page?('/acerca') ? 'bg-gray-700 border-r-2 border-primary-500' : '' %>">
+          <i class="fas fa-user mr-3"></i> 
+          <span>Acerca de</span>
         </a>
-        <a href="/articulos" class="nav-item <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'active' : '' %>">
-          <i class="fas fa-newspaper nav-icon"></i>
-          <span class="nav-text">Artículos</span>
+        <a href="/articulos" 
+           data-action="click->mobile-navigation#close"
+           class="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition-colors duration-200 <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'bg-gray-700 border-r-2 border-primary-500' : '' %>">
+          <i class="fas fa-newspaper mr-3"></i> 
+          <span>Artículos</span>
         </a>
-        <a href="/newsletter" class="nav-item <%= current_page?('/newsletter') ? 'active' : '' %>">
-          <i class="fas fa-envelope nav-icon"></i>
-          <span class="nav-text">Newsletter</span>
+        <a href="/newsletter" 
+           data-action="click->mobile-navigation#close"
+           class="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition-colors duration-200 <%= current_page?('/newsletter') ? 'bg-gray-700 border-r-2 border-primary-500' : '' %>">
+          <i class="fas fa-envelope mr-3"></i> 
+          <span>Newsletter</span>
         </a>
-        <a href="/servicios" class="nav-item <%= current_page?('/servicios') ? 'active' : '' %>">
-          <i class="fas fa-cogs nav-icon"></i>
-          <span class="nav-text">Servicios</span>
+        <a href="/servicios" 
+           data-action="click->mobile-navigation#close"
+           class="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition-colors duration-200 <%= current_page?('/servicios') ? 'bg-gray-700 border-r-2 border-primary-500' : '' %>">
+          <i class="fas fa-cogs mr-3"></i> 
+          <span>Servicios</span>
         </a>
         <% if user_signed_in? %>
-          <a href="/dashboard" class="nav-item">
-            <i class="fas fa-tachometer-alt nav-icon"></i>
-            <span class="nav-text">Dashboard</span>
+          <a href="/dashboard" 
+             data-action="click->mobile-navigation#close"
+             class="flex items-center px-4 py-3 text-white hover:bg-gray-700 transition-colors duration-200">
+            <i class="fas fa-tachometer-alt mr-3"></i> 
+            <span>Dashboard</span>
           </a>
         <% end %>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Desktop Navigation -->
+  <div class="hidden md:block">
+    <div class="flex items-center justify-center space-x-1">
+      <a href="/index" 
+         class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 <%= current_page?('/index') ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50' %>">
+        <i class="fas fa-home mr-2"></i>
+        Inicio
+      </a>
+      <a href="/acerca" 
+         class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 <%= current_page?('/acerca') ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50' %>">
+        <i class="fas fa-user mr-2"></i>
+        Acerca de
+      </a>
+      <a href="/articulos" 
+         class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 <%= current_page?('/articulos') || controller.controller_name == 'posts' ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50' %>">
+        <i class="fas fa-newspaper mr-2"></i>
+        Artículos
+      </a>
+      <a href="/newsletter" 
+         class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 <%= current_page?('/newsletter') ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50' %>">
+        <i class="fas fa-envelope mr-2"></i>
+        Newsletter
+      </a>
+      <a href="/servicios" 
+         class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 <%= current_page?('/servicios') ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50' %>">
+        <i class="fas fa-cogs mr-2"></i>
+        Servicios
+      </a>
+      <% if user_signed_in? %>
+        <a href="/dashboard" 
+           class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200">
+          <i class="fas fa-tachometer-alt mr-2"></i>
+          Dashboard
+        </a>
+      <% end %>
+    </div>
+  </div>
+</nav>

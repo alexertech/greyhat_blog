@@ -23,6 +23,9 @@ gem 'importmap-rails'
 gem 'bootstrap', '~> 5.3.0'
 gem 'sassc-rails'
 
+# TailwindCSS
+gem 'tailwindcss-rails', '~> 2.0'
+
 # Pagination
 gem 'will_paginate', '~> 4.0'
 gem 'will_paginate-bootstrap4'
