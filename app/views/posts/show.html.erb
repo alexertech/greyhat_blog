@@ -229,35 +229,38 @@
         <% @related_posts.each do |post| %>
           <div class="col-md-4 mb-4">
             <div class="card h-100 border-0 shadow-sm">
-              <% if post.image.attached? %>
-                <%= image_tag post.image.variant(:thumb), class: "card-img-top", loading: "lazy", style: "height: 200px; object-fit: cover;" %>
-              <% else %>
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 200px;">
-                  <i class="fas fa-file-alt fa-3x"></i>
-                </div>
-              <% end %>
-              <div class="card-body">
-                <h5 class="card-title">
-                  <%= link_to post.title, post, class: "text-decoration-none" %>
-                </h5>
-                
-                <!-- Tags -->
-                <% if post.tags.any? %>
-                  <div class="mb-3">
-                    <% post.tags.limit(2).each do |tag| %>
-                      <%= link_to search_path(tag: tag.name), class: "badge bg-light text-muted text-decoration-none me-1 mb-1", style: "font-size: 0.7rem;" do %>
-                        <i class="fas fa-tag me-1"></i><%= tag.name %>
-                      <% end %>
-                    <% end %>
+              <%= link_to post, class: "text-decoration-none" do %>
+
+                <% if post.image.attached? %>
+                  <%= image_tag post.image.variant(:thumb), class: "card-img-top", loading: "lazy", style: "height: 200px; object-fit: cover;" %>
+                <% else %>
+                  <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 200px;">
+                    <i class="fas fa-file-alt fa-3x"></i>
                   </div>
                 <% end %>
-                
-                <p class="card-text">
-                  <small class="text-muted">
-                    <%= post.created_at.strftime("%d %b. %Y") %>
-                  </small>
-                </p>
-              </div>
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <%= post.title %>
+                  </h5>
+                  
+                  <!-- Tags -->
+                  <% if post.tags.any? %>
+                    <div class="mb-3">
+                      <% post.tags.limit(2).each do |tag| %>
+                        <%= link_to search_path(tag: tag.name), class: "badge bg-light text-muted text-decoration-none me-1 mb-1", style: "font-size: 0.7rem;" do %>
+                          <i class="fas fa-tag me-1"></i><%= tag.name %>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                  
+                  <p class="card-text">
+                    <small class="text-muted">
+                      <%= post.created_at.strftime("%d %b. %Y") %>
+                    </small>
+                  </p>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>
