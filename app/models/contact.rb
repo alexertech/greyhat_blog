@@ -30,7 +30,7 @@ class Contact < ApplicationRecord
     # Check for specific suspicious patterns
     if suspicious_domains.include?(domain) &&
        (message.present? && message.length < 20 ||
-        name.present? && !name.match?(/^[A-Za-zÀ-ÖØ-öø-ÿ\s\-'.]+$/))
+        name.present? && !name.match?(/^[A-Za-zÀ-ÖØ-öø-ÿáéíóúüñçÁÉÍÓÚÜÑÇ\s\-'\.]+$/))
       errors.add(:email, 'Por favor utilice un correo electrónico válido')
     end
 
