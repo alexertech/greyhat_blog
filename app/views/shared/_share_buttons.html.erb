@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center gap-3">
+<div class="d-flex align-items-center gap-1">
   <!-- Like Button -->
   <% if defined?(post) && post %>
     <div class="like-section"
@@ -11,7 +11,7 @@
               title="Me gusta">
         <i data-like-target="icon" class="far fa-heart"></i>
         <span data-like-target="count"><%= post.likes_count || 0 %></span>
-        <span class="d-none d-md-inline">Me gusta</span>
+        <span class="d-none d-md-inline">Like</span>
       </button>
     </div>
   <% end %>
@@ -25,7 +25,7 @@
        title="Cómprame un café"
        onclick="gtag('event', 'kofi_click', { 'event_category': 'support', 'event_label': 'coffee_button' });">
       <i class="fas fa-coffee"></i>
-      <span class="d-none d-md-inline">Cómprame un café</span>
+      <span class="d-none d-md-inline">Cafecito?</span>
     </a>
   </div>
 
@@ -42,14 +42,8 @@
       <button data-action="click->share-buttons#shareLinkedIn" class="btn btn-outline-primary btn-sm" title="Compartir en LinkedIn">
         <i class="fab fa-linkedin"></i>
       </button>
-      <button data-action="click->share-buttons#shareWhatsApp" class="btn btn-outline-success btn-sm" title="Compartir en WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-      </button>
       <button data-action="click->share-buttons#shareTwitter" class="btn btn-outline-primary btn-sm" title="Compartir en Twitter">
         <i class="fab fa-twitter"></i>
-      </button>
-      <button data-action="click->share-buttons#shareFacebook" class="btn btn-outline-primary btn-sm" title="Compartir en Facebook">
-        <i class="fab fa-facebook"></i>
       </button>
       <button data-action="click->share-buttons#copyLink" class="btn btn-outline-secondary btn-sm" title="Copiar enlace">
         <i class="fas fa-link"></i>
