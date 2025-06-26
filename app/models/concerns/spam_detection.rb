@@ -88,7 +88,8 @@ module SpamDetection
     
     # Valid name should only contain letters, spaces, hyphens and apostrophes
     # and should have at least 2 characters and no more than 50
-    unless name_field.match?(/^[A-Za-zÀ-ÖØ-öø-ÿ\s\-'\.]{2,50}$/)
+    # Includes all Spanish accented characters: áéíóúüñçÁÉÍÓÚÜÑÇ
+    unless name_field.match?(/^[A-Za-zÀ-ÖØ-öø-ÿáéíóúüñçÁÉÍÓÚÜÑÇ\s\-'\.]{2,50}$/)
       error_message = I18n.t('errors.messages.invalid_name', default: "Por favor ingrese un nombre válido")
       errors.add(error_field, error_message)
     end

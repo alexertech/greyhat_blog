@@ -8,14 +8,17 @@ puts "🌱 Seeding Greyhat Blog Engine..."
 
 # Create admin user
 puts "👤 Creating admin user..."
+admin_user = nil
 unless User.exists?(email: 'admin@example.com')
-  User.create!(
+  admin_user = User.create!(
     email: 'admin@example.com',
     password: 'password123456',
-    password_confirmation: 'password123456'
+    password_confirmation: 'password123456',
+    public_name: 'Admin'
   )
   puts "   ✅ Admin user created: admin@example.com / password123456"
 else
+  admin_user = User.find_by(email: 'admin@example.com')
   puts "   ⚠️  Admin user already exists"
 end
 
@@ -88,7 +91,8 @@ sample_posts.each_with_index do |post_data, index|
     post = Post.new(
       title: post_data[:title],
       draft: post_data[:draft],
-      slug: post_data[:title].parameterize
+      slug: post_data[:title].parameterize,
+      user: admin_user
     )
     
     # Set the ActionText body content
@@ -289,7 +293,7 @@ puts "📞 Creating sample contacts..."
   days_ago = rand(1..30)
   
   Contact.create!(
-    name: ["María García", "Carlos López", "Ana Rodríguez", "Luis Martín", "Elena Vega"].sample + " #{i}",
+    name: ["María García", "Carlos López", "Ana Rodríguez", "Luis Martín", "Elena Vega"].sample,
     email: "usuario#{i}@example.com", 
     message: "Hola, me interesa conocer más sobre sus servicios de desarrollo web.",
     created_at: days_ago.days.ago

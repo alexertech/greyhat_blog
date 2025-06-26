@@ -92,6 +92,17 @@
                       <i class="fas fa-clock me-1"></i>
                       <%= @reading_times[post.id] || 1 %> min lectura
                     </span>
+                    <span class="d-flex align-items-center">
+                      <% if post.user&.avatar&.attached? %>
+                        <%= image_tag post.user.avatar.variant(:thumb), 
+                            class: "rounded-circle me-2", 
+                            style: "width: 24px; height: 24px; object-fit: cover;",
+                            alt: post.user.display_name %>
+                      <% else %>
+                        <i class="fas fa-user-circle me-2" style="font-size: 24px;"></i>
+                      <% end %>
+                      <%= post.user&.display_name || "Autor desconocido" %>
+                    </span>
                     <span>
                       <i class="fas fa-eye me-1"></i>
                       <%= post.total_visits rescue 0 %> lecturas

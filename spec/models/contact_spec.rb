@@ -75,5 +75,47 @@ RSpec.describe Contact, type: :model do
       
       expect(contact.errors[:base]).to include('Spam detectado')
     end
+
+    context 'Spanish accented names' do
+      it 'accepts Spanish names with accented characters' do
+        valid_names = [
+          'María García',
+          'José Antonio Núñez',
+          'Ángela Sánchez-López',
+          'Joaquín Ruíz',
+          'Pilar Hernández',
+          'Óscar Díez',
+          "María del Carmen O'Connor"
+        ]
+
+        valid_names.each do |name|
+          contact = Contact.new(
+            name: name,
+            email: 'test@example.com',
+            message: 'Este es un mensaje de prueba'
+          )
+          expect(contact).to be_valid, "Expected '#{name}' to be valid but got errors: #{contact.errors.full_messages}"
+        end
+      end
+
+      it 'rejects names with invalid characters' do
+        invalid_names = [
+          'María123',
+          'José@example.com',
+          'Test#User',
+          'Invalid$Name'
+        ]
+
+        invalid_names.each do |name|
+          contact = Contact.new(
+            name: name,
+            email: 'test@example.com',
+            message: 'Este es un mensaje de prueba'
+          )
+          expect(contact).not_to be_valid, "Expected '#{name}' to be invalid"
+          expect(contact.errors[:name]).to be_present, "Expected name validation error for '#{name}'"
+        end
+      end
+    end
   end
 end 
