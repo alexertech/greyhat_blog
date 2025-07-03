@@ -26,6 +26,14 @@ class Visit < ApplicationRecord
     where("user_agent !~* '(bot|crawler|spider|yahoo|slurp|daum|yandex|googlebot|bingbot|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora|pinterest|slackbot|redditbot|snapchat|applebot)' OR user_agent IS NULL")
   }
 
+  scope :social_media, -> {
+    where("referer ILIKE ANY (ARRAY[?])", Dashboard::ReferrerAnalyzer::SOCIAL_DOMAINS.map { |domain| "%#{domain}%" })
+  }
+
+  scope :search_engine, -> {
+    where("referer ILIKE ANY (ARRAY[?])", Dashboard::ReferrerAnalyzer::SEARCH_DOMAINS.map { |domain| "%#{domain}%" })
+  }
+
   def self.count_by_date(period = 7)
     where('viewed_at >= ?', period.days.ago)
       .group(Arel.sql('DATE(viewed_at)'))
