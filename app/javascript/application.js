@@ -1,15 +1,9 @@
 // application.js
-import "@rails/activestorage";
-import "@rails/actiontext";
-import "./controllers"
+import "@rails/activestorage"
+import "@rails/actiontext"
 import "bootstrap"
 import "trix"
 import "@rails/actiontext"
-import "@rails/activestorage"
 import "@hotwired/turbo-rails"
-
-// Import charts functionality directly
+import "./controllers"
 import "./charts"
-
-// Remove Rails UJS as it conflicts with Turbo
-// Rails UJS is not needed when using Turbo Rails
