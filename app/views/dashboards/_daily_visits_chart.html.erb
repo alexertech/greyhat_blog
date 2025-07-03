@@ -1,0 +1,15 @@
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h5 class="chart-title">
+          <i class="fas fa-chart-line me-2"></i>
+          Visitas Diarias (Últimos 30 días)
+        </h5>
+      </div>
+      <div class="chart-body">
+        <canvas id="dailyVisitsChart" data-visits="<%= @daily_visits_chart.to_json %>"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
