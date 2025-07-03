@@ -137,6 +137,10 @@ class DashboardsController < ApplicationController
     @user_agents_summary = insights[:user_agents_summary]
     @content_insights = insights[:content_insights]
     @tag_performance = insights[:tag_performance]
+    @bounce_rate = insights[:bounce_rate]
+    @avg_session_duration = insights[:avg_session_duration]
+    @top_exit_pages = insights[:top_exit_pages]
+    @conversion_funnel = insights[:conversion_funnel]
 
     # Top referrers for quick view - exclude self-referrers
     @top_referrers_preview = Dashboard::ReferrerAnalyzer.analyze(
@@ -172,26 +176,24 @@ class DashboardsController < ApplicationController
     @search_engine_visits = Visit.search_engine.count
     @direct_visits = Visit.where(referer: [nil, '']).count
 
-    # Performance Analytics - TODO: Move to service
-    @bounce_rate = 0 # Temporarily disabled - needs service implementation
-    @avg_session_duration = 0 # Temporarily disabled - needs service implementation
-    @top_exit_pages = {} # Temporarily disabled - needs service implementation
-    @conversion_funnel = {} # Temporarily disabled - needs service implementation
+    # Performance Analytics
+    analytics_service = Dashboard::AnalyticsService.new(current_user, {period: @period})
+    insights = analytics_service.generate_insights
+    @bounce_rate = insights[:bounce_rate]
+    @avg_session_duration = insights[:avg_session_duration]
+    @top_exit_pages = insights[:top_exit_pages]
+    @conversion_funnel = insights[:conversion_funnel]
+    @insights = insights[:performance_insights]
+    @content_insights = insights[:content_insights]
+    @tag_performance = insights[:tag_performance]
+    @popular_search_terms = insights[:popular_search_terms]
+    @user_agents_summary = insights[:user_agents_summary]
 
     # Live Activity (last 24 hours)
     @recent_visits = Visit.includes(:visitable)
                           .where('viewed_at >= ?', 24.hours.ago)
                           .order(viewed_at: :desc)
                           .limit(20)
-
-    # Performance insights
-    analytics_service = Dashboard::AnalyticsService.new(current_user, {period: @period})
-    insights = analytics_service.generate_insights
-    @insights = insights[:performance_insights]
-    @content_insights = insights[:content_insights]
-    @tag_performance = insights[:tag_performance]
-    @popular_search_terms = insights[:popular_search_terms]
-    @user_agents_summary = insights[:user_agents_summary]
   end
 
   def posts
