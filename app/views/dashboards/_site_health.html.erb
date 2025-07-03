@@ -1,0 +1,81 @@
+<div class="row mb-4">
+  <div class="col-12 mb-4">
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h5 class="analytics-title">
+          <i class="fas fa-heartbeat me-2"></i>
+          Site Health Status
+        </h5>
+      </div>
+      <div class="analytics-body">
+        <div class="health-status">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="health-main-status">
+                <div class="health-indicator health-<%= (@site_health || {})[:status] || 'unknown' %>">
+                  <% case (@site_health || {})[:status] %>
+                  <% when 'excellent' %>
+                    <i class="fas fa-check-circle fa-3x text-success"></i>
+                  <% when 'good' %>
+                    <i class="fas fa-thumbs-up fa-3x text-primary"></i>
+                  <% when 'warning' %>
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+                  <% else %>
+                    <i class="fas fa-times-circle fa-3x text-danger"></i>
+                  <% end %>
+                </div>
+                <div class="health-status-text">
+                  <div class="health-main-label h4"><%= ((@site_health || {})[:status] || 'unknown').humanize %></div>
+                  <div class="health-timestamp">
+                    <% if (@site_health || {})[:last_check] %>
+                      Último check: <%= time_ago_in_words((@site_health || {})[:last_check]) %> ago
+                      <% if (@site_health || {})[:monitoring_stale] %>
+                        <span class="badge bg-warning">Monitoreo obsoleto</span>
+                      <% end %>
+                    <% else %>
+                      <span class="badge bg-danger">Sin datos de health check</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="health-metrics">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="health-metric">
+                      <div class="health-metric-label">Uptime (24h)</div>
+                      <div class="health-metric-value h3"><%= (@site_health || {})[:uptime] || 0 %>%</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="health-metric">
+                      <div class="health-metric-label">Tiempo Respuesta</div>
+                      <div class="health-metric-value h3"><%= ((@site_health || {})[:avg_response_time] || 0).round %>ms</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="health-metric">
+                      <div class="health-metric-label">Errores (1h)</div>
+                      <div class="health-metric-value h3 <%= ((@site_health || {})[:error_count] || 0) > 0 ? 'text-warning' : 'text-success' %>">
+                        <%= (@site_health || {})[:error_count] || 0 %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <% if (@traffic_anomaly || {})[:is_anomaly] %>
+            <div class="alert alert-warning mt-3">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <strong>Anomalía de Tráfico:</strong> Tráfico inusualmente alto
+              (<%= (@traffic_anomaly || {})[:current_hour_visits] || 0 %> vs <%= ((@traffic_anomaly || {})[:average_hourly] || 0).round %> promedio)
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

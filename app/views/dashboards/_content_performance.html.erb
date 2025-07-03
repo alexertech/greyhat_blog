@@ -1,0 +1,99 @@
+<div class="row mb-4">
+  <div class="col-lg-6 mb-4">
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h5 class="analytics-title">
+          <i class="fas fa-trophy me-2"></i>
+          Top Performing Content
+        </h5>
+      </div>
+      <div class="analytics-body">
+        <% if (@top_performing_posts || []).any? %>
+          <% (@top_performing_posts || []).each_with_index do |post, index| %>
+            <div class="performance-item">
+              <div class="performance-rank">#<%= index + 1 %></div>
+              <div class="performance-content">
+                <div class="performance-title">
+                  <%= link_to post.title.truncate(40), post, class: "text-decoration-none" %>
+                </div>
+                <div class="performance-stats">
+                  <span class="badge bg-primary me-1">Score: <%= post.engagement_score rescue 0 %></span>
+                  <span class="badge bg-success me-1"><%= post.total_visits %> visitas</span>
+                  <span class="badge bg-info"><%= post.comments.approved.count %> comentarios</span>
+                </div>
+              </div>
+              <div class="performance-trend">
+                <% trend = post.performance_trend rescue 0 %>
+                <% if trend > 15 %>
+                  <span class="trend-positive">
+                    <i class="fas fa-arrow-up"></i> +<%= trend %>%
+                  </span>
+                <% elsif trend > 0 %>
+                  <span class="trend-slight-positive">
+                    <i class="fas fa-arrow-up"></i> +<%= trend %>%
+                  </span>
+                <% elsif trend < -15 %>
+                  <span class="trend-negative">
+                    <i class="fas fa-arrow-down"></i> <%= trend %>%
+                  </span>
+                <% elsif trend < 0 %>
+                  <span class="trend-slight-negative">
+                    <i class="fas fa-arrow-down"></i> <%= trend %>%
+                  </span>
+                <% else %>
+                  <span class="trend-neutral">
+                    <i class="fas fa-minus"></i> <%= trend == 0 ? "=" : trend %>%
+                  </span>
+                <% end %>
+                <small class="d-block text-muted" style="font-size: 0.7rem;">3d vs 3d</small>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="no-data">
+            <i class="fas fa-trophy fa-2x text-muted mb-2"></i>
+            <p class="text-muted">Publica más contenido para ver métricas de rendimiento</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 mb-4">
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h5 class="analytics-title">
+          <i class="fas fa-lightbulb me-2"></i>
+          Content Strategy Insights
+        </h5>
+      </div>
+      <div class="analytics-body">
+        <div class="insights-container">
+          <% (@content_insights || []).each do |insight| %>
+            <div class="insight-item">
+              <i class="fas fa-lightbulb text-warning me-2"></i>
+              <%= insight %>
+            </div>
+          <% end %>
+        </div>
+
+        <% if (@tag_performance || {}).any? %>
+          <div class="mt-4">
+            <h6 class="mb-3">Rendimiento por Tema</h6>
+            <% (@tag_performance || {}).first(5).each do |tag_name, visits| %>
+              <div class="tag-performance-item">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-bold"><%= tag_name %></span>
+                  <span class="badge bg-primary"><%= visits %> visitas</span>
+                </div>
+                <div class="progress" style="height: 6px;">
+                  <div class="progress-bar bg-primary" style="width: <%= (visits.to_f / @tag_performance.values.max * 100).round(1) %>%"></div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

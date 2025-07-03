@@ -1,0 +1,94 @@
+<div class="row mb-4">
+  <div class="col-lg-6 mb-4">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h5 class="chart-title">
+          <i class="fas fa-chart-pie me-2"></i>
+          Fuentes de Tráfico
+        </h5>
+      </div>
+      <div class="chart-body" style="padding: 0;">
+        <div class="chart-placeholder">
+          <div class="text-center">
+            <i class="fas fa-chart-pie fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Fuentes de Tráfico</p>
+            
+            <!-- Traffic Sources Chart -->
+            <div class="traffic-chart mt-4">
+              <% 
+                total_visits = @social_media_visits + @search_engine_visits + @direct_visits + @referral_visits
+                sources = [
+                  { name: 'Social', visits: @social_media_visits, color: '#3b82f6' },
+                  { name: 'Búsquedas', visits: @search_engine_visits, color: '#10b981' },
+                  { name: 'Directo', visits: @direct_visits, color: '#06b6d4' },
+                  { name: 'Referencias', visits: @referral_visits, color: '#f59e0b' }
+                ]
+              %>
+              
+              <% sources.each do |source| %>
+                <% percentage = total_visits > 0 ? (source[:visits].to_f / total_visits * 100).round(1) : 0 %>
+                <div class="traffic-source-item mb-3">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-bold"><%= source[:name] %></span>
+                    <span class="badge" style="background-color: <%= source[:color] %>"><%= source[:visits] %></span>
+                  </div>
+                  <div class="progress" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: <%= percentage %>%; background-color: <%= source[:color] %>" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <small class="text-muted"><%= percentage %>%</small>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 mb-4">
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h5 class="analytics-title">
+          <i class="fas fa-external-link-alt me-2"></i>
+          Principales Referentes
+        </h5>
+      </div>
+      <div class="analytics-body">
+        <% if @top_referrers_preview.any? %>
+          <% @top_referrers_preview.each do |referrer| %>
+            <div class="referrer-item">
+              <div class="referrer-icon">
+                <% case referrer[:source_type] %>
+                <% when :social %>
+                  <i class="fab fa-<%= referrer[:domain].include?('linkedin') ? 'linkedin' : referrer[:domain].include?('twitter') ? 'twitter' : 'share-alt' %> text-primary"></i>
+                <% when :newsletter %>
+                  <i class="fas fa-newspaper text-warning"></i>
+                <% when :search %>
+                  <i class="fas fa-search text-success"></i>
+                <% else %>
+                  <i class="fas fa-globe text-muted"></i>
+                <% end %>
+              </div>
+              <div class="referrer-content">
+                <div class="referrer-name"><%= referrer[:display_name] %></div>
+                <div class="referrer-type">
+                  <span class="badge badge-<%= referrer[:source_type] %>">
+                    <%= referrer[:source_type].to_s.humanize %>
+                  </span>
+                </div>
+              </div>
+              <div class="referrer-count">
+                <span class="visit-count"><%= referrer[:count] %></span>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="no-data">
+            <i class="fas fa-external-link-alt fa-2x text-muted mb-2"></i>
+            <p class="text-muted">No hay datos de referentes disponibles</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
