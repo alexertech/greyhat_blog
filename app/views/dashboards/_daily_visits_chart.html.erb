@@ -8,7 +8,7 @@
         </h5>
       </div>
       <div class="chart-body">
-        <canvas id="dailyVisitsChart" data-visits="<%= @daily_visits_chart.to_json %>"></canvas>
+        <%= line_chart @daily_visits_chart, height: "300px", colors: ["#0D6EFD"], discrete: true %>
       </div>
     </div>
   </div>

@@ -98,8 +98,19 @@ class DashboardsController < ApplicationController
     total_categorized = @social_media_visits + @search_engine_visits + @direct_visits
     @referral_visits = [@total_visits - total_categorized, 0].max
 
-    # Charts data
-    @daily_visits_chart = Visit.count_by_date(30)
+    # Charts data - create array format with simple labels
+    raw_chart_data = Visit.count_by_date(30)
+    @daily_visits_chart = raw_chart_data.map do |date, count|
+      formatted_date = case date
+      when String
+        Date.parse(date).strftime("%m/%d")  # "07/03"
+      when Date
+        date.strftime("%m/%d")              # "07/03"
+      else
+        date.to_s
+      end
+      [formatted_date, count]
+    end
     @hourly_visits_chart = Visit.count_by_hour
 
     # Newsletter Conversion Funnel

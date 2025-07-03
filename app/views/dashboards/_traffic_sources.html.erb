@@ -16,14 +16,14 @@
             <!-- Traffic Sources Chart -->
             <div class="traffic-chart mt-4">
               <% 
-                sources = [
-                  { name: 'Social', visits: @social_media_visits, color: '#3b82f6' },
-                  { name: 'Búsquedas', visits: @search_engine_visits, color: '#10b981' },
-                  { name: 'Directo', visits: @direct_visits, color: '#06b6d4' },
-                  { name: 'Referencias', visits: @referral_visits, color: '#f59e0b' }
+                sources_data = [
+                  ['Social', @social_media_visits],
+                  ['Búsquedas', @search_engine_visits],
+                  ['Directo', @direct_visits],
+                  ['Referencias', @referral_visits]
                 ]
               %>
-              <canvas id="trafficSourcesChart" data-sources="<%= sources.to_json %>"></canvas>
+              <%= pie_chart sources_data, height: "300px", colors: ['#3b82f6', '#10b981', '#06b6d4', '#f59e0b'] %>
             </div>
           </div>
         </div>
