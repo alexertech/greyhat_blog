@@ -43,6 +43,9 @@ gem 'dotenv-rails'
 # Background jobs
 gem 'good_job', '~> 4.1'
 
+# Charts
+gem 'chartkick'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
