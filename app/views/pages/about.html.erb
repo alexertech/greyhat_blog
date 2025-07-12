@@ -31,51 +31,52 @@
       </section>
       
       <section>
-        <h2 class="mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Conoce al Fundador</h2>
-        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-3 bg-white p-4 rounded shadow-sm">
-          <div class="mb-3 mb-md-0 me-md-4 text-center">
-            <a href="https://www.alexertech.com/" target="_blank" rel="noopener noreferrer">
-              <%= image_tag "0.jpg", class: "rounded-circle img-thumbnail" %>
-            </a>
+        <h2 class="mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Conoce al Equipo</h2>
+        <% User.all.each do |user| %>
+          <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-4 bg-white p-4 rounded shadow-sm">
+            <div class="mb-3 mb-md-0 me-md-4 text-center">
+              <% if user.avatar.attached? %>
+                <div class="position-relative d-inline-block">
+                  <%= image_tag user.avatar.variant(:medium), 
+                      class: "rounded-circle", 
+                      style: "width: 120px; height: 120px; object-fit: cover; border: 3px solid #f8f9fa;",
+                      alt: "Foto de #{user.public_name}" %>
+                </div>
+              <% else %>
+                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" 
+                     style="width: 120px; height: 120px; border: 3px solid #f8f9fa;">
+                  <i class="fas fa-user text-muted fa-3x"></i>
+                </div>
+              <% end %>
+            </div>
+            <div class="flex-grow-1">
+              <h4 class="mb-2 text-dark"><%= user.public_name %></h4>
+              <% if user.description.present? %>
+                <p class="mb-0 text-muted"><%= simple_format(user.description) %></p>
+              <% end %>
+              <div class="mt-2">
+                <small class="text-muted">
+                  <i class="fas fa-edit me-1"></i>
+                  <% published_count = user.posts.published.count %>
+                  <% if published_count > 0 %>
+                    <%= pluralize(published_count, 'artículo', 'artículos') %> publicado<%= 's' if published_count != 1 %>
+                  <% else %>
+                    Miembro del equipo
+                  <% end %>
+                </small>
+              </div>
+            </div>
           </div>
-          <div>
-            <p><strong>Alex Barrios</strong> es desarrollador, escritor y observador del caos digital. Con más de 20 años de experiencia en software y ciberseguridad, hoy se dedica a reflexionar y escribir sobre el impacto humano de la tecnología.</p>
-
-            <p>Certificado en seguridad ofensiva y senior software developer, su enfoque combina lo técnico con lo ético, lo operativo con lo mental. Su motivación: compartir ideas que inviten a pensar, desde el teclado hasta la conciencia.</p>
+        <% end %>
+        
+        <% if User.count == 0 %>
+          <div class="text-center p-4 bg-light rounded">
+            <i class="fas fa-users text-muted fa-3x mb-3"></i>
+            <p class="text-muted">Información del equipo próximamente.</p>
           </div>
-        </div>
+        <% end %>
       </section>
 
-      <section>
-        <div class="text-center mt-4 mb-5">
-          <p class="fw-bold mb-2">Certificaciones Destacadas:</p>
-          <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="Offensive Security Certified Professional (OSCP)">
-            <a href="https://www.credly.com/badges/fe965ff8-295b-4732-957b-9fdd02345fee/public_url" target="_blank" rel="noopener noreferrer">
-              <%= image_tag "oscp-acclaim.png", alt: "OSCP Certification", width: "100" %>
-            </a>
-          </div>
-          <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="Offensive Security Certified Expert (OSCE)">
-            <a href="https://www.credly.com/badges/dceb04e8-b09b-41a0-921c-ccef72c0819b/public_url" target="_blank" rel="noopener noreferrer">
-              <%= image_tag "osce-acclaim.png", alt: "OSCE Certification", width: "100" %>
-            </a>
-          </div>
-          <div class="d-inline-block" data-bs-toggle="tooltip" title="Offensive Security Web Expert (OSWE)">
-            <a href="https://www.credly.com/badges/edd92d83-4fb5-46ca-aacd-7eafec615007/public_url" target="_blank" rel="noopener noreferrer">
-              <%= image_tag "oswe-acclaim.png", alt: "OSCE Certification", width: "100" %>
-            </a>          
-          </div>
-          <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="Offensive Security Wireless Professional (OSWP)">
-            <a href="https://www.credly.com/badges/bab572ab-edcc-4df4-a50e-2153d8442b7f/public_url" target="_blank" rel="noopener noreferrer">
-              <%= image_tag "oswp-acclaim.png", alt: "OSWP Certification", width: "100" %>
-            </a>
-          </div>
-          <div class="d-inline-block me-3" data-bs-toggle="tooltip" title="AWS Certified Cloud Practitioner">
-            <a href="https://www.credly.com/badges/8f7e242f-03d4-4ac9-ab3c-33f4c1bc9a43/public_url" target="_blank" rel="noopener noreferrer">
-              <%= image_tag "aws-acclaim.png", alt: "AWS CCP", width: "100" %>
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
 </div>
