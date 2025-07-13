@@ -32,7 +32,7 @@
       
       <section>
         <h2 class="mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Conoce al Equipo</h2>
-        <% User.all.each do |user| %>
+        <% User.order(:id).each do |user| %>
           <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start mb-4 bg-white p-4 rounded shadow-sm">
             <div class="mb-3 mb-md-0 me-md-4 text-center">
               <% if user.avatar.attached? %>
@@ -54,17 +54,6 @@
               <% if user.description.present? %>
                 <p class="mb-0 text-muted"><%= simple_format(user.description) %></p>
               <% end %>
-              <div class="mt-2">
-                <small class="text-muted">
-                  <i class="fas fa-edit me-1"></i>
-                  <% published_count = user.posts.published.count %>
-                  <% if published_count > 0 %>
-                    <%= pluralize(published_count, 'artículo', 'artículos') %> publicado<%= 's' if published_count != 1 %>
-                  <% else %>
-                    Miembro del equipo
-                  <% end %>
-                </small>
-              </div>
             </div>
           </div>
         <% end %>
