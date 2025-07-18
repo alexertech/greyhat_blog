@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 set :application, 'greyhat_cl'
-set :repo_url, 'git@github.com:alexertech/greyhat_blog.git'
+set :repo_url, 'git@tharpa.khyungnorbu.duckdns.org:alexertech/alexertech_com.git'
 set :deploy_to, '/home/alex/greyhat_cl'
 
 set :rbenv_ruby, File.read('.ruby-version').strip
