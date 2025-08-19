@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Docker Compose deployment script
+# Deploys to Docker server at 192.168.0.50
+
+set -e
+
+# Configuration
+DOCKER_SERVER="192.168.0.50"
+DOCKER_USER="alex"
+APP_NAME="greyhat_cl"
+DEPLOY_DIR="/home/alex/docker/docker_deploy/$APP_NAME"
+
+echo "🚀 Starting deployment to $DOCKER_SERVER..."
+
+# Create temporary build archive
+echo "📦 Creating build archive..."
+tar --exclude='.git' --exclude='node_modules' --exclude='tmp' --exclude='log' -czf /tmp/$APP_NAME-source.tar.gz .
+
+# Transfer source to Docker server
+echo "📤 Transferring source to Docker server..."
+scp /tmp/$APP_NAME-source.tar.gz $DOCKER_USER@$DOCKER_SERVER:/tmp/
+
+# Deploy on remote server
+echo "🔄 Deploying on remote server..."
+ssh $DOCKER_USER@$DOCKER_SERVER << EOF
+  # Create deployment directory
+  mkdir -p $DEPLOY_DIR
+
+  # Extract source to deployment directory
+  cd $DEPLOY_DIR
+  tar -xzf /tmp/$APP_NAME-source.tar.gz
+
+  # Stop existing services
+  docker compose down 2>/dev/null || true
+
+  # Build and start services
+  echo "🏗️  Building and starting services..."
+  docker compose up -d --build
+
+  echo "🔄 Running assets precompile..."
+  docker compose exec web bundle exec rails assets:precompile
+
+  # Clean up
+  rm /tmp/$APP_NAME-source.tar.gz
+
+  echo "📁 Deployment saved to $DEPLOY_DIR"
+EOF
+
+# Clean up local tar file
+rm /tmp/$APP_NAME-source.tar.gz
+
+echo "🎉 Deployment complete!"

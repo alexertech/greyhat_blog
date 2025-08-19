@@ -1,0 +1,48 @@
+name: greyhat_cl
+
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: greyhat_postgres
+    environment:
+      POSTGRES_DB: greyhat_production
+      POSTGRES_USER: alexertech
+      POSTGRES_PASSWORD: super_secure_password_2025
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - caddy_net
+      - app_internal
+    restart: unless-stopped
+
+  web:
+    build: .
+    container_name: greyhat_com
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: postgresql://alexertech:super_secure_password_2025@database:5432/greyhat_production
+      RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_MASTER_KEY: bcd4cd0e61a6a468c85c170a969a5c8c
+      RAILS_LOG_TO_STDOUT: "true"
+    depends_on:
+      - database
+    volumes:
+      - storage_data:/app/storage
+    networks:
+      - caddy_net
+      - app_internal
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  storage_data:
+    driver: local
+
+networks:
+  caddy_net:
+    external: true
+  app_internal:
+    driver: bridge
+    internal: true
