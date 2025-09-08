@@ -9,7 +9,7 @@
 
     <% if contact.errors.any? %>
       <div class="alert alert-danger">
-        <h5>Por favor corrija los siguiente <%= pluralize(contact.errors.count, "error") %>:</h5>
+        <h5>Por favor corrija los errores:</h5>
         <ul class="mb-0">
           <% contact.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -48,7 +48,7 @@
       <%= form.label :website, "Website (leave blank)" %>
       <%= form.text_field :website, autocomplete: "off" %>
     </div>
-    
+
     <!-- Secondary honeypot - visible but labeled to trick bots -->
     <div class="mb-3 d-none">
       <%= form.label :phone, "Si eres un humano, por favor deja esto en blanco", class: "form-label" %>
@@ -68,32 +68,32 @@
       var submitButton = document.getElementById('submit-button');
       var messageField = document.querySelector('textarea[name="contact[message]"]');
       var charCount = document.getElementById('charCount');
-      
+
       // Enable submit button after 1 second
       setTimeout(function() {
         submitButton.disabled = false;
       }, 1000);
-      
+
       // Character counter for message field
       if (messageField && charCount) {
         messageField.addEventListener('input', function() {
           charCount.textContent = messageField.value.length + ' caracteres';
         });
       }
-      
-      // Form validation 
+
+      // Form validation
       Array.prototype.slice.call(forms).forEach(function(form) {
         form.addEventListener('submit', function(event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
-          
+
           // Additional client-side validation
           var name = form.querySelector('input[name="contact[name]"]');
           var email = form.querySelector('input[name="contact[email]"]');
           var message = form.querySelector('textarea[name="contact[message]"]');
-          
+
           // Basic link detection
           var linkRegex = /(https?:\/\/|www\.|\.(com|net|org))/i;
           if (linkRegex.test(name.value) || linkRegex.test(message.value)) {
@@ -101,14 +101,14 @@
             alert('Por favor no incluya enlaces en su mensaje');
             return false;
           }
-          
+
           // Check message length
           if (message.value.length < 10) {
             event.preventDefault();
             alert('Su mensaje es demasiado corto');
             return false;
           }
-          
+
           form.classList.add('was-validated');
         }, false);
       });

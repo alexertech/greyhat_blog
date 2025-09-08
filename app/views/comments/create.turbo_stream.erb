@@ -3,12 +3,12 @@
   <%= turbo_stream.prepend "comments" do %>
     <%= render "comments/comment", comment: @comment %>
   <% end %>
-  
+
   <%= turbo_stream.replace "comment_form" do %>
     <%= render "comments/form", post: @post, comment: Comment.new %>
   <% end %>
-  
+
   <%= turbo_stream.update "comment_count" do %>
-    <%= pluralize(@post.comments.count, "comentario") %>
+    <%= @post.comments.count %>
   <% end %>
-<% end %> 
+<% end %>

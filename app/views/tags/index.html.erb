@@ -14,16 +14,16 @@
       <% if @tags_with_counts.any? %>
         <div class="tag-cloud mb-5">
           <% @tags_with_counts.each do |tag| %>
-            <% 
+            <%
               # Calculate relative size based on post count
               max_count = @tags_with_counts.first.posts_count.to_f
               relative_size = (tag.posts_count.to_f / max_count * 1.5 + 0.8).round(1)
               relative_size = [relative_size, 2.0].min # Cap at 2.0
             %>
-            <%= link_to search_path(tag: tag.name), 
+            <%= link_to search_path(tag: tag.name),
                 class: "tag-cloud-item badge bg-primary text-decoration-none me-2 mb-2 px-3 py-2",
                 style: "font-size: #{relative_size}rem; transition: all 0.2s ease;",
-                title: "#{pluralize(tag.posts_count, 'artículo')}" do %>
+                title: "#{tag.posts_count} articulo(s)" do %>
               <i class="fas fa-tag me-1"></i>
               <%= tag.name %>
               <span class="badge bg-light text-dark ms-1"><%= tag.posts_count %></span>
@@ -70,7 +70,7 @@
                       <% end %>
                     </h5>
                     <p class="card-text text-muted">
-                      <%= pluralize(tag.posts_count, 'artículo') %>
+                      <%= tag.posts_count %> artículo(s)
                     </p>
                     <%= link_to "Ver artículos", search_path(tag: tag.name), class: "btn btn-outline-primary btn-sm" %>
                   </div>
@@ -82,7 +82,7 @@
 
         <div class="text-center mt-5">
           <p class="text-muted">
-            ¿Buscas algo específico? 
+            ¿Buscas algo específico?
             <%= link_to "Utiliza la búsqueda", search_path, class: "text-decoration-none" %>
             para encontrar artículos por contenido.
           </p>

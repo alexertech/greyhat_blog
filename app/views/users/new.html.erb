@@ -20,7 +20,7 @@
           <%= form_with model: @user, local: true, multipart: true do |form| %>
             <% if @user.errors.any? %>
               <div class="alert alert-danger" role="alert">
-                <h6><%= pluralize(@user.errors.count, "error") %> impidieron guardar el usuario:</h6>
+                <h6><%= @user.errors.count %> errores impidieron guardar el usuario:</h6>
                 <ul class="mb-0">
                   <% @user.errors.full_messages.each do |message| %>
                     <li><%= message %></li>
@@ -34,7 +34,7 @@
                 <%= form.label :email, "Email *", class: "form-label" %>
                 <%= form.email_field :email, class: "form-control", required: true %>
               </div>
-              
+
               <div class="col-md-6 mb-3">
                 <%= form.label :password, "Contraseña *", class: "form-label" %>
                 <%= form.password_field :password, class: "form-control", required: true %>
@@ -44,14 +44,14 @@
 
             <div class="mb-3">
               <%= form.label :public_name, "Nombre Público *", class: "form-label" %>
-              <%= form.text_field :public_name, class: "form-control", required: true, 
+              <%= form.text_field :public_name, class: "form-control", required: true,
                   placeholder: "Ej: Alex Barrios" %>
               <div class="form-text">Este nombre aparecerá como autor en los posts</div>
             </div>
 
             <div class="mb-3">
               <%= form.label :description, "Descripción", class: "form-label" %>
-              <%= form.text_area :description, class: "form-control", rows: 4, 
+              <%= form.text_area :description, class: "form-control", rows: 4,
                   placeholder: "Escribe una breve descripción del autor que aparecerá en los posts..." %>
             </div>
 

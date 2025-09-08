@@ -5,7 +5,7 @@
         <div class="d-flex align-items-center">
           <i class="fas fa-exclamation-triangle me-2"></i>
           <div>
-            <h6 class="alert-title mb-1"><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h6>
+            <h6 class="alert-title mb-1"><%= post.errors.count %> prohibited this post from being saved:</h6>
             <ul class="mb-0 small">
               <% post.errors.full_messages.each do |message| %>
                 <li><%= message %></li>
@@ -21,8 +21,8 @@
       <%= form.label :user_id, class: "form-label fw-semibold" do %>
         <i class="fas fa-user me-2 text-primary"></i>Autor del artículo
       <% end %>
-      <%= form.collection_select :user_id, User.order(:public_name, :email), :id, :display_name, 
-          { prompt: "Selecciona un autor..." }, 
+      <%= form.collection_select :user_id, User.order(:public_name, :email), :id, :display_name,
+          { prompt: "Selecciona un autor..." },
           { class: "form-select" } %>
       <div class="form-text mt-2">
         <i class="fas fa-info-circle me-1 text-info"></i>
@@ -47,7 +47,7 @@
             data: { controller: "trix-paste", trix_paste_target: "editor" },
             style: "min-height: 20rem; border: 1px solid #ced4da; border-radius: 0.5rem; padding: 1rem;" %>
       </div>
-   
+
       <div class="form-text mt-2">
         <i class="fas fa-info-circle me-1 text-info"></i>
         Puedes pegar imágenes directamente en el editor o usar el formato Markdown.
@@ -74,49 +74,49 @@
         Selecciona una imagen destacada para tu artículo. Formatos aceptados: JPG, PNG, GIF.
       </div>
     </div>
-    
-    <div class="mb-4" 
-         data-controller="tag-manager" 
+
+    <div class="mb-4"
+         data-controller="tag-manager"
          data-tag-manager-current-tags-value="<%= post.tags.pluck(:name).to_json %>">
       <%= form.label :tag_names, class: "form-label fw-semibold" do %>
         <i class="fas fa-tags me-2 text-primary"></i>Etiquetas
       <% end %>
-      
+
       <!-- Tag Display Area -->
       <div data-tag-manager-target="tagContainer" class="mb-2"></div>
-      
+
       <!-- Hidden Input Field -->
-      <%= form.text_field :tag_names, 
-          value: post.tags.pluck(:name).join(', '), 
-          class: "form-control", 
+      <%= form.text_field :tag_names,
+          value: post.tags.pluck(:name).join(', '),
+          class: "form-control",
           placeholder: "Escribe etiquetas separadas por comas o selecciona de las sugerencias",
-          data: { 
+          data: {
             tag_manager_target: "input",
             action: "input->tag-manager#handleInput keydown->tag-manager#handleKeydown"
           } %>
-      
+
       <!-- AI Content Analysis -->
       <div class="d-flex gap-2 mb-2">
-        <button type="button" 
+        <button type="button"
                 class="btn btn-outline-primary btn-sm"
                 data-tag-manager-target="analyzeButton"
                 data-action="click->tag-manager#analyzeContent">
           <i class="fas fa-magic me-1"></i>Analizar contenido
         </button>
       </div>
-      
+
       <!-- AI Suggestions -->
       <div data-tag-manager-target="aiSuggestions" class="mb-2"></div>
-      
+
       <!-- Tag Suggestions -->
       <div data-tag-manager-target="suggestions" class="mt-2"></div>
-      
+
       <div class="form-text mt-2">
         <i class="fas fa-info-circle me-1 text-info"></i>
         Separa las etiquetas con comas o presiona Enter. Haz clic en "Analizar contenido" para obtener sugerencias inteligentes basadas en el texto.
       </div>
     </div>
-    
+
     <div class="mb-4">
       <div class="form-check form-switch">
         <%= form.check_box :draft, class: "form-check-input", role: "switch" %>
