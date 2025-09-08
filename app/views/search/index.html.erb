@@ -6,12 +6,12 @@
           <i class="fas fa-search me-2"></i>
           Buscar Artículos
         </h2>
-        
+
         <%= form_with url: search_path, method: :get, local: true, class: "search-form" do |form| %>
           <div class="input-group mb-3">
-            <%= form.text_field :q, 
-                value: @query, 
-                placeholder: "Buscar en títulos y contenido...", 
+            <%= form.text_field :q,
+                value: @query,
+                placeholder: "Buscar en títulos y contenido...",
                 class: "form-control form-control-lg",
                 autocomplete: "off" %>
             <button class="btn btn-primary btn-lg" type="submit">
@@ -28,9 +28,9 @@
             <h5 class="text-muted">
               <% if @posts.any? %>
                 <% if @tag.present? %>
-                  <%= pluralize(@posts.count, 'artículo encontrado', 'artículos encontrados') %> con la etiqueta "<em><%= @tag %></em>"
+                  <%= @posts.count %>artículo(s) encontrados con la etiqueta "<em><%= @tag %></em>"
                 <% else %>
-                  <%= pluralize(@posts.count, 'resultado encontrado', 'resultados encontrados') %> para "<em><%= @query %></em>"
+                  <%= @posts.count %>resultado(s) encontrados para "<em><%= @query %></em>"
                 <% end %>
               <% else %>
                 <% if @tag.present? %>
@@ -50,24 +50,24 @@
                     <% if post.image.attached? %>
                       <div class="col-md-3">
                         <%= link_to post do %>
-                          <%= image_tag post.image.variant(:thumb), 
-                              class: "img-fluid rounded-start h-100 w-100", 
+                          <%= image_tag post.image.variant(:thumb),
+                              class: "img-fluid rounded-start h-100 w-100",
                               style: "object-fit: cover;" %>
                         <% end %>
                       </div>
                     <% end %>
-                    
+
                     <div class="<%= post.image.attached? ? 'col-md-9' : 'col-12' %>">
                       <div class="card-body">
                         <h5 class="card-title">
                           <%= link_to post.title, post, class: "text-decoration-none" %>
                         </h5>
-                        
+
                         <p class="card-text">
-                          <%= highlight(strip_tags(post.body.to_plain_text).truncate(200), @query, 
+                          <%= highlight(strip_tags(post.body.to_plain_text).truncate(200), @query,
                               highlighter: '<mark class="bg-warning">\1</mark>') %>
                         </p>
-                        
+
                         <!-- Tags -->
                         <% if post.tags.any? %>
                           <div class="mb-2">
@@ -78,7 +78,7 @@
                             <% end %>
                           </div>
                         <% end %>
-                        
+
                         <div class="card-text">
                           <small class="text-muted">
                             <i class="fas fa-calendar me-1"></i>
@@ -102,7 +102,7 @@
               <i class="fas fa-search fa-3x text-muted mb-3"></i>
               <h4 class="text-muted">No se encontraron artículos</h4>
               <p class="text-muted">
-                Intenta con diferentes palabras clave o 
+                Intenta con diferentes palabras clave o
                 <%= link_to "explora todos los artículos", "/articulos", class: "text-decoration-none" %>
               </p>
             </div>
