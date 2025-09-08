@@ -4,12 +4,8 @@ services:
   database:
     image: postgres:16-alpine
     container_name: greyhat_postgres
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-greyhat_production}
-      POSTGRES_USER: ${POSTGRES_USER:-alex}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
-      PGUSER: ${POSTGRES_USER:-alex}
+    env_file:
+      - .env
     volumes:
       - greyhat_postgres_data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
@@ -30,14 +26,8 @@ services:
   web:
     build: .
     container_name: greyhat_web
-    environment:
-      RAILS_ENV: ${RAILS_ENV:-production}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-alex}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_production}
-      REDIS_URL: redis://redis:6379/0
-      RAILS_SERVE_STATIC_FILES: "true"
-      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      RAILS_LOG_TO_STDOUT: "true"
+    env_file:
+      - .env
     depends_on:
       - database
       - redis
