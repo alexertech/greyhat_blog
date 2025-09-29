@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Documentation
+README.md
+CLAUDE.md
+*.md
+
+# Logs
+log/*
+*.log
+
+# Runtime data
+tmp/*
+storage/tmp/*
+.pid
+
+# Dependencies
+node_modules
+
+# Environment files
+.env*
+config/master.key
+
+# Test files
+coverage/
+spec/
+test/
+
+# Development files
+.byebug_history
+.irb_history
+.pry_history
+
+# System files
+.DS_Store
+.vscode/
+.idea/
+
+# Deployment
+deploy-docker-compose
+bin/deploy-docker-compose
+config/deploy*
+Capfile
+
+# Ruby version managers
+.ruby-version
+.rbenv-version
+
+# Bundle
+vendor/bundle/
+.bundle/

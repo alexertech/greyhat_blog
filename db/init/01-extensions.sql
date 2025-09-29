@@ -1,8 +1,6 @@
 -- PostgreSQL extensions required by the application
 CREATE EXTENSION IF NOT EXISTS plpgsql;
 
--- Create postgres role
-CREATE ROLE postgres WITH SUPERUSER CREATEDB CREATEROLE PASSWORD 'postgres';
-
--- Update existing alex role to be superuser
-ALTER ROLE alex WITH SUPERUSER CREATEDB CREATEROLE PASSWORD 'super_secure_password_2025';
+-- Note: User roles and passwords should be managed via environment variables
+-- The postgres user is created automatically by the postgres Docker image
+-- Additional roles should be created via POSTGRES_USER and POSTGRES_PASSWORD env vars
