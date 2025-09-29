@@ -2,15 +2,17 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV['POSTGRES_HOST'] || 'localhost' %>
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  database: <%= ENV['POSTGRES_DB'] %>
 
 development:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] || 'postgresql://localhost/greyhat_development' %>
 
 test:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] || 'postgresql://localhost/greyhat_test' %>
+  database: greyhat_test
 
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>

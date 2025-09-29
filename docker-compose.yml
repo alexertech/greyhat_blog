@@ -5,49 +5,47 @@ services:
     image: postgres:15
     container_name: greyhat_postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-greyhat_${RAILS_ENV:-development}}
-      POSTGRES_USER: ${POSTGRES_USER:-greyhat}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - greyhat_postgres_data:/var/lib/postgresql/data
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - ./postgres:/var/lib/postgresql/data
+    restart: unless-stopped
     networks:
       - greyhat_network
-    restart: unless-stopped
 
   web:
     build: .
     container_name: greyhat_web
     environment:
-      RAILS_ENV: ${RAILS_ENV:-development}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-greyhat}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_${RAILS_ENV:-development}}
+      RAILS_ENV: ${RAILS_ENV}
+      POSTGRES_HOST: database
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      RAILS_SERVE_STATIC_FILES: ${RAILS_SERVE_STATIC_FILES:-true}
-      RAILS_LOG_TO_STDOUT: ${RAILS_LOG_TO_STDOUT:-true}
+      RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_LOG_TO_STDOUT: "true"
     depends_on:
       - database
     volumes:
-      - ${MOUNT_SOURCE:-.}:/app
-      - greyhat_storage:/app/storage
+      - .:/app
+      - ./storage:/app/storage
     ports:
-      - "${RAILS_PORT:-3000}:3000"
+      - "3000:3000"
     expose:
       - "3000"
     networks:
       - greyhat_network
-      - ${CADDY_NETWORK:-caddy_net}
+      - caddy_net
     restart: unless-stopped
-    command: ${RAILS_COMMAND:-bundle exec rails server -b 0.0.0.0}
-
-volumes:
-  greyhat_postgres_data:
-  greyhat_storage:
+    command: bundle exec rails server -b 0.0.0.0
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
   greyhat_network:
-    name: greyhat_network
     driver: bridge
   caddy_net:
     external: true
