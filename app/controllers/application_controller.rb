@@ -4,6 +4,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   after_action :record_health_check
 
+  def health
+    # Simple health check endpoint for Docker
+    render json: {
+      status: 'ok',
+      timestamp: Time.current.iso8601,
+      rails_env: Rails.env
+    }
+  end
+
   private
 
   def record_health_check

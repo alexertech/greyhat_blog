@@ -44,6 +44,9 @@ Rails.application.routes.draw do
   get '/tags' => 'tags#index'
   post '/tags/suggest' => 'tags#suggest'
   
+  # Health check endpoint for Docker
+  get '/health' => 'application#health'
+
   # SEO and Site Management
   get '/sitemap.xml' => 'sitemaps#index', as: 'sitemap', defaults: { format: 'xml' }
   get '/robots.txt' => 'robots#index', as: 'robots', defaults: { format: 'text' }

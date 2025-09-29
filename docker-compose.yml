@@ -12,47 +12,71 @@ services:
       PGUSER: ${POSTGRES_USER:-alex}
     volumes:
       - greyhat_postgres_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/init:/docker-entrypoint-initdb.d:ro
     networks:
-      - caddy_net
       - greyhat_internal
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-alex} -d ${POSTGRES_DB:-greyhat_production}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    security_opt:
+      - no-new-privileges:true
 
   redis:
     image: redis:7-alpine
     container_name: greyhat_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password}
     volumes:
       - greyhat_redis_data:/data
     networks:
       - greyhat_internal
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_password}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+    security_opt:
+      - no-new-privileges:true
 
   web:
-    build: .
+    build:
+      context: .
+      target: production
     container_name: greyhat_web
     environment:
       RAILS_ENV: ${RAILS_ENV:-production}
       DATABASE_URL: postgresql://${POSTGRES_USER:-alex}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_production}
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_password}@redis:6379/0
       RAILS_SERVE_STATIC_FILES: "true"
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       RAILS_LOG_TO_STDOUT: "true"
     depends_on:
-      - database
-      - redis
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
-      - ./storage:/app/storage
+      - app_storage:/app/storage
     ports:
       - "3001:3000"
     networks:
       - caddy_net
       - greyhat_internal
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    init: true
 
 volumes:
   greyhat_postgres_data:
   greyhat_redis_data:
+  app_storage:
 
 networks:
   caddy_net:
