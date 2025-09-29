@@ -8,7 +8,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-greyhat_production}
       POSTGRES_USER: ${POSTGRES_USER:-alex}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
       PGUSER: ${POSTGRES_USER:-alex}
     volumes:
       - greyhat_postgres_data:/var/lib/postgresql/data
