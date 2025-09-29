@@ -5,84 +5,49 @@ services:
     image: postgres:16-alpine
     container_name: greyhat_postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-greyhat_production}
-      POSTGRES_USER: ${POSTGRES_USER:-alex}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_INITDB_ARGS: "--auth-host=md5"
-      PGUSER: ${POSTGRES_USER:-alex}
+      POSTGRES_DB: ${POSTGRES_DB:-greyhat_development}
+      POSTGRES_USER: ${POSTGRES_USER:-greyhat}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-greyhat}
     volumes:
       - greyhat_postgres_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
     networks:
-      - greyhat_internal
+      - greyhat_network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-alex} -d ${POSTGRES_DB:-greyhat_production}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    security_opt:
-      - no-new-privileges:true
-
-  redis:
-    image: redis:7-alpine
-    container_name: greyhat_redis
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password}
-    volumes:
-      - greyhat_redis_data:/data
-    networks:
-      - greyhat_internal
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_password}", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-      start_period: 30s
-    security_opt:
-      - no-new-privileges:true
 
   web:
-    build:
-      context: .
-      target: production
+    build: .
     container_name: greyhat_web
     environment:
-      RAILS_ENV: ${RAILS_ENV:-production}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-alex}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_production}
-      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_password}@redis:6379/0
-      RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_ENV: ${RAILS_ENV:-development}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-greyhat}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_development}
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      RAILS_LOG_TO_STDOUT: "true"
+      RAILS_SERVE_STATIC_FILES: ${RAILS_SERVE_STATIC_FILES:-true}
+      RAILS_LOG_TO_STDOUT: ${RAILS_LOG_TO_STDOUT:-true}
     depends_on:
-      database:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - database
     volumes:
-      - app_storage:/app/storage
-    # No ports exposed - accessed only through reverse proxy
+      - ${MOUNT_SOURCE:-.}:/app
+      - greyhat_storage:/app/storage
+    ports:
+      - "${RAILS_PORT:-3000}:3000"
     expose:
       - "3000"
     networks:
-      - caddy_net
-      - greyhat_internal
+      - greyhat_network
+      - caddy
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    init: true
+    command: ${RAILS_COMMAND:-bundle exec rails server -b 0.0.0.0}
 
 volumes:
   greyhat_postgres_data:
-  greyhat_redis_data:
-  app_storage:
+  greyhat_storage:
 
 networks:
-  caddy_net:
-    external: true
-  greyhat_internal:
-    name: greyhat_cl_internal
+  greyhat_network:
+    name: greyhat_network
     driver: bridge
-    internal: true
+  caddy:
+    external: true
