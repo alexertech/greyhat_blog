@@ -3,13 +3,29 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Build Commands
+
+### Native/Local Development
 - Start server: `bundle exec rails s`
 - Install dependencies: `bundle install`
 - Database setup: `bundle exec rails db:prepare`
 - Run all tests: `bundle exec rspec`
 - Run single test: `bundle exec rspec spec/path/to_spec.rb:LINE_NUMBER`
-- Deploy: `bundle exec cap production deploy`
 - Run migrations locally: `bundle exec rails db:migrate`
+
+### Docker Development
+- Start development environment: `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d`
+- View logs: `docker compose -f docker-compose.yml -f docker-compose.dev.yml logs -f web`
+- Run migrations: `docker compose -f docker-compose.yml -f docker-compose.dev.yml exec web bundle exec rails db:migrate`
+- Stop development: `docker compose -f docker-compose.yml -f docker-compose.dev.yml down`
+
+### Docker Production
+- Deploy to production: `./bin/deploy-docker-compose`
+- Manual production start: `docker compose --env-file .env.production up -d`
+- Production with debugging: `docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.debug.yml up -d`
+- View production logs: `docker compose --env-file .env.production logs -f web`
+
+### Legacy Deployment
+- Deploy with Capistrano: `bundle exec cap production deploy`
 
 ## Deployment
 - **Automatic Migrations**: Database migrations run automatically during deployment

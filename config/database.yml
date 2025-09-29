@@ -1,20 +1,16 @@
 default: &default
-  adapter:  postgresql
+  adapter: postgresql
   encoding: unicode
-  host:     <%= ENV['DATABASE_HOST'] %>
-  port:     5432
-  username: <%= ENV['DATABASE_USERNAME'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
-  database: <%= ENV['DATABASE_PREFIX'] %>_development
+  url: <%= ENV['DATABASE_URL'] || 'postgresql://localhost/greyhat_development' %>
 
 test:
   <<: *default
-  database: <%= ENV['DATABASE_PREFIX'] %>-test
+  url: <%= ENV['DATABASE_URL'] || 'postgresql://localhost/greyhat_test' %>
 
 production:
-  adapter: postgresql
+  <<: *default
   url: <%= ENV['DATABASE_URL'] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
