@@ -63,8 +63,9 @@ services:
         condition: service_healthy
     volumes:
       - app_storage:/app/storage
-    ports:
-      - "3001:3000"
+    # No ports exposed - accessed only through reverse proxy
+    expose:
+      - "3000"
     networks:
       - caddy_net
       - greyhat_internal

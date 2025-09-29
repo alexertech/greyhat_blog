@@ -1,0 +1,16 @@
+# Production debugging override
+# Use only when you need direct access for debugging
+# Usage: docker compose -f docker-compose.yml -f docker-compose.debug.yml up
+
+services:
+  web:
+    ports:
+      - "3001:3000"  # Temporarily expose for debugging
+
+  database:
+    ports:
+      - "5433:5432"  # Database access for debugging
+
+  redis:
+    ports:
+      - "6380:6379"  # Redis access for debugging
