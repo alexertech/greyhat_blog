@@ -14,6 +14,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "vector"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false

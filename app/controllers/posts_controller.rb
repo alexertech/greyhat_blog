@@ -121,31 +121,7 @@ class PostsController < ApplicationController
   end
 
   def track_visit
-    return unless @post # Safety check
-    
-    # Use single atomic operation to avoid race conditions
-    Visit.transaction do
-      # Check for existing visit in last 24 hours
-      existing_visit = Visit.where(
-        visitable: @post,
-        ip_address: request.remote_ip,
-        viewed_at: 24.hours.ago..Time.current
-      ).exists?
-      
-      # Increment unique visits counter if no recent visit
-      @post.increment!(:unique_visits) unless existing_visit
-      
-      # Always record the visit for analytics
-      Visit.create!(
-        visitable: @post,
-        ip_address: request.remote_ip,
-        user_agent: request.user_agent,
-        referer: request.referer,
-        action_type: 'page_view'
-      )
-    end
-  rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.warn "Failed to track visit for post #{@post&.id}: #{e.message}"
+    VisitTrackingService.new(@post, request).track_visit
   end
 
   def ensure_published_or_admin
