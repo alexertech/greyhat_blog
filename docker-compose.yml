@@ -46,6 +46,8 @@ services:
 
 networks:
   greyhat_network:
+    name: greyhat_network
     driver: bridge
   caddy_net:
+    name: caddy_net
     external: true
