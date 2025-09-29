@@ -1,0 +1,77 @@
+#!/bin/bash
+# Database connection troubleshooting script
+
+echo "===================================="
+echo "Database Connection Troubleshooting"
+echo "===================================="
+echo ""
+
+echo "1. Environment Variables:"
+echo "   RAILS_ENV: ${RAILS_ENV}"
+echo "   DATABASE_URL: ${DATABASE_URL}"
+echo "   POSTGRES_USER: ${POSTGRES_USER}"
+echo "   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:+[SET]}"
+echo "   POSTGRES_DB: ${POSTGRES_DB}"
+echo ""
+
+echo "2. Parsing DATABASE_URL:"
+if [ -n "$DATABASE_URL" ]; then
+  DB_USER=$(echo $DATABASE_URL | sed -n 's|.*://\([^:]*\):.*|\1|p')
+  DB_PASS=$(echo $DATABASE_URL | sed -n 's|.*://[^:]*:\([^@]*\)@.*|\1|p')
+  DB_HOST=$(echo $DATABASE_URL | sed -n 's|.*@\([^:]*\):.*|\1|p')
+  DB_PORT=$(echo $DATABASE_URL | sed -n 's|.*:\([0-9]*\)/.*|\1|p')
+  DB_NAME=$(echo $DATABASE_URL | sed -n 's|.*/\([^?]*\).*|\1|p')
+
+  echo "   User from URL: $DB_USER"
+  echo "   Password from URL: ${DB_PASS:+[SET - length: ${#DB_PASS}]}"
+  echo "   Host: $DB_HOST"
+  echo "   Port: $DB_PORT"
+  echo "   Database: $DB_NAME"
+else
+  echo "   DATABASE_URL not set!"
+fi
+echo ""
+
+echo "3. Testing DNS resolution:"
+if command -v nslookup &> /dev/null; then
+  nslookup database 2>&1 | head -5
+elif command -v getent &> /dev/null; then
+  getent hosts database
+else
+  echo "   No DNS tools available"
+fi
+echo ""
+
+echo "4. Testing TCP connection to database:5432:"
+if timeout 3 bash -c "cat < /dev/null > /dev/tcp/database/5432" 2>/dev/null; then
+  echo "   ✓ TCP connection successful"
+else
+  echo "   ✗ TCP connection failed"
+fi
+echo ""
+
+echo "5. Testing PostgreSQL connection with psql:"
+if [ -n "$DATABASE_URL" ]; then
+  echo "   Attempting connection..."
+  PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "SELECT version();" 2>&1 | head -3
+else
+  echo "   Skipped - DATABASE_URL not set"
+fi
+echo ""
+
+echo "6. Checking pg_hba.conf from database container:"
+echo "   (Run this on database container: docker exec greyhat_postgres cat /var/lib/postgresql/data/pg_hba.conf | tail -5)"
+echo ""
+
+echo "7. Testing Rails database connection:"
+if command -v bundle &> /dev/null; then
+  echo "   Attempting Rails connection..."
+  bundle exec rails runner "puts ActiveRecord::Base.connection.execute('SELECT version()').first" 2>&1 | head -5
+else
+  echo "   Bundle not available"
+fi
+echo ""
+
+echo "===================================="
+echo "Troubleshooting Complete"
+echo "===================================="
