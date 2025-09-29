@@ -2,12 +2,12 @@ name: greyhat_cl
 
 services:
   database:
-    image: postgres:16-alpine
+    image: postgres:15
     container_name: greyhat_postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-greyhat_development}
+      POSTGRES_DB: ${POSTGRES_DB:-greyhat_${RAILS_ENV:-development}}
       POSTGRES_USER: ${POSTGRES_USER:-greyhat}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-greyhat}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - greyhat_postgres_data:/var/lib/postgresql/data
     ports:
@@ -21,7 +21,7 @@ services:
     container_name: greyhat_web
     environment:
       RAILS_ENV: ${RAILS_ENV:-development}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-greyhat}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_development}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-greyhat}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-greyhat_${RAILS_ENV:-development}}
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       RAILS_SERVE_STATIC_FILES: ${RAILS_SERVE_STATIC_FILES:-true}
@@ -37,7 +37,7 @@ services:
       - "3000"
     networks:
       - greyhat_network
-      - caddy
+      - ${CADDY_NETWORK:-caddy_net}
     restart: unless-stopped
     command: ${RAILS_COMMAND:-bundle exec rails server -b 0.0.0.0}
 
@@ -49,5 +49,5 @@ networks:
   greyhat_network:
     name: greyhat_network
     driver: bridge
-  caddy:
+  caddy_net:
     external: true
