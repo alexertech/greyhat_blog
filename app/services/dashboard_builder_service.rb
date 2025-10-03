@@ -32,6 +32,9 @@ class DashboardBuilderService
       # Newsletter funnel
       **newsletter_metrics,
 
+      # Bot vs Human analytics
+      **bot_analytics,
+
       # Legacy compatibility
       **legacy_metrics
     }
@@ -247,6 +250,59 @@ class DashboardBuilderService
           current_hour_visits: 0, average_hourly: 0,
           is_anomaly: false, threshold: 0
         }
+      }
+    end
+  end
+
+  # Bot vs Human analytics with optimized single queries
+  def bot_analytics
+    begin
+      # Single query to get all bot/human counts with time ranges
+      total_visits = Visit.count
+      human_visits = Visit.humans.count
+      bot_visits = Visit.bots.count
+
+      human_percentage = total_visits > 0 ? (human_visits.to_f / total_visits * 100).round(1) : 0
+      bot_percentage = total_visits > 0 ? (bot_visits.to_f / total_visits * 100).round(1) : 0
+
+      # Time-based stats in single queries
+      one_day_ago = 1.day.ago
+      one_week_ago = 1.week.ago
+      one_month_ago = 1.month.ago
+
+      {
+        bot_analytics_total_visits: total_visits,
+        bot_analytics_human_visits: human_visits,
+        bot_analytics_bot_visits: bot_visits,
+        bot_analytics_human_percentage: human_percentage,
+        bot_analytics_bot_percentage: bot_percentage,
+        bot_analytics_human_last_day: Visit.humans.where('viewed_at >= ?', one_day_ago).count,
+        bot_analytics_human_last_week: Visit.humans.where('viewed_at >= ?', one_week_ago).count,
+        bot_analytics_human_last_month: Visit.humans.where('viewed_at >= ?', one_month_ago).count,
+        bot_analytics_bot_last_day: Visit.bots.where('viewed_at >= ?', one_day_ago).count,
+        bot_analytics_bot_last_week: Visit.bots.where('viewed_at >= ?', one_week_ago).count,
+        bot_analytics_bot_last_month: Visit.bots.where('viewed_at >= ?', one_month_ago).count,
+        bot_analytics_visits_last_day: Visit.where('viewed_at >= ?', one_day_ago).count,
+        bot_analytics_visits_last_week: Visit.where('viewed_at >= ?', one_week_ago).count,
+        bot_analytics_visits_last_month: Visit.where('viewed_at >= ?', one_month_ago).count
+      }
+    rescue => e
+      Rails.logger.error "Bot analytics error: #{e.message}"
+      {
+        bot_analytics_total_visits: 0,
+        bot_analytics_human_visits: 0,
+        bot_analytics_bot_visits: 0,
+        bot_analytics_human_percentage: 0,
+        bot_analytics_bot_percentage: 0,
+        bot_analytics_human_last_day: 0,
+        bot_analytics_human_last_week: 0,
+        bot_analytics_human_last_month: 0,
+        bot_analytics_bot_last_day: 0,
+        bot_analytics_bot_last_week: 0,
+        bot_analytics_bot_last_month: 0,
+        bot_analytics_visits_last_day: 0,
+        bot_analytics_visits_last_week: 0,
+        bot_analytics_visits_last_month: 0
       }
     end
   end

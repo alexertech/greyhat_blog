@@ -1,0 +1,26 @@
+<div class="metric-card <%= 'metric-card-highlight' if local_assigns[:highlight] %>">
+  <div class="metric-card-body">
+    <div class="metric-icon bg-<%= bg_color %>">
+      <i class="fas <%= icon %>"></i>
+      <% if local_assigns[:badge_count] && local_assigns[:badge_count] > 0 %>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          <%= local_assigns[:badge_count] %>
+        </span>
+      <% end %>
+    </div>
+    <div class="metric-content">
+      <div class="metric-value"><%= number_with_delimiter(value) %></div>
+      <div class="metric-label"><%= label %></div>
+      <% if local_assigns[:change_text] %>
+        <div class="metric-change <%= local_assigns[:change_class] %>">
+          <%= local_assigns[:change_text] %>
+        </div>
+      <% end %>
+    </div>
+    <% if local_assigns[:link] %>
+      <div class="metric-action">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    <% end %>
+  </div>
+</div>

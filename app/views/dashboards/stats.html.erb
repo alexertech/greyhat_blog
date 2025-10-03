@@ -194,17 +194,17 @@
           <div class="row text-center mb-4">
             <div class="col-6">
               <h6 class="text-muted mb-1">Tasa de Rebote</h6>
-              <h3 class="text-<%= @bounce_rate > 70 ? 'danger' : @bounce_rate > 50 ? 'warning' : 'success' %>">
+              <h3 class="text-<%= bounce_rate_color(@bounce_rate) %>">
                 <%= @bounce_rate %>%
               </h3>
               <small class="text-muted">
-                <%= @bounce_rate > 70 ? '🔴 Alta' : @bounce_rate > 50 ? '🟡 Media' : '🟢 Baja' %>
+                <%= @bounce_rate > 70 ? 'Alta' : @bounce_rate > 50 ? 'Media' : 'Baja' %>
               </small>
             </div>
             <div class="col-6">
               <h6 class="text-muted mb-1">Duración Promedio</h6>
               <h3 class="text-primary">
-                <%= @avg_session_duration > 60 ? "#{(@avg_session_duration / 60).round(1)}m" : "#{@avg_session_duration}s" %>
+                <%= format_session_duration(@avg_session_duration) %>
               </h3>
               <small class="text-muted">Tiempo en sitio</small>
             </div>
@@ -270,34 +270,26 @@
           <h5 class="mb-0"><i class="fas fa-users me-2"></i>Visitas: Humanos vs Bots</h5>
         </div>
         <div class="card-body">
-          <%
-            total_visits = Visit.count
-            human_visits = Visit.humans.count
-            bot_visits = Visit.bots.count
-            human_percentage = total_visits > 0 ? (human_visits.to_f / total_visits * 100).round(1) : 0
-            bot_percentage = total_visits > 0 ? (bot_visits.to_f / total_visits * 100).round(1) : 0
-          %>
-          
           <!-- Visual Representation -->
           <div class="row mb-4">
             <div class="col-md-6">
               <div class="text-center">
-                <h2 class="text-success mb-1"><%= human_percentage %>%</h2>
+                <h2 class="text-success mb-1"><%= @bot_analytics_human_percentage %>%</h2>
                 <h5 class="text-muted mb-3">Visitas Humanas</h5>
                 <div class="progress mb-2" style="height: 30px;">
-                  <div class="progress-bar bg-success" style="width: <%= human_percentage %>%">
-                    <%= number_with_delimiter(human_visits) %> visitas
+                  <div class="progress-bar bg-success" style="width: <%= @bot_analytics_human_percentage %>%">
+                    <%= number_with_delimiter(@bot_analytics_human_visits) %> visitas
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="text-center">
-                <h2 class="text-warning mb-1"><%= bot_percentage %>%</h2>
+                <h2 class="text-warning mb-1"><%= @bot_analytics_bot_percentage %>%</h2>
                 <h5 class="text-muted mb-3">Visitas de Bots</h5>
                 <div class="progress mb-2" style="height: 30px;">
-                  <div class="progress-bar bg-warning" style="width: <%= bot_percentage %>%">
-                    <%= number_with_delimiter(bot_visits) %> visitas
+                  <div class="progress-bar bg-warning" style="width: <%= @bot_analytics_bot_percentage %>%">
+                    <%= number_with_delimiter(@bot_analytics_bot_visits) %> visitas
                   </div>
                 </div>
               </div>
@@ -305,17 +297,9 @@
           </div>
 
           <!-- Quality Score -->
-          <div class="alert <%= human_percentage >= 70 ? 'alert-success' : human_percentage >= 50 ? 'alert-warning' : 'alert-danger' %> text-center">
-            <strong>Calidad del Tráfico:</strong>
-            <% if human_percentage >= 80 %>
-              🟢 Excelente - Alto porcentaje de tráfico humano
-            <% elsif human_percentage >= 60 %>
-              🟡 Bueno - Tráfico mayormente humano
-            <% elsif human_percentage >= 40 %>
-              🟠 Regular - Equilibrio entre humanos y bots
-            <% else %>
-              🔴 Atención - Alto porcentaje de tráfico de bots
-            <% end %>
+          <% quality = traffic_quality_status(@bot_analytics_human_percentage) %>
+          <div class="alert <%= quality[:alert_class] %> text-center">
+            <strong>Calidad del Tráfico:</strong> <%= quality[:message] %>
           </div>
 
           <!-- Detailed Table -->
@@ -334,26 +318,26 @@
               <tbody>
                 <tr>
                   <td><i class="fas fa-user text-success me-2"></i><strong>Humanos</strong></td>
-                  <td><span class="badge bg-success fs-6"><%= number_with_delimiter(human_visits) %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.day.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.humans.where('viewed_at >= ?', 1.month.ago).count %></span></td>
-                  <td><span class="badge bg-success"><%= human_percentage %>%</span></td>
+                  <td><span class="badge bg-success fs-6"><%= number_with_delimiter(@bot_analytics_human_visits) %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_human_last_day %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_human_last_week %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_human_last_month %></span></td>
+                  <td><span class="badge bg-success"><%= @bot_analytics_human_percentage %>%</span></td>
                 </tr>
                 <tr>
                   <td><i class="fas fa-robot text-warning me-2"></i><strong>Bots</strong></td>
-                  <td><span class="badge bg-warning fs-6"><%= number_with_delimiter(bot_visits) %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.day.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.bots.where('viewed_at >= ?', 1.month.ago).count %></span></td>
-                  <td><span class="badge bg-warning"><%= bot_percentage %>%</span></td>
+                  <td><span class="badge bg-warning fs-6"><%= number_with_delimiter(@bot_analytics_bot_visits) %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_bot_last_day %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_bot_last_week %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_bot_last_month %></span></td>
+                  <td><span class="badge bg-warning"><%= @bot_analytics_bot_percentage %>%</span></td>
                 </tr>
                 <tr class="table-active">
                   <td><i class="fas fa-chart-bar me-2"></i><strong>Total</strong></td>
-                  <td><span class="badge bg-primary fs-6"><%= number_with_delimiter(total_visits) %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.day.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.week.ago).count %></span></td>
-                  <td><span class="badge bg-secondary"><%= Visit.where('viewed_at >= ?', 1.month.ago).count %></span></td>
+                  <td><span class="badge bg-primary fs-6"><%= number_with_delimiter(@bot_analytics_total_visits) %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_visits_last_day %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_visits_last_week %></span></td>
+                  <td><span class="badge bg-secondary"><%= @bot_analytics_visits_last_month %></span></td>
                   <td><span class="badge bg-primary">100%</span></td>
                 </tr>
               </tbody>
@@ -397,8 +381,8 @@
                     <tr>
                       <td class="text-center">
                         <% if index < 3 %>
-                          <span class="badge bg-<%= index == 0 ? 'warning' : index == 1 ? 'secondary' : 'warning' %> fs-6">
-                            <%= index == 0 ? '🥇' : index == 1 ? '🥈' : '🥉' %>
+                          <span class="badge bg-<%= index == 0 ? 'warning' : index == 1 ? 'secondary' : 'info' %> fs-6">
+                            <%= index + 1 %>
                           </span>
                         <% else %>
                           <span class="text-muted"><%= index + 1 %></span>

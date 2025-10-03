@@ -157,7 +157,7 @@
               </span>
               <span>
                 <i class="fas fa-clock me-1"></i>
-                <%= (@post.body.to_plain_text.split.size/200)+1 %> min de lectura
+                <%= reading_time_text(@post) %>
               </span>
             </div>
           </div>

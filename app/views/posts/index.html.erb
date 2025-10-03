@@ -20,13 +20,21 @@
   </div>
 
   <!-- View Toggle -->
-  <div class="content-card p-3 mb-4">
+  <div class="content-card p-3 mb-4" data-controller="view-toggle">
     <div class="d-flex justify-content-between align-items-center">
-      <div class="view-toggle btn-group" role="group">
-        <button type="button" class="btn btn-outline-primary active" data-view="grid">
+      <div class="btn-group" role="group">
+        <button type="button"
+                class="btn btn-outline-primary"
+                data-view="grid"
+                data-view-toggle-target="button"
+                data-action="click->view-toggle#toggle">
           <i class="fas fa-th-large me-2"></i>Tarjetas
         </button>
-        <button type="button" class="btn btn-outline-primary" data-view="list">
+        <button type="button"
+                class="btn btn-outline-primary"
+                data-view="list"
+                data-view-toggle-target="button"
+                data-action="click->view-toggle#toggle">
           <i class="fas fa-list me-2"></i>Lista
         </button>
       </div>
@@ -37,10 +45,9 @@
         </span>
       </div>
     </div>
-  </div>
 
   <!-- Posts Grid View -->
-  <div class="posts-view" data-view="grid">
+  <div class="posts-view" data-view="grid" data-view-toggle-target="view">
     <% if @posts.any? %>
       <div class="posts-grid">
         <% @posts.each do |post| %>
@@ -66,18 +73,22 @@
               
               <div class="post-meta">
                 <div class="post-date">
-                  <i class="fas fa-calendar-alt"></i>
-                  <%= time_ago_in_words(post.created_at) %> ago
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  <time datetime="<%= post.created_at.iso8601 %>">
+                    <%= time_ago_in_words(post.created_at) %> ago
+                  </time>
                 </div>
-                
+
                 <div class="post-stats">
                   <div class="stat-item">
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                    <span class="visually-hidden">Visitas: </span>
                     <%= post.total_visits %>
                   </div>
                   <div class="stat-item">
-                    <i class="fas fa-comments"></i>
-                    <%= post.comments.approved.count %>
+                    <i class="fas fa-comments" aria-hidden="true"></i>
+                    <span class="visually-hidden">Comentarios: </span>
+                    <%= post.comments_count %>
                   </div>
                 </div>
                 
@@ -132,7 +143,7 @@
   </div>
 
   <!-- Posts List View -->
-  <div class="posts-view d-none" data-view="list">
+  <div class="posts-view d-none" data-view="list" data-view-toggle-target="view">
     <% if @posts.any? %>
       <div class="posts-list">
         <% @posts.each do |post| %>
@@ -142,7 +153,9 @@
                 <%= link_to post.title, post, class: "text-decoration-none" %>
               </h4>
               <div class="post-date">
-                <%= time_ago_in_words(post.created_at) %> ago
+                <time datetime="<%= post.created_at.iso8601 %>">
+                  <%= time_ago_in_words(post.created_at) %> ago
+                </time>
               </div>
             </div>
             
@@ -212,43 +225,5 @@
       </div>
     </div>
   <% end %>
+  </div>
 </div>
-
-<!-- View Toggle JavaScript -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const viewButtons = document.querySelectorAll('.view-toggle button');
-  const postsViews = document.querySelectorAll('.posts-view');
-  
-  viewButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const view = this.dataset.view;
-      
-      // Update button states
-      viewButtons.forEach(btn => btn.classList.remove('active'));
-      this.classList.add('active');
-      
-      // Update view visibility
-      postsViews.forEach(viewEl => {
-        if (viewEl.dataset.view === view) {
-          viewEl.classList.remove('d-none');
-        } else {
-          viewEl.classList.add('d-none');
-        }
-      });
-      
-      // Save preference
-      localStorage.setItem('postsView', view);
-    });
-  });
-  
-  // Restore saved view preference
-  const savedView = localStorage.getItem('postsView');
-  if (savedView) {
-    const savedButton = document.querySelector(`[data-view="${savedView}"]`);
-    if (savedButton) {
-      savedButton.click();
-    }
-  }
-});
-</script>
