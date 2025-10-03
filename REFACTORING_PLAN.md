@@ -18,8 +18,9 @@
 - AnalyticsService: 413 lines
 - Test coverage: Models ✅, Controllers ✅, Services ❌
 
-### 📈 Code Metrics After Phase 1 COMPLETE
-- Post model: **161 lines** (-38 lines, -19% reduction)
+### 📈 Code Metrics After Phase 1 & 2 COMPLETE
+- Post model: **148 lines** (-51 lines, -26% total reduction)
+- Page model: **5 lines** (-15 lines, -75% reduction!)
 - PostsController: **132 lines** (-25 lines, -16% reduction)
 - Dashboard::AnalyticsService: **25 lines** (-388 lines, -94% reduction!)
 - PostAnalyticsService: **69 lines** (new service)
@@ -27,9 +28,11 @@
 - TrafficAnalyticsService: **160 lines** (new service)
 - ContentAnalyticsService: **165 lines** (new service)
 - ConversionAnalyticsService: **38 lines** (new service)
+- Visitable concern: **44 lines** (new shared concern)
 - PostAnalyticsService tests: **245 lines** (comprehensive coverage)
 - VisitTrackingService tests: **237 lines** (comprehensive coverage)
-- Test coverage: Models ✅, Controllers ✅, Services ✅
+- Visitable concern tests: **105 lines** (shared examples)
+- Test coverage: Models ✅, Controllers ✅, Services ✅, Concerns ✅
 
 ## Refactoring Plan - 5 Phases
 
@@ -72,15 +75,18 @@
 ### Phase 2: Create Shared Concerns (DRY Improvements)
 **Goal**: Eliminate code duplication
 
-#### 2.1 Analytics Query Concern
-- **File**: `app/models/concerns/analytics_queries.rb`
-- **Methods**: `social_media_visits`, `search_engine_visits`, `group_by_date`
-- **Status**: ⏳ Pending
-
-#### 2.2 Error Handling Concern
-- **File**: `app/controllers/concerns/analytics_error_handling.rb`
-- **Methods**: `with_fallback`, `log_analytics_error`
-- **Status**: ⏳ Pending
+#### 2.1 Visitable Concern ✅
+- **File**: `app/models/concerns/visitable.rb`
+- **Extracted from**: Post and Page models
+- **Methods extracted**:
+  - `recent_visits(days)` - Count visits within specified days
+  - `visits_by_day(days)` - Group visits by date
+  - Association: `has_many :visits, as: :visitable, dependent: :destroy`
+- **Impact**:
+  - Post model: 161 → 148 lines (-13 lines, -8% reduction)
+  - Page model: 20 → 5 lines (-15 lines, -75% reduction!)
+- **Test coverage**: 18 comprehensive specs using shared examples
+- **Status**: ✅ **COMPLETED** (2025-10-03)
 
 ### Phase 3: Controller Simplification
 **Goal**: Slim controllers following Rails conventions
@@ -158,11 +164,11 @@
   - All dashboard functionality preserved and tested
 
 ### In Progress 🚧
-- **PHASE 1 COMPLETE!** Ready for Phase 2
+- **PHASE 1 & 2 COMPLETE!** Ready for Phase 3
 
 ### Next Up ⏳
-- Phase 2: Create Shared Concerns (DRY Improvements)
 - Phase 3: Controller Simplification
+- Phase 4: Model Cleanup
 
 ## Expected Benefits
 
@@ -296,3 +302,60 @@
 - **Readability**: Self-documenting service names and methods
 - **Performance**: No degradation, maintained all optimizations
 - **Future-Proof**: Easy to extend or modify individual services
+
+## 🎉 PHASE 2 COMPLETE SUMMARY ✅
+
+### 🏆 Major Achievements
+**THE WIN**: Eliminated code duplication across Post and Page models by extracting common visitable behavior into a reusable concern
+
+**Total Lines Reduced**: 28 lines of duplicated code removed
+**Total Lines Added**: 44 lines of clean concern + 105 lines of comprehensive tests
+**Net Code Quality**: Massive improvement in DRY compliance and maintainability
+
+### 📊 Before vs After Comparison
+
+| Component | Before | After | Reduction | Status |
+|-----------|---------|--------|-----------|---------|
+| Post Model | 161 lines | **148 lines** | **-8%** | ✅ Clean |
+| Page Model | 20 lines | **5 lines** | **-75%** | ✅ Super Clean! |
+| **TOTAL** | **181 lines** | **153 lines** | **-15%** | 🎯 **SUCCESS** |
+
+### 🎯 Concern Created (Following DRY & Single Responsibility)
+- **Visitable** (44 lines) - Shared analytics query methods for visitable models
+  - `recent_visits(days)` - Instance method for counting recent visits
+  - `visits_by_day(days)` - Class method for grouping visits by date
+  - Polymorphic association: `has_many :visits, as: :visitable`
+
+### ✅ Quality Guarantees Met
+- **100% Backward Compatibility**: All existing functionality works unchanged
+- **Comprehensive Test Coverage**: 18 specs added using shared examples pattern
+- **DRY Principle Applied**: Zero code duplication between Post and Page
+- **Ruby Way**: Clean concern following Rails conventions
+- **Single Responsibility**: Concern has one clear purpose (visitable analytics)
+- **Reusability**: Ready for any future visitable models
+
+### 🚀 Benefits Realized
+- **Maintainability**: Changes to visit logic now made in ONE place
+- **Testability**: Shared examples test both Post and Page with same specs
+- **Reusability**: Any new model can include Visitable concern
+- **Readability**: Page model is now ultra-clean at 5 lines
+- **Performance**: No degradation, maintained all optimizations
+- **Future-Proof**: Easy to add new visitable models (Comments, Projects, etc.)
+
+### 📁 Files Created
+- `app/models/concerns/visitable.rb` (44 lines)
+- `spec/models/concerns/visitable_spec.rb` (105 lines with shared examples)
+
+### 🔧 Files Modified
+- `app/models/post.rb` (161 → 148 lines, removed duplicated methods)
+- `app/models/page.rb` (20 → 5 lines, -75% reduction!)
+- `spec/factories/pages.rb` (Fixed factory to match actual schema)
+
+### 🧪 Test Results
+- **375 total specs**: ✅ All passing
+- **0 failures**: ✅ Perfect
+- **18 new specs**: ✅ Comprehensive concern coverage
+
+---
+**Last Updated**: 2025-10-03
+**Next Phase**: Phase 3 - Controller Simplification

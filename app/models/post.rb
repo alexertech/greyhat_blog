@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  include Visitable
+
   validates :title, presence: true, length: { minimum: 1 }
   validates :body, presence: true
   validates :user_id, presence: true
@@ -16,7 +18,6 @@ class Post < ApplicationRecord
   end
   has_rich_text :body
   belongs_to :user
-  has_many :visits, as: :visitable, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :post_tags, dependent: :destroy
   has_many :tags, through: :post_tags
@@ -28,10 +29,6 @@ class Post < ApplicationRecord
 
   def to_param
     slug
-  end
-
-  def recent_visits(days = 7)
-    visits.where('viewed_at >= ?', days.days.ago).count
   end
 
   def total_visits
@@ -102,17 +99,6 @@ class Post < ApplicationRecord
 
   def related_posts(limit = 3)
     analytics_service.related_posts(limit)
-  end
-
-  def self.visits_by_day(days = 7)
-    post_ids = pluck(:id)
-    return {} if post_ids.empty?
-
-    Visit.where(visitable_type: 'Post', visitable_id: post_ids)
-         .where('viewed_at >= ?', days.days.ago)
-         .group('DATE(viewed_at)')
-         .order('DATE(viewed_at)')
-         .count
   end
 
   private
