@@ -32,7 +32,7 @@ services:
       - database
     volumes:
       - .:/app
-      - ./storage:/app/storagess
+      - ./storage:/app/storage
     expose:
       - "3000"
     networks:
