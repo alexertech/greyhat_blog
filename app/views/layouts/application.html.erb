@@ -94,42 +94,19 @@
 		<div class="d-none d-md-flex align-items-center gap-2 order-2">
 			<%= form_with url: search_path, method: :get, local: true do |form| %>
 				<div class="input-group input-group-sm header-search" style="width: 250px;">
-					<%= form.text_field :q, 
-						placeholder: "Buscar...", 
+					<%= form.text_field :q,
+						placeholder: "Buscar...",
 						class: "form-control form-control-sm border-0 search-input",
 						value: params[:q] %>
-					<button class="btn btn-primary btn-sm border-0 search-button" 
+					<button class="btn btn-primary btn-sm border-0 search-button"
 							type="submit">
 						<i class="fas fa-search"></i>
 					</button>
 				</div>
 			<% end %>
-			
+
 			<!-- Dark Mode Toggle -->
-			<div data-controller="dark-mode">
-				<button data-dark-mode-target="toggle"
-						data-action="click->dark-mode#toggle"
-						class="btn btn-outline-secondary btn-sm theme-toggle"
-						style="border-radius: 25px; padding: 8px 16px; border: 2px solid #6c757d; position: relative; overflow: hidden; transition: all 0.3s ease; min-width: 60px; height: 36px;"
-						aria-label="Toggle dark mode">
-					<div class="theme-toggle-slider" style="
-						position: absolute;
-						top: 2px;
-						left: 2px;
-						width: 28px;
-						height: 28px;
-						background: linear-gradient(45deg, #ffd700, #ffed4a);
-						border-radius: 50%;
-						transition: all 0.3s ease;
-						box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-						display: flex;
-						align-items: center;
-						justify-content: center;
-					">
-						<i data-dark-mode-target="icon" class="fas fa-sun" style="font-size: 12px; color: #333;"></i>
-					</div>
-				</button>
-			</div>
+			<%= render 'partials/dark_mode_toggle' %>
 		</div>
 	</div>
 	<div class="bottom-border mb-2">

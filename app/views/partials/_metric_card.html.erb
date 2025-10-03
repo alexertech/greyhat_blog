@@ -1,0 +1,21 @@
+<%
+  # Required local variables:
+  # - icon: Font Awesome icon class (e.g., 'fa-eye')
+  # - bg_color: Bootstrap background color (e.g., 'primary', 'success')
+  # - value: The metric value to display
+  # - label: The metric label
+  # Optional local variables:
+  # - change_text: Optional change/subtitle text
+  # - change_class: Optional change CSS class
+  # - link: Optional URL to make card clickable
+  # - highlight: Boolean to highlight the card
+  # - badge_count: Optional badge count to display on icon
+%>
+
+<% if local_assigns[:link] %>
+  <%= link_to local_assigns[:link], class: "text-decoration-none" do %>
+    <%= render 'partials/metric_card_content', local_assigns %>
+  <% end %>
+<% else %>
+  <%= render 'partials/metric_card_content', local_assigns %>
+<% end %>

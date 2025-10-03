@@ -1,102 +1,64 @@
 <div class="row mb-4">
   <div class="col-xl-3 col-md-6 mb-4">
-    <div class="metric-card">
-      <div class="metric-card-body">
-        <div class="metric-icon bg-primary">
-          <i class="fas fa-eye"></i>
-        </div>
-        <div class="metric-content">
-          <div class="metric-value"><%= number_with_delimiter(@total_visits) %></div>
-          <div class="metric-label">Visitas Totales</div>
-          <div class="metric-change positive">
-            <% if @visits_today > 0 %>
-              <i class="fas fa-calendar-day"></i> 
-              <%= @visits_today %> hoy • <%= @visits_this_week %> esta semana
-            <% else %>
-              <i class="fas fa-arrow-up"></i> 
-              +<%= @visits_this_week %> esta semana
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%
+      change_text = if @visits_today > 0
+        "<i class='fas fa-calendar-day'></i> #{@visits_today} hoy • #{@visits_this_week} esta semana"
+      else
+        "<i class='fas fa-arrow-up'></i> +#{@visits_this_week} esta semana"
+      end
+    %>
+    <%= render 'partials/metric_card',
+        icon: 'fa-eye',
+        bg_color: 'primary',
+        value: @total_visits,
+        label: 'Visitas Totales',
+        change_text: change_text.html_safe,
+        change_class: 'positive' %>
   </div>
 
   <div class="col-xl-3 col-md-6 mb-4">
-    <div class="metric-card">
-      <div class="metric-card-body">
-        <div class="metric-icon bg-success">
-          <i class="fas fa-newspaper"></i>
-        </div>
-        <div class="metric-content">
-          <div class="metric-value"><%= @published_posts %></div>
-          <div class="metric-label">Artículos Publicados</div>
-          <div class="metric-change">
-            <%= @posts_this_month %> este mes
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= render 'partials/metric_card',
+        icon: 'fa-newspaper',
+        bg_color: 'success',
+        value: @published_posts,
+        label: 'Artículos Publicados',
+        change_text: "#{@posts_this_month} este mes" %>
   </div>
 
   <div class="col-xl-3 col-md-6 mb-4">
-    <%= link_to dashboards_comments_path, class: "text-decoration-none" do %>
-      <div class="metric-card <%= 'metric-card-highlight' if @pending_comment_count > 0 %>">
-        <div class="metric-card-body">
-          <div class="metric-icon bg-warning">
-            <i class="fas fa-comments"></i>
-            <% if @pending_comment_count > 0 %>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                <%= @pending_comment_count %>
-              </span>
-            <% end %>
-          </div>
-          <div class="metric-content">
-            <div class="metric-value"><%= @approved_comment_count %></div>
-            <div class="metric-label">Comentarios Aprobados</div>
-            <div class="metric-change <%= @pending_comment_count > 0 ? 'attention' : '' %>">
-              <% if @pending_comment_count > 0 %>
-                <i class="fas fa-clock"></i> 
-                <%= @pending_comment_count %> pendientes
-              <% else %>
-                <i class="fas fa-check"></i> 
-                Todo al día
-              <% end %>
-            </div>
-          </div>
-          <div class="metric-action">
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <%
+      comments_change = if @pending_comment_count > 0
+        "<i class='fas fa-clock'></i> #{@pending_comment_count} pendientes"
+      else
+        "<i class='fas fa-check'></i> Todo al día"
+      end
+    %>
+    <%= render 'partials/metric_card',
+        icon: 'fa-comments',
+        bg_color: 'warning',
+        value: @approved_comment_count,
+        label: 'Comentarios Aprobados',
+        change_text: comments_change.html_safe,
+        change_class: (@pending_comment_count > 0 ? 'attention' : ''),
+        link: dashboards_comments_path,
+        highlight: @pending_comment_count > 0,
+        badge_count: @pending_comment_count %>
   </div>
 
   <div class="col-xl-3 col-md-6 mb-4">
-    <%= link_to contacts_path, class: "text-decoration-none" do %>
-      <div class="metric-card">
-        <div class="metric-card-body">
-          <div class="metric-icon bg-info">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <div class="metric-content">
-            <div class="metric-value"><%= @total_contacts %></div>
-            <div class="metric-label">Contactos Totales</div>
-            <div class="metric-change">
-              <% if @contacts_this_month > 0 %>
-                <i class="fas fa-arrow-up"></i> 
-                +<%= @contacts_this_month %> este mes
-              <% else %>
-                <i class="fas fa-inbox"></i>
-                Sin contactos nuevos
-              <% end %>
-            </div>
-          </div>
-          <div class="metric-action">
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <%
+      contacts_change = if @contacts_this_month > 0
+        "<i class='fas fa-arrow-up'></i> +#{@contacts_this_month} este mes"
+      else
+        "<i class='fas fa-inbox'></i> Sin contactos nuevos"
+      end
+    %>
+    <%= render 'partials/metric_card',
+        icon: 'fa-envelope',
+        bg_color: 'info',
+        value: @total_contacts,
+        label: 'Contactos Totales',
+        change_text: contacts_change.html_safe,
+        link: contacts_path %>
   </div>
 </div>
