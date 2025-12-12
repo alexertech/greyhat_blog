@@ -1,0 +1,55 @@
+<%#
+  Navigation items partial - DRY navigation links
+
+  Usage:
+    render 'partials/nav_items', variant: :desktop
+    render 'partials/nav_items', variant: :mobile
+
+  Params:
+    variant: :desktop or :mobile (determines CSS classes)
+    close_action: optional action for mobile menu close
+%>
+
+<%
+  nav_items = [
+    { path: '/index', icon: 'home', label: 'Inicio' },
+    { path: '/acerca', icon: 'user', label: 'Acerca de' },
+    { path: '/articulos', icon: 'newspaper', label: 'Artículos', match_controller: 'posts' },
+    { path: '/newsletter', icon: 'envelope', label: 'Newsletter' },
+    { path: '/servicios', icon: 'cogs', label: 'Servicios' }
+  ]
+
+  # Add dashboard for signed-in users
+  nav_items << { path: '/dashboard', icon: 'tachometer-alt', label: 'Dashboard', auth: true } if user_signed_in?
+
+  variant = local_assigns[:variant] || :desktop
+  close_action = local_assigns[:close_action]
+%>
+
+<% nav_items.each do |item| %>
+  <% next if item[:auth] && !user_signed_in? %>
+
+  <%
+    is_active = current_page?(item[:path]) ||
+                (item[:match_controller] && controller.controller_name == item[:match_controller])
+
+    if variant == :mobile
+      link_class = "mobile-nav-item #{is_active ? 'active' : ''}"
+      icon_class = "fas fa-#{item[:icon]} me-3"
+    else
+      link_class = "nav-item #{is_active ? 'active' : ''}"
+      icon_class = "fas fa-#{item[:icon]} nav-icon"
+    end
+  %>
+
+  <a href="<%= item[:path] %>"
+     class="<%= link_class %>"
+     <%= "data-action=click->mobile-navigation#close" if variant == :mobile %>>
+    <i class="<%= icon_class %>"></i>
+    <% if variant == :mobile %>
+      <span><%= item[:label] %></span>
+    <% else %>
+      <span class="nav-text"><%= item[:label] %></span>
+    <% end %>
+  </a>
+<% end %>
