@@ -1,9 +1,11 @@
-// Bootstrap and its variables
-@import "bootstrap";
-@import "actiontext";
-@import "services_enhanced";
-@import "modern_navbar";
-@import "layout_integration";
+// Core framework
+@use "bootstrap";
+
+// Application styles
+@use "actiontext";
+@use "services_enhanced";
+@use "modern_navbar";
+@use "layout_integration";
 
 // Custom styles
 body {
