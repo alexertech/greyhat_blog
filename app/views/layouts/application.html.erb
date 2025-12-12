@@ -1,164 +1,188 @@
 <!doctype html>
-<html lang="en">
-
+<html lang="es">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="<%= meta_description %>">
-	<link rel="icon" href="favicon.ico" type="image/x-icon" />
-	
-	<!-- SEO Meta Tags -->
-	<meta name="robots" content="index, follow">
-	<meta name="language" content="Spanish">
-	<meta name="author" content="Greyhat">
-	<link rel="canonical" href="<%= canonical_url %>">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="<%= meta_description %>">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
-	<%= csrf_meta_tags %>
-	<%= csp_meta_tag %>
-	<% if content_for?(:head) %>
-		<%= yield(:head) %>
-	<% else %>
-		<title><%= page_title %></title>
-		
-		<!-- Default Open Graph -->
-		<meta property="og:type" content="website">
-		<meta property="og:title" content="Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida">
-		<meta property="og:description" content="<%= meta_description %>">
-		<meta property="og:url" content="<%= canonical_url %>">
-		<meta property="og:site_name" content="Greyhat">
-		<meta property="og:image" content="<%= asset_url('logo.png') %>">
-		<meta property="og:locale" content="es_ES">
-		
-		<!-- Default Twitter Card -->
-		<meta name="twitter:card" content="summary">
-		<meta name="twitter:site" content="@greyhatcl">
-		<meta name="twitter:title" content="Greyhat">
-		<meta name="twitter:description" content="<%= meta_description %>">
-		<meta name="twitter:image" content="<%= asset_url('logo.png') %>">
-		
-		<!-- Structured Data -->
-		<%= structured_data_for_website %>
-		<%= structured_data_for_organization %>
-	<% end %>
-	<!-- DNS Prefetch for performance -->
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-	
-	<!-- Preconnect to Google Fonts to improve loading performance -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
-	
-	<!-- Font Awesome with performance optimization -->
-	<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-	<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></noscript>
-	
-	<!-- Preload critical resources -->
-	<%= preload_link_tag asset_path('logo.png'), as: :image %>
-	
-	<%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-	
-	<!-- Trix Editor CSS -->
-	<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
-	
-	<!-- Chartkick CSS -->
-	<%= content_for :head %>
-	<style>
-		.chartkick canvas {
-			border-radius: 8px;
-		}
-	</style>
-	
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism-okaidia.min.css" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+  <!-- SEO Meta Tags -->
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="Spanish">
+  <meta name="author" content="Greyhat">
+  <link rel="canonical" href="<%= canonical_url %>">
 
-	
-	<!-- Prism.js for syntax highlighting -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-core.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
-	
-	<%= javascript_importmap_tags %>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <% if content_for?(:head) %>
+    <%= yield(:head) %>
+  <% else %>
+    <title><%= page_title %></title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Greyhat - Explorando el Equilibrio entre la Tecnología y la Vida">
+    <meta property="og:description" content="<%= meta_description %>">
+    <meta property="og:url" content="<%= canonical_url %>">
+    <meta property="og:site_name" content="Greyhat">
+    <meta property="og:image" content="<%= asset_url('logo.png') %>">
+    <meta property="og:locale" content="es_ES">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@greyhatcl">
+    <meta name="twitter:title" content="Greyhat">
+    <meta name="twitter:description" content="<%= meta_description %>">
+    <meta name="twitter:image" content="<%= asset_url('logo.png') %>">
+
+    <!-- Structured Data -->
+    <%= structured_data_for_website %>
+    <%= structured_data_for_organization %>
+  <% end %>
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></noscript>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+
+  <!-- Trix Editor -->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+
+  <!-- Prism Syntax Highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+  <%= javascript_importmap_tags %>
 </head>
 
-<body>
+<body data-controller="scroll-progress">
+  <!-- Reading Progress Bar (for articles) -->
+  <% if controller_name == 'posts' && action_name == 'show' %>
+    <div class="reading-progress" data-scroll-progress-target="bar"></div>
+  <% end %>
 
-<div id="main_body" class="container-sm py-4 mx-auto" style="max-width: 900px;">
-	<div id="header" class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-		<div class="logo d-flex justify-content-center flex-grow-1 order-1 order-md-0">
-			<%= image_tag "logo.png", class: "img-fluid" %>
-		</div>
-		
-		<!-- Header Search and Dark Mode (Desktop) -->
-		<div class="d-none d-md-flex align-items-center gap-2 order-2">
-			<%= form_with url: search_path, method: :get, local: true do |form| %>
-				<div class="input-group input-group-sm header-search" style="width: 250px;">
-					<%= form.text_field :q,
-						placeholder: "Buscar...",
-						class: "form-control form-control-sm border-0 search-input",
-						value: params[:q] %>
-					<button class="btn btn-primary btn-sm border-0 search-button"
-							type="submit">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			<% end %>
+  <!-- Sticky Header -->
+  <header class="site-header" data-controller="sticky-header">
+    <div class="header-container">
+      <!-- Logo -->
+      <a href="/index" class="header-logo">
+        <%= image_tag "logo.png", alt: "Greyhat", class: "header-logo__image" %>
+      </a>
 
-			<!-- Dark Mode Toggle -->
-			<%= render 'partials/dark_mode_toggle' %>
-		</div>
-	</div>
-	<div class="bottom-border mb-2">
-		<%= render 'partials/navigation' %>
-	</div>
-	<!-- Integrated Content Container -->
-	<div class="site-container">
-		<!-- Flash Messages -->
-		<% if notice %>
-			<div class="alert alert-success alert-dismissible fade show" role="alert" style="margin: 1rem 1rem 0 1rem; border-radius: 12px;">
-				<i class="fas fa-check-circle me-2"></i>
-				<%= notice %>
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-			</div>
-		<% end %>
+      <!-- Desktop Navigation -->
+      <nav class="header-nav d-none d-lg-flex">
+        <%= render 'partials/nav_items', variant: :header %>
+      </nav>
 
-		<% if alert %>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 1rem 1rem 0 1rem; border-radius: 12px;">
-				<i class="fas fa-exclamation-triangle me-2"></i>
-				<%= alert %>
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-			</div>
-		<% end %>
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <!-- Search -->
+        <div class="header-search d-none d-md-block">
+          <%= form_with url: search_path, method: :get, local: true, class: "header-search__form" do |form| %>
+            <%= form.text_field :q,
+                placeholder: "Buscar...",
+                class: "header-search__input",
+                value: params[:q] %>
+            <button type="submit" class="header-search__button">
+              <i class="fas fa-search"></i>
+            </button>
+          <% end %>
+        </div>
 
-		<% flash.each do |type, message| %>
-			<% next if ['notice', 'alert'].include?(type) %>
-			<% alert_class = case type
-				when 'success' then 'alert-success'
-				when 'error' then 'alert-danger'
-				when 'warning' then 'alert-warning'
-				when 'info' then 'alert-info'
-				else 'alert-secondary'
-			end %>
-			<div class="alert <%= alert_class %> alert-dismissible fade show" role="alert" style="margin: 1rem 1rem 0 1rem; border-radius: 12px;">
-				<%= message %>
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-			</div>
-		<% end %>
+        <!-- Dark Mode Toggle -->
+        <%= render 'partials/dark_mode_toggle' %>
 
-		
-		<div><%= yield %></div>
+        <!-- Mobile Menu Toggle -->
+        <button class="header-menu-toggle d-lg-none"
+                data-action="click->mobile-navigation#toggle"
+                aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
 
-	</div>
+  <!-- Mobile Navigation Overlay -->
+  <div data-controller="mobile-navigation">
+    <div data-mobile-navigation-target="overlay" class="mobile-nav-overlay"></div>
+    <div data-mobile-navigation-target="menu" class="mobile-nav-menu">
+      <div class="mobile-nav-header">
+        <span class="mobile-nav-header__title">Menu</span>
+        <button data-action="click->mobile-navigation#close" class="mobile-nav-header__close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="mobile-search p-3">
+        <%= form_with url: search_path, method: :get, local: true do |form| %>
+          <div class="input-group">
+            <%= form.text_field :q, placeholder: "Buscar...", class: "form-control", value: params[:q] %>
+            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+          </div>
+        <% end %>
+      </div>
+      <nav class="mobile-nav-items">
+        <%= render 'partials/nav_items', variant: :mobile %>
+      </nav>
+    </div>
+  </div>
 
-	<div id="footer">
-		<div class="d-flex justify-content-center align-items-center copyfoot py-2">
-			Greyhat &nbsp;&nbsp;<i class="fa-solid fa-copyright"></i>&nbsp;&nbsp;All rights reserved
-		</div>
-	</div>
+  <!-- Main Content -->
+  <main class="site-main">
+    <div class="content-container">
+      <!-- Flash Messages -->
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="fas fa-check-circle me-2"></i><%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
 
-</div>
+      <% if alert %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i><%= alert %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
 
+      <%= yield %>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-brand__name">Greyhat</span>
+        <span class="footer-brand__tagline">Tecnología con propósito</span>
+      </div>
+      <div class="footer-links">
+        <a href="/acerca">Acerca de</a>
+        <a href="/newsletter">Newsletter</a>
+        <a href="/servicios">Servicios</a>
+      </div>
+      <div class="footer-copyright">
+        <i class="fa-solid fa-copyright"></i> <%= Date.current.year %> Greyhat. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" data-controller="scroll-to-top" data-action="click->scroll-to-top#scroll" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 </body>
-
 </html>
