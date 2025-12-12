@@ -10,39 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_03_182957) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
-  enable_extension "plpgsql"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
-    t.string "name", null: false
     t.text "body"
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", precision: nil, null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -54,13 +54,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "post_id", null: false
-    t.string "username", null: false
-    t.string "email", null: false
+    t.boolean "approved", default: false, null: false
     t.text "body", null: false
     t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.bigint "post_id", null: false
     t.datetime "updated_at", null: false
-    t.boolean "approved", default: false, null: false
+    t.string "username", null: false
     t.index ["approved"], name: "index_comments_on_approved"
     t.index ["created_at"], name: "index_comments_on_created_at"
     t.index ["post_id", "approved"], name: "idx_comments_post_approved"
@@ -68,86 +68,86 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.string "name"
+    t.datetime "created_at", null: false
     t.string "email"
     t.text "message"
-    t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "description"
-    t.jsonb "serialized_properties"
-    t.text "on_finish"
-    t.text "on_success"
-    t.text "on_discard"
-    t.text "callback_queue_name"
     t.integer "callback_priority"
-    t.datetime "enqueued_at"
+    t.text "callback_queue_name"
+    t.datetime "created_at", null: false
+    t.text "description"
     t.datetime "discarded_at"
+    t.datetime "enqueued_at"
     t.datetime "finished_at"
     t.datetime "jobs_finished_at"
+    t.text "on_discard"
+    t.text "on_finish"
+    t.text "on_success"
+    t.jsonb "serialized_properties"
+    t.datetime "updated_at", null: false
   end
 
   create_table "good_job_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.uuid "active_job_id", null: false
-    t.text "job_class"
-    t.text "queue_name"
-    t.jsonb "serialized_params"
-    t.datetime "scheduled_at"
-    t.datetime "finished_at"
-    t.text "error"
-    t.integer "error_event", limit: 2
-    t.text "error_backtrace", array: true
-    t.uuid "process_id"
+    t.datetime "created_at", null: false
     t.interval "duration"
+    t.text "error"
+    t.text "error_backtrace", array: true
+    t.integer "error_event", limit: 2
+    t.datetime "finished_at"
+    t.text "job_class"
+    t.uuid "process_id"
+    t.text "queue_name"
+    t.datetime "scheduled_at"
+    t.jsonb "serialized_params"
+    t.datetime "updated_at", null: false
     t.index ["active_job_id", "created_at"], name: "index_good_job_executions_on_active_job_id_and_created_at"
     t.index ["process_id", "created_at"], name: "index_good_job_executions_on_process_id_and_created_at"
   end
 
   create_table "good_job_processes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.jsonb "state"
     t.integer "lock_type", limit: 2
+    t.jsonb "state"
+    t.datetime "updated_at", null: false
   end
 
   create_table "good_job_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.text "key"
+    t.datetime "updated_at", null: false
     t.jsonb "value"
     t.index ["key"], name: "index_good_job_settings_on_key", unique: true
   end
 
   create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "queue_name"
-    t.integer "priority"
-    t.jsonb "serialized_params"
-    t.datetime "scheduled_at"
-    t.datetime "performed_at"
-    t.datetime "finished_at"
-    t.text "error"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.uuid "active_job_id"
-    t.text "concurrency_key"
-    t.text "cron_key"
-    t.uuid "retried_good_job_id"
-    t.datetime "cron_at"
-    t.uuid "batch_id"
     t.uuid "batch_callback_id"
-    t.boolean "is_discrete"
-    t.integer "executions_count"
-    t.text "job_class"
+    t.uuid "batch_id"
+    t.text "concurrency_key"
+    t.datetime "created_at", null: false
+    t.datetime "cron_at"
+    t.text "cron_key"
+    t.text "error"
     t.integer "error_event", limit: 2
+    t.integer "executions_count"
+    t.datetime "finished_at"
+    t.boolean "is_discrete"
+    t.text "job_class"
     t.text "labels", array: true
-    t.uuid "locked_by_id"
     t.datetime "locked_at"
+    t.uuid "locked_by_id"
+    t.datetime "performed_at"
+    t.integer "priority"
+    t.text "queue_name"
+    t.uuid "retried_good_job_id"
+    t.datetime "scheduled_at"
+    t.jsonb "serialized_params"
+    t.datetime "updated_at", null: false
     t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
     t.index ["batch_callback_id"], name: "index_good_jobs_on_batch_callback_id", where: "(batch_callback_id IS NOT NULL)"
     t.index ["batch_id"], name: "index_good_jobs_on_batch_id", where: "(batch_id IS NOT NULL)"
@@ -166,9 +166,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "pages", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "name"
     t.integer "unique_visits", default: 0
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "visits_count", default: 0, null: false
     t.index ["name"], name: "idx_pages_name"
@@ -176,9 +176,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "post_tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "post_id", null: false
     t.bigint "tag_id", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_post_tags_on_post_id"
     t.index ["tag_id", "post_id"], name: "idx_post_tags_lookup"
@@ -186,13 +186,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "post_translations", force: :cascade do |t|
-    t.bigint "post_id", null: false
-    t.string "locale", limit: 5, null: false
-    t.string "title", null: false
     t.text "body"
-    t.string "slug", null: false
-    t.boolean "published", default: false
     t.datetime "created_at", null: false
+    t.string "locale", limit: 5, null: false
+    t.bigint "post_id", null: false
+    t.boolean "published", default: false
+    t.string "slug", null: false
+    t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["locale"], name: "index_post_translations_on_locale"
     t.index ["post_id", "locale"], name: "index_post_translations_on_post_id_and_locale", unique: true
@@ -202,16 +202,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.string "title"
+    t.integer "approved_comments_count", default: 0, null: false
     t.text "body"
+    t.integer "comments_count", default: 0, null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.integer "unique_visits", default: 0
     t.boolean "draft", default: false, null: false
+    t.integer "likes_count", default: 0, null: false
+    t.string "slug"
+    t.string "title"
+    t.integer "unique_visits", default: 0
+    t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "visits_count", default: 0, null: false
-    t.integer "likes_count", default: 0, null: false
     t.index ["draft", "created_at"], name: "index_posts_on_draft_and_created_at", where: "(draft = false)"
     t.index ["slug"], name: "index_posts_on_slug"
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -219,58 +221,58 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_17_222121) do
   end
 
   create_table "site_healths", force: :cascade do |t|
-    t.string "metric_type", null: false
-    t.decimal "value", precision: 10, scale: 2, null: false
-    t.text "metadata"
     t.datetime "checked_at", null: false
     t.datetime "created_at", null: false
+    t.text "metadata"
+    t.string "metric_type", null: false
     t.datetime "updated_at", null: false
+    t.decimal "value", precision: 10, scale: 2, null: false
     t.index ["checked_at"], name: "index_site_healths_on_checked_at"
     t.index ["metric_type", "checked_at"], name: "index_site_healths_on_metric_type_and_checked_at"
     t.index ["metric_type"], name: "index_site_healths_on_metric_type"
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "current_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.text "description"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "remember_created_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
     t.integer "failed_attempts", default: 0, null: false
+    t.datetime "last_sign_in_at"
+    t.string "last_sign_in_ip"
     t.datetime "locked_at"
-    t.string "unlock_token"
     t.string "public_name"
-    t.text "description"
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "reset_password_sent_at", precision: nil
+    t.string "reset_password_token"
+    t.integer "sign_in_count", default: 0, null: false
+    t.string "unlock_token"
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "visits", force: :cascade do |t|
+    t.integer "action_type", default: 0
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.string "referer"
+    t.string "session_id"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.datetime "viewed_at", default: -> { "CURRENT_TIMESTAMP" }
     t.integer "visitable_id"
     t.string "visitable_type"
-    t.string "ip_address"
-    t.string "user_agent"
-    t.string "referer"
-    t.datetime "viewed_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "action_type", default: 0
-    t.string "session_id"
     t.index "EXTRACT(hour FROM viewed_at), viewed_at", name: "idx_visits_hour_extract"
     t.index ["action_type", "visitable_type", "visitable_id", "ip_address", "viewed_at"], name: "idx_visits_newsletter_conversion", where: "(action_type = 1)"
     t.index ["action_type"], name: "index_visits_on_action_type"

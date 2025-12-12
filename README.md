@@ -1,13 +1,13 @@
 # Greyhat Blog
 
-A Rails 7.2 blog engine with analytics dashboard, newsletter integration, and content management.
+A Rails 8 blog engine with analytics dashboard, newsletter integration, and content management.
 
 ## Requirements
 
-- Ruby 3.3.4
+- Ruby 3.4.7
+- Rails 8.1.1
 - PostgreSQL 14+
-- Node.js 18+ (asset compilation)
-- ImageMagick or LibVips (image processing)
+- LibVips (image processing)
 
 ## Setup
 
@@ -112,10 +112,11 @@ Database migrations run automatically during deployment.
 
 ## Tech Stack
 
-- Rails 7.2.2 with PostgreSQL
+- Rails 8.1 with PostgreSQL
 - Bootstrap 5.3 + Stimulus JS
+- Propshaft + Dartsass
 - ActionText + ActiveStorage
-- Chart.js + Chartkick for analytics
+- Chartkick for analytics
 - Devise authentication
 - RSpec for testing
 
