@@ -42,3 +42,9 @@ yarn-debug.log*
 /Notes.todo
 
 /.env
+
+# Internal development documentation (not for public GitHub)
+/CLAUDE.md
+/CODE_PRINCIPLES.md
+/REFACTORING_PLAN.md
+/DOCKER_SETUP_RECIPE.md
