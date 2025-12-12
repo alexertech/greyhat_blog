@@ -1,14 +1,17 @@
-// Dashboard Styles
+// =============================================================================
+// DASHBOARD-SPECIFIC STYLES
+// Uses foundation tokens - no duplicated patterns
+// =============================================================================
 
-// Newsletter Funnel Styles
+// Newsletter Funnel
 .funnel-container {
   .funnel-step {
     text-align: center;
-    padding: 1rem;
-    border-radius: 8px;
-    background: #f8f9fa;
-    margin-bottom: 1rem;
-    
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    margin-bottom: var(--space-md);
+
     .funnel-icon {
       width: 50px;
       height: 50px;
@@ -16,26 +19,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 0.5rem;
-      color: white;
-      
-      i {
-        font-size: 1.2rem;
-      }
+      margin: 0 auto var(--space-sm);
+      color: var(--text-inverse);
+
+      i { font-size: 1.2rem; }
     }
-    
+
     .funnel-value {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #333;
+      color: var(--text-heading);
     }
-    
+
     .funnel-label {
       font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 0.25rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xs);
     }
-    
+
     .funnel-conversion {
       font-size: 0.8rem;
       font-weight: bold;
@@ -43,278 +44,221 @@
   }
 }
 
-// Site Health Styles
+// Site Health
 .health-status {
   .health-main-status {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    
-    .health-indicator {
-      flex-shrink: 0;
-    }
-    
+    gap: var(--space-md);
+
     .health-main-label {
       font-size: 1.1rem;
       font-weight: bold;
       text-transform: capitalize;
     }
-    
+
     .health-timestamp {
       font-size: 0.8rem;
-      color: #666;
+      color: var(--text-secondary);
     }
   }
-  
+
   .health-metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-    
+    gap: var(--space-md);
+
     .health-metric {
       text-align: center;
       padding: 0.75rem;
-      background: #f8f9fa;
-      border-radius: 6px;
-      
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+
       .health-metric-label {
         font-size: 0.8rem;
-        color: #666;
-        margin-bottom: 0.25rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-xs);
       }
-      
+
       .health-metric-value {
         font-size: 1.1rem;
         font-weight: bold;
-        color: #333;
+        color: var(--text-heading);
       }
     }
   }
 }
 
-// Content Performance Styles
+// Health status colors
+.health-excellent { color: var(--color-success); }
+.health-good { color: var(--color-primary); }
+.health-warning { color: var(--color-warning); }
+.health-critical { color: var(--color-danger); }
+
+// Content Performance
 .performance-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-md);
   padding: 0.75rem;
-  border-bottom: 1px solid #eee;
-  
-  &:last-child {
-    border-bottom: none;
-  }
-  
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child { border-bottom: none; }
+
   .performance-rank {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #666;
+    color: var(--text-secondary);
     min-width: 30px;
   }
-  
+
   .performance-content {
     flex: 1;
-    
+
     .performance-title {
       font-weight: 600;
-      margin-bottom: 0.25rem;
+      margin-bottom: var(--space-xs);
     }
-    
+
     .performance-stats {
       display: flex;
-      gap: 0.25rem;
+      gap: var(--space-xs);
       flex-wrap: wrap;
     }
   }
-  
+
   .performance-trend {
-    .trend-positive {
-      color: #28a745;
-      font-weight: bold;
-    }
-    
-    .trend-negative {
-      color: #dc3545;
-      font-weight: bold;
-    }
-    
-    .trend-neutral {
-      color: #6c757d;
-    }
+    .trend-positive { color: var(--color-success); font-weight: bold; }
+    .trend-negative { color: var(--color-danger); font-weight: bold; }
+    .trend-neutral { color: var(--text-secondary); }
   }
 }
 
-// Insights Styles
-.insights-container {
-  .insight-item {
-    padding: 0.75rem;
-    background: #f8f9fa;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
-    border-left: 4px solid #ffc107;
-    
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+// Insights
+.insights-container .insight-item {
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
+  border-left: 4px solid var(--color-warning);
+
+  &:last-child { margin-bottom: 0; }
 }
 
 .tag-performance-item {
-  margin-bottom: 1rem;
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
+  margin-bottom: var(--space-md);
+  &:last-child { margin-bottom: 0; }
 }
 
-// Health Status Colors
-.health-excellent {
-  color: #28a745;
-}
-
-.health-good {
-  color: #007bff;
-}
-
-.health-warning {
-  color: #ffc107;
-}
-
-.health-critical {
-  color: #dc3545;
-}
-
-// Metric Cards Enhancement
-.metric-card {
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .metric-card-body {
-    position: relative;
-    
-    .metric-action {
-      position: absolute;
-      top: 50%;
-      right: 1rem;
-      transform: translateY(-50%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      color: #007bff;
-      font-size: 1.1rem;
-    }
-  }
-  
-  &:hover .metric-action {
-    opacity: 1;
-  }
-}
-
-.metric-card-highlight {
-  border-color: #ffc107;
-  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
-  
-  &:hover {
-    border-color: #ff9500;
-    box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
-  }
-}
-
-// Analytics Cards
-.analytics-card, .chart-card, .posts-card, .mini-chart-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f0f0f0;
-  transition: box-shadow 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.analytics-header, .chart-header, .posts-header {
-  padding: 1.5rem 1.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 0;
-  
-  .analytics-title, .chart-title, .posts-title {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-  }
-}
-
-.analytics-body, .chart-body, .posts-body {
-  padding: 1.5rem 0 1.5rem 0;
-}
-
-// Dashboard Header Enhancement
+// Dashboard container
 .dashboard-container {
+  padding: var(--space-lg);
+
   .dashboard-title {
-    color: #2c3e50;
+    font-size: 2rem;
     font-weight: 700;
-  }
-  
-  .btn {
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      transform: translateY(-1px);
-    }
+    color: var(--text-heading);
   }
 }
 
-// No Data States
+// No data state
 .no-data {
-  padding: 3rem 2rem;
+  padding: var(--space-xl);
   text-align: center;
-  
-  i {
-    opacity: 0.6;
-  }
-  
-  h6 {
-    font-weight: 600;
-    margin-top: 1rem;
-  }
-  
-  p {
-    font-size: 0.95rem;
-    line-height: 1.5;
+
+  i { opacity: 0.6; }
+  h6 { font-weight: 600; margin-top: var(--space-md); }
+  p { font-size: 0.95rem; line-height: 1.5; }
+}
+
+// Search/Referrer items (dashboard analytics)
+.search-term-item, .referrer-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child { border-bottom: none; }
+}
+
+.term-rank {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.term-content, .referrer-content { flex: 1; }
+.term-name, .referrer-name { font-weight: 500; color: var(--text-primary); }
+.term-count { font-size: 0.85rem; color: var(--text-secondary); }
+
+.term-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+
+  .term-progress {
+    height: 100%;
+    background: var(--color-primary);
+    transition: width var(--transition-base);
   }
 }
 
-// Responsive improvements
+// Traffic badges
+.badge-social { background: var(--color-primary); color: var(--text-inverse); }
+.badge-newsletter { background: var(--color-warning); color: var(--bg-dark); }
+.badge-search { background: var(--color-success); color: var(--text-inverse); }
+.badge-other { background: var(--text-secondary); color: var(--text-inverse); }
+
+.visit-count { font-weight: 600; color: var(--color-primary); }
+
+// Posts table
+.post-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.post-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-warning);
+  color: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.metric-badge {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-inverse);
+}
+
+// Responsive
 @media (max-width: 768px) {
-  .dashboard-container {
-    .d-flex.gap-2.flex-wrap {
-      flex-direction: column;
-      gap: 0.5rem !important;
-      
-      .btn {
-        justify-content: center;
-      }
-    }
+  .dashboard-container .d-flex.gap-2.flex-wrap {
+    flex-direction: column;
+    gap: var(--space-sm) !important;
   }
-  
-  .metric-card .metric-action {
-    display: none;
-  }
-  
+
   .posts-header {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-md);
     align-items: stretch !important;
-    
-    .d-flex.gap-2 {
-      justify-content: center;
-    }
   }
 }

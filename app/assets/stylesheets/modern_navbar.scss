@@ -1,11 +1,15 @@
-// Modern Navbar Styles
+// =============================================================================
+// MODERN NAVBAR
+// Uses glass-nav utility from foundation
+// =============================================================================
 
 .modern-navbar {
   background: rgba(33, 37, 41, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 16px;
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
   padding: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
@@ -14,10 +18,7 @@
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(111, 66, 193, 0.05) 100%);
     pointer-events: none;
   }
@@ -37,33 +38,28 @@
     padding: 12px 16px;
     text-decoration: none;
     color: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
     position: relative;
     flex: 1;
     min-height: 64px;
     background: transparent;
     font-weight: 500;
-    
-    // Hover effect
+
     &:hover {
       color: white;
       background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      
-      .nav-icon {
-        color: #79c0ff;
-      }
+      box-shadow: var(--shadow-sm);
+
+      .nav-icon { color: var(--link-color); }
     }
 
-    // Active state
     &.active {
       color: white;
-      background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+      background: var(--gradient-primary);
       box-shadow: 0 4px 20px rgba(13, 110, 253, 0.4);
       transform: translateY(-1px);
-      
-      // Active indicator
+
       &::before {
         content: '';
         position: absolute;
@@ -77,43 +73,37 @@
         animation: activeGlow 2s infinite alternate;
       }
 
-      .nav-icon {
-        color: white;
-      }
-
-      .nav-text {
-        color: white;
-      }
+      .nav-icon, .nav-text { color: white; }
     }
 
     .nav-icon {
       font-size: 1.2rem;
       margin-bottom: 4px;
-      transition: all 0.3s ease;
+      transition: all var(--transition-base);
     }
 
     .nav-text {
       font-size: 0.85rem;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all var(--transition-base);
     }
   }
 }
 
-// Mobile Navigation Enhancements
+// Mobile Navigation
 .mobile-nav-header {
   background: linear-gradient(135deg, #212529 0%, #343a40 100%) !important;
-  border-radius: 12px 12px 0 0 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+  box-shadow: var(--shadow-sm);
 }
 
 .mobile-nav-menu {
   background: linear-gradient(180deg, #212529 0%, #1a1e21 100%) !important;
-  border-radius: 0 0 12px 12px;
-  
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+
   .mobile-nav-items {
     padding: 8px;
-    
+
     .mobile-nav-item {
       display: flex;
       align-items: center;
@@ -122,26 +112,23 @@
       text-decoration: none;
       color: rgba(255, 255, 255, 0.8);
       border-radius: 10px;
-      transition: all 0.3s ease;
+      transition: all var(--transition-base);
       position: relative;
       font-weight: 500;
       border: none;
-      
+
       &:hover {
         background: rgba(255, 255, 255, 0.1);
         color: white;
-        
-        i {
-          color: #79c0ff;
-        }
+
+        i { color: var(--link-color); }
       }
 
       &.active {
-        background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+        background: var(--gradient-primary);
         color: white;
         box-shadow: 0 2px 12px rgba(13, 110, 253, 0.3);
-        
-        // Active indicator line
+
         &::before {
           content: '';
           position: absolute;
@@ -154,24 +141,14 @@
           border-radius: 0 2px 2px 0;
         }
 
-        i {
-          color: white;
-        }
-
-        span {
-          color: white;
-        }
+        i, span { color: white; }
       }
 
       i {
         font-size: 1.1rem;
-        transition: all 0.3s ease;
+        transition: all var(--transition-base);
         width: 20px;
         text-align: center;
-      }
-
-      span {
-        transition: all 0.3s ease;
       }
     }
   }
@@ -189,12 +166,12 @@
   }
 }
 
-// Dark mode adjustments
+// Dark mode
 [data-theme="dark"] {
   .modern-navbar {
     background: rgba(10, 10, 10, 0.95);
     border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-lg);
 
     &::before {
       background: linear-gradient(135deg, rgba(66, 133, 244, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
@@ -202,14 +179,14 @@
 
     .nav-item {
       color: rgba(255, 255, 255, 0.7);
-      
+
       &:hover {
         background: rgba(255, 255, 255, 0.12);
         color: white;
       }
 
       &.active {
-        background: linear-gradient(135deg, #4285f4 0%, #8b5cf6 100%);
+        background: var(--gradient-primary);
         box-shadow: 0 4px 20px rgba(66, 133, 244, 0.4);
       }
     }
@@ -221,25 +198,18 @@
 
   .mobile-nav-menu {
     background: linear-gradient(180deg, #0a0a0a 0%, #141414 100%) !important;
-    
-    .mobile-nav-item {
-      &.active {
-        background: linear-gradient(135deg, #4285f4 0%, #8b5cf6 100%);
-        box-shadow: 0 2px 12px rgba(66, 133, 244, 0.3);
-      }
+
+    .mobile-nav-item.active {
+      background: var(--gradient-primary);
+      box-shadow: 0 2px 12px rgba(66, 133, 244, 0.3);
     }
   }
 }
 
-// Responsive adjustments
+// Responsive
 @media (max-width: 768px) {
   .modern-navbar {
     padding: 6px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
   }
-}
-
-// Legacy support - hide old styles when modern navbar is present
-.modern-navbar + * .main-nav-item {
-  display: none;
 }
