@@ -42,6 +42,8 @@ yarn-debug.log*
 /Notes.todo
 
 /.env
+/.env.dev
+/.env.production
 
 # Internal development documentation (not for public GitHub)
 /CLAUDE.md
